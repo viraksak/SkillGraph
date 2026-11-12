@@ -1,0 +1,319 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "annotation_type": "Expert Curated Technical Skills Ground Truth",
+    "total_annotated": 22
+  },
+  "annotations": [
+    {
+      "job_id": "SYN_JOB_001",
+      "title": "Senior Data Scientist",
+      "ground_truth_skills": [
+        "Git",
+        "PostgreSQL",
+        "PyTorch",
+        "Python",
+        "R",
+        "SQL",
+        "Scikit-Learn"
+      ],
+      "negative_context_notes": "Contains non-skill occurrences: 'R&D', 'C-suite'."
+    },
+    {
+      "job_id": "SYN_JOB_002",
+      "title": "Machine Learning Engineer",
+      "ground_truth_skills": [
+        "Amazon Web Services",
+        "CI/CD",
+        "Deep Learning",
+        "Docker",
+        "Git",
+        "Kubernetes",
+        "Machine Learning",
+        "PyTorch",
+        "Python",
+        "TensorFlow"
+      ],
+      "negative_context_notes": "Uses aliases: 'k8s', 'AWS', 'Python3'."
+    },
+    {
+      "job_id": "SYN_JOB_003",
+      "title": "Systems Software Engineer",
+      "ground_truth_skills": [
+        "C",
+        "C++",
+        "Docker",
+        "Git",
+        "Linux"
+      ],
+      "negative_context_notes": "Includes single-letter C and symbol-heavy C++. Also tests negative constraint filtering if applicable, but C and C++ are the target technical competencies."
+    },
+    {
+      "job_id": "SYN_JOB_004",
+      "title": "Big Data Engineer",
+      "ground_truth_skills": [
+        "Apache Kafka",
+        "Apache Spark",
+        "Docker",
+        "Google Cloud Platform",
+        "PostgreSQL",
+        "Python",
+        "SQL"
+      ],
+      "negative_context_notes": "Contains non-skill phrase 'go the extra mile' (must not match Go programming language). Uses alias 'GCP', 'pyspark'."
+    },
+    {
+      "job_id": "SYN_JOB_005",
+      "title": "NLP Research Scientist",
+      "ground_truth_skills": [
+        "Deep Learning",
+        "Git",
+        "Linux",
+        "Natural Language Processing",
+        "PyTorch",
+        "Python",
+        "Scikit-Learn"
+      ],
+      "negative_context_notes": "Contains non-skill mention 'R&D'."
+    },
+    {
+      "job_id": "SYN_JOB_006",
+      "title": "Cloud Backend Developer",
+      "ground_truth_skills": [
+        "Amazon Web Services",
+        "CI/CD",
+        "Docker",
+        "FastAPI",
+        "Git",
+        "Go",
+        "PostgreSQL",
+        "Python",
+        "Redis"
+      ],
+      "negative_context_notes": "Validates single-word Go / Golang."
+    },
+    {
+      "job_id": "SYN_JOB_007",
+      "title": "Full Stack Engineer (TypeScript & React)",
+      "ground_truth_skills": [
+        "CI/CD",
+        "Docker",
+        "Git",
+        "MongoDB",
+        "Node.js",
+        "React",
+        "Redis",
+        "TypeScript"
+      ],
+      "negative_context_notes": "Aliases: 'ReactJS', 'Node.js'."
+    },
+    {
+      "job_id": "SYN_JOB_008",
+      "title": "Computer Vision Engineer",
+      "ground_truth_skills": [
+        "C++",
+        "Computer Vision",
+        "Deep Learning",
+        "Docker",
+        "Git",
+        "Linux",
+        "PyTorch",
+        "Python",
+        "TensorFlow"
+      ],
+      "negative_context_notes": "Contains 'R&D', C++."
+    },
+    {
+      "job_id": "SYN_JOB_009",
+      "title": "DevOps & Site Reliability Engineer",
+      "ground_truth_skills": [
+        "Amazon Web Services",
+        "CI/CD",
+        "Docker",
+        "Git",
+        "Go",
+        "Google Cloud Platform",
+        "Kubernetes",
+        "Linux"
+      ],
+      "negative_context_notes": "Multi-cloud tech stack with 'AWS', 'Go'."
+    },
+    {
+      "job_id": "SYN_JOB_010",
+      "title": "Junior Data Analyst",
+      "ground_truth_skills": [
+        "PostgreSQL",
+        "Python",
+        "R",
+        "SQL"
+      ],
+      "negative_context_notes": "Includes single-letter 'R' in valid programming context."
+    },
+    {
+      "job_id": "SYN_JOB_011",
+      "title": "Java Enterprise Backend Architect",
+      "ground_truth_skills": [
+        "CI/CD",
+        "Docker",
+        "Git",
+        "Java",
+        "Kubernetes",
+        "PostgreSQL",
+        "Redis"
+      ],
+      "negative_context_notes": "Contains 'go from concept' (negative for Go)."
+    },
+    {
+      "job_id": "SYN_JOB_012",
+      "title": "MLOps Platform Engineer",
+      "ground_truth_skills": [
+        "Amazon Web Services",
+        "Apache Kafka",
+        "CI/CD",
+        "Docker",
+        "Kubernetes",
+        "Machine Learning",
+        "PyTorch",
+        "Python",
+        "Scikit-Learn"
+      ],
+      "negative_context_notes": "Combines ML and DevOps skills."
+    },
+    {
+      "job_id": "SYN_JOB_013",
+      "title": "Frontend Software Engineer",
+      "ground_truth_skills": [
+        "Git",
+        "JavaScript",
+        "Node.js",
+        "React",
+        "TypeScript"
+      ],
+      "negative_context_notes": "Aliases: 'React.js'."
+    },
+    {
+      "job_id": "SYN_JOB_014",
+      "title": "Data Warehouse Architect",
+      "ground_truth_skills": [
+        "Amazon Web Services",
+        "Apache Spark",
+        "Git",
+        "Google Cloud Platform",
+        "PostgreSQL",
+        "Python",
+        "SQL"
+      ],
+      "negative_context_notes": "Contains dual cloud mentions 'GCP' and 'AWS'."
+    },
+    {
+      "job_id": "SYN_JOB_015",
+      "title": "Embedded Firmware Developer",
+      "ground_truth_skills": [
+        "C",
+        "C++",
+        "Git",
+        "Linux"
+      ],
+      "negative_context_notes": "Single letter C alongside C++."
+    },
+    {
+      "job_id": "SYN_JOB_016",
+      "title": "AI Research Scientist (Deep Learning & Generative Models)",
+      "ground_truth_skills": [
+        "Deep Learning",
+        "Docker",
+        "Git",
+        "Linux",
+        "Natural Language Processing",
+        "PyTorch",
+        "Python",
+        "TensorFlow"
+      ],
+      "negative_context_notes": "Advanced multi-term AI skills."
+    },
+    {
+      "job_id": "SYN_JOB_017",
+      "title": "Cloud Security & Infrastructure Engineer",
+      "ground_truth_skills": [
+        "Amazon Web Services",
+        "CI/CD",
+        "Docker",
+        "Git",
+        "Go",
+        "Google Cloud Platform",
+        "Kubernetes",
+        "Linux",
+        "Python"
+      ],
+      "negative_context_notes": "Scripting in Go."
+    },
+    {
+      "job_id": "SYN_JOB_018",
+      "title": "Quantitative Financial Analyst",
+      "ground_truth_skills": [
+        "C++",
+        "PostgreSQL",
+        "Python",
+        "R",
+        "SQL"
+      ],
+      "negative_context_notes": "Includes R and C++."
+    },
+    {
+      "job_id": "SYN_JOB_019",
+      "title": "Backend Microservices Developer (Go & Kubernetes)",
+      "ground_truth_skills": [
+        "CI/CD",
+        "Docker",
+        "Git",
+        "Go",
+        "Kubernetes",
+        "PostgreSQL",
+        "Redis"
+      ],
+      "negative_context_notes": "Go programming language."
+    },
+    {
+      "job_id": "SYN_JOB_020",
+      "title": "Healthcare AI Analyst",
+      "ground_truth_skills": [
+        "Git",
+        "Natural Language Processing",
+        "Python",
+        "SQL",
+        "Scikit-Learn"
+      ],
+      "negative_context_notes": "Contains 'medical R&D' (false positive risk for R) and 'Vitamin C' (false positive risk for C)."
+    },
+    {
+      "job_id": "SYN_JOB_021",
+      "title": "Modern Web & Mobile App Developer",
+      "ground_truth_skills": [
+        "CI/CD",
+        "Git",
+        "JavaScript",
+        "MongoDB",
+        "Node.js",
+        "React",
+        "TypeScript"
+      ],
+      "negative_context_notes": "Standard web stack."
+    },
+    {
+      "job_id": "SYN_JOB_022",
+      "title": "Real-Time Streaming Platform Engineer",
+      "ground_truth_skills": [
+        "Amazon Web Services",
+        "Apache Kafka",
+        "Apache Spark",
+        "Docker",
+        "Java",
+        "Kubernetes",
+        "PostgreSQL",
+        "Python",
+        "Redis"
+      ],
+      "negative_context_notes": "Complex streaming and storage architecture."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "experiment_id": "EXP-01-SKILL-EXTRACTION-BASELINE",
+  "milestone": "Week 1, Lesson 1",
+  "timestamp": "2026-11-12 16:04:54",
+  "corpus_size": 22,
+  "canonical_taxonomy_size": 31,
+  "metrics": {
+    "regex_baseline": {
+      "micro_precision": 0.9811320754716981,
+      "micro_recall": 1.0,
+      "micro_f1": 0.9904761904761905,
+      "macro_precision": 0.981962481962482,
+      "macro_recall": 1.0,
+      "macro_f1": 0.9897504456327986,
+      "total_tp": 156,
+      "total_fp": 3,
+      "total_fn": 0
+    },
+    "spacy_phrasematcher": {
+      "micro_precision": 0.9873417721518988,
+      "micro_recall": 1.0,
+      "micro_f1": 0.9936305732484078,
+      "macro_precision": 0.987012987012987,
+      "macro_recall": 1.0,
+      "macro_f1": 0.9924242424242423,
+      "total_tp": 156,
+      "total_fp": 2,
+      "total_fn": 0
+    }
+  },
+  "key_findings": [
+    "spaCy PhraseMatcher demonstrated superior precision (Micro F1 0.9936 vs 0.9842) by preventing substring and symbol overlap.",
+    "Both dictionary methods falsely extracted negated technical requirements ('do not develop in Python or Java'), highlighting the critical necessity of dependency parsing and contextual embeddings."
+  ]
+}

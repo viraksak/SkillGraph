@@ -1,0 +1,220 @@
+{
+  "Python": {
+    "category": "Programming Language",
+    "aliases": [
+      "python",
+      "python3",
+      "python 3",
+      "py"
+    ]
+  },
+  "R": {
+    "category": "Programming Language",
+    "aliases": [
+      "r"
+    ]
+  },
+  "C": {
+    "category": "Programming Language",
+    "aliases": [
+      "c"
+    ]
+  },
+  "C++": {
+    "category": "Programming Language",
+    "aliases": [
+      "c++",
+      "cpp",
+      "c/c++"
+    ]
+  },
+  "Go": {
+    "category": "Programming Language",
+    "aliases": [
+      "go",
+      "golang"
+    ]
+  },
+  "Java": {
+    "category": "Programming Language",
+    "aliases": [
+      "java"
+    ]
+  },
+  "JavaScript": {
+    "category": "Programming Language",
+    "aliases": [
+      "javascript",
+      "js"
+    ]
+  },
+  "TypeScript": {
+    "category": "Programming Language",
+    "aliases": [
+      "typescript",
+      "ts"
+    ]
+  },
+  "SQL": {
+    "category": "Query Language",
+    "aliases": [
+      "sql"
+    ]
+  },
+  "Machine Learning": {
+    "category": "AI / Data Science",
+    "aliases": [
+      "machine learning",
+      "ml"
+    ]
+  },
+  "Deep Learning": {
+    "category": "AI / Data Science",
+    "aliases": [
+      "deep learning",
+      "dl"
+    ]
+  },
+  "Natural Language Processing": {
+    "category": "AI / Data Science",
+    "aliases": [
+      "natural language processing",
+      "nlp"
+    ]
+  },
+  "Computer Vision": {
+    "category": "AI / Data Science",
+    "aliases": [
+      "computer vision",
+      "cv"
+    ]
+  },
+  "PyTorch": {
+    "category": "Machine Learning Framework",
+    "aliases": [
+      "pytorch",
+      "torch"
+    ]
+  },
+  "TensorFlow": {
+    "category": "Machine Learning Framework",
+    "aliases": [
+      "tensorflow",
+      "tf"
+    ]
+  },
+  "Scikit-Learn": {
+    "category": "Machine Learning Framework",
+    "aliases": [
+      "scikit-learn",
+      "scikit learn",
+      "sklearn"
+    ]
+  },
+  "PostgreSQL": {
+    "category": "Database",
+    "aliases": [
+      "postgresql",
+      "postgres",
+      "psql"
+    ]
+  },
+  "MongoDB": {
+    "category": "Database",
+    "aliases": [
+      "mongodb",
+      "mongo"
+    ]
+  },
+  "Redis": {
+    "category": "Database",
+    "aliases": [
+      "redis"
+    ]
+  },
+  "Apache Spark": {
+    "category": "Data Engineering",
+    "aliases": [
+      "apache spark",
+      "spark",
+      "pyspark"
+    ]
+  },
+  "Apache Kafka": {
+    "category": "Data Engineering",
+    "aliases": [
+      "apache kafka",
+      "kafka"
+    ]
+  },
+  "Docker": {
+    "category": "DevOps & Cloud",
+    "aliases": [
+      "docker"
+    ]
+  },
+  "Kubernetes": {
+    "category": "DevOps & Cloud",
+    "aliases": [
+      "kubernetes",
+      "k8s"
+    ]
+  },
+  "Amazon Web Services": {
+    "category": "DevOps & Cloud",
+    "aliases": [
+      "amazon web services",
+      "aws"
+    ]
+  },
+  "Google Cloud Platform": {
+    "category": "DevOps & Cloud",
+    "aliases": [
+      "google cloud platform",
+      "gcp",
+      "google cloud"
+    ]
+  },
+  "CI/CD": {
+    "category": "DevOps & Cloud",
+    "aliases": [
+      "ci/cd",
+      "ci cd",
+      "continuous integration"
+    ]
+  },
+  "React": {
+    "category": "Frontend Framework",
+    "aliases": [
+      "react",
+      "reactjs",
+      "react.js"
+    ]
+  },
+  "Node.js": {
+    "category": "Backend Framework",
+    "aliases": [
+      "node.js",
+      "nodejs",
+      "node"
+    ]
+  },
+  "FastAPI": {
+    "category": "Backend Framework",
+    "aliases": [
+      "fastapi"
+    ]
+  },
+  "Linux": {
+    "category": "Operating Systems",
+    "aliases": [
+      "linux"
+    ]
+  },
+  "Git": {
+    "category": "Developer Tools",
+    "aliases": [
+      "git"
+    ]
+  }
+}
