@@ -1,0 +1,916 @@
+{
+  "dataset_name": "SkillGraph Human Annotation Benchmark - Week 1 Sample",
+  "schema_version": "1.1.0",
+  "created_at": "2026-11-12",
+  "total_records": 50,
+  "annotation_protocol": "two_pass_strictly_blinded",
+  "protocol_summary": {
+    "pass_1": "Strictly blinded skill span extraction. Annotator sees only record_id and verbatim text. Extracts exact character offsets and verbatim skill mentions.",
+    "pass_2": "Canonical taxonomy mapping. Annotator resolves confirmed mentions to canonical_skill and skill_id in data/processed/global_skill_taxonomy.csv.",
+    "blinding_policy": "All occupational, geographic, industry, seniority, and synthetic ground truth metadata have been completely removed from active annotation records to eliminate cognitive bias. Metadata remains indexed in data/processed/global_jobs_cleaned.csv for post-annotation unblinding and analysis."
+  },
+  "guidelines_reference": "data/annotations/annotation_guidelines.md",
+  "taxonomy_reference": "data/processed/global_skill_taxonomy.csv",
+  "records": [
+    {
+      "record_id": 1,
+      "job_id": "GLOBAL_SYN_000196",
+      "text": "A technology company in Siem Reap, Cambodia is looking for a Junior Data Engineer to join its Data Engineering team. Work is organised in small cross-functional teams that release changes regularly. This role suits candidates building their first few years of experience. The position follows a hybrid working pattern.\n\nDay-to-day responsibilities: Monitor pipeline jobs and resolve failures quickly; Document data lineage and operating procedures; Work with analysts and scientists to supply reliable datasets; Help onboard new team members to Data Engineering tools and routines; Model and manage data warehouse and data lake structures; Enforce data quality checks and schema standards.\n\nApplicants need a bachelor's degree in a relevant field and up to 2 years of relevant experience. The role requires ELT, Postgres, SQL, Apache Airflow, and Spark. Fluency in Khmer and English is required.\n\nIt would be an advantage to bring K8s and Azure. Structured onboarding and development opportunities are provided.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 2,
+      "job_id": "GLOBAL_SYN_000375",
+      "text": "This full-time Junior Data Scientist position is based in Hai Phong, Vietnam, within a technology company. Work is organised in small cross-functional teams that release changes regularly. This role suits candidates building their first few years of experience.\n\nMain duties: (1) design experiments and validate model performance with suitable metrics; (2) monitor deployed models for drift and degradation; (3) contribute ideas to improve team processes and share lessons with colleagues; (4) develop statistical and machine learning models to answer business questions; (5) translate model results into recommendations for decision makers.\n\nApplicants need a bachelor's degree in a relevant field and 1 to 3 years of relevant experience. Candidates must demonstrate SQL queries, problem-solving, Python 3, statistical methods, and ML. Fluency in Vietnamese and English is required.\n\nAdditional strengths in TensorFlow or model deployment will be viewed favourably.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 3,
+      "job_id": "GLOBAL_SYN_000943",
+      "text": "A technology company in Chiang Mai, Thailand is looking for a Junior Software Developer to join its Software Engineering team. The organisation is investing in modernising its systems and data capabilities. This role suits candidates building their first few years of experience. The position is mainly on-site.\n\nMain duties: (1) integrate applications with internal and third-party services; (2) contribute ideas to improve team processes and share lessons with colleagues; (3) design and build features for web and mobile applications from approved requirements; (4) improve application performance and reliability in production; (5) write clean, testable code and take part in peer code reviews.\n\nApplicants need a bachelor's degree in a relevant field and 1 to 3 years of relevant experience. The role requires Scrum, problem-solving, version control, unit testing, and Python. You must be able to work in Thai and English.\n\nIt would be an advantage to bring CI/CD pipelines, TypeScript, and ReactJS.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 4,
+      "job_id": "GLOBAL_SYN_001159",
+      "text": "Work is organised in small cross-functional teams that release changes regularly. As a Data Analyst, you will work in the Data Analytics team in Penang, Malaysia, reporting to the Data Analytics team lead. This is a full-time opportunity.\n\nDay-to-day responsibilities: Write queries to extract data from relational databases; Collect, clean and validate data from several internal sources; Own Data Analytics deliverables from planning through completion; Support ad hoc analysis requests from business teams; Build reports and dashboards that track business performance; Monitor data quality and flag inconsistencies to data owners.\n\nWe expect a bachelor's degree in a relevant field, together with 3 to 5 years of relevant experience. Strong grounding in Python, communication skills, data analytics, Power BI, Structured Query Language, and attention to detail is expected. You must be able to work in Malay and English.\n\nAdditional strengths in data warehousing, A/B Testing, or presenting to stakeholders will be viewed favourably.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 5,
+      "job_id": "GLOBAL_SYN_001771",
+      "text": "We are hiring a Machine Learning Engineer for our Bandung office. The role sits in the Machine Learning function and reports to the Machine Learning team lead. The organisation is investing in modernising its systems and data capabilities.\n\nMain duties: (1) own Machine Learning deliverables from planning through completion; (2) package and deploy machine learning models as reliable services; (3) monitor model latency, accuracy and drift in production; (4) optimise inference performance and infrastructure cost; (5) maintain documentation and model version records; (6) work with data scientists to turn prototypes into maintainable code.\n\nApplicants need a bachelor's degree in a relevant field and 3 to 5 years of relevant experience. Strong grounding in model serving, software testing, PyTorch, ML, Python 3, and containerisation is expected. The working languages for this role are Indonesian and English.\n\nIt would be an advantage to bring deep learning and PySpark.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 6,
+      "job_id": "GLOBAL_SYN_001272",
+      "text": "This full-time Trainee Software Developer position is based in Cebu City, Philippines, within a technology company. The organisation is investing in modernising its systems and data capabilities. This role suits recent graduates and early-career candidates.\n\nThe successful candidate will fix defects reported by users and testers and document the fixes, contribute to sprint planning and estimate delivery effort, integrate applications with internal and third-party services, design and build features for web and mobile applications from approved requirements, and take part in onboarding and on-the-job training for the Software Engineering team.\n\nThe minimum requirements are a bachelor's degree in a relevant field and no prior experience, although internships or relevant projects are an advantage. Candidates must demonstrate problem solving, version control, Python, Java, and SQL. Fluency in English and Filipino is required.\n\nAdditional strengths in AWS or CI/CD will be viewed favourably. The employer encourages applications from candidates of all backgrounds.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 7,
+      "job_id": "GLOBAL_SYN_000680",
+      "text": "The organisation is investing in modernising its systems and data capabilities. As a Senior Software Developer, you will work in the Software Engineering team in Osaka, Japan, reporting to the head of Software Engineering. This is a full-time opportunity.\n\nMain duties: (1) improve application performance and reliability in production; (2) mentor junior staff and review the quality of Software Engineering work; (3) lead complex or high-priority Software Engineering initiatives with limited supervision; (4) design and build features for web and mobile applications from approved requirements; (5) contribute to sprint planning and estimate delivery effort; (6) maintain technical documentation for the systems you work on; (7) integrate applications with internal and third-party services.\n\nThe minimum requirements are a master's degree in a relevant field and 5 to 10 years of relevant experience. Strong grounding in SQL, version control, test automation, RESTful APIs, agile, mentoring, and problem solving is expected. You must be able to work in Japanese and English.\n\nAdditional strengths in CI/CD, Docker, React, or TypeScript will be viewed favourably. Successful candidates will be introduced to the team through a short induction period.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 8,
+      "job_id": "GLOBAL_SYN_001428",
+      "text": "This full-time Junior Data Engineer position is based in Busan, South Korea, within a technology company. Work is organised in small cross-functional teams that release changes regularly. This role suits candidates building their first few years of experience.\n\nMain duties: (1) monitor pipeline jobs and resolve failures quickly; (2) help onboard new team members to Data Engineering tools and routines; (3) work with analysts and scientists to supply reliable datasets; (4) enforce data quality checks and schema standards; (5) build and maintain batch and streaming data pipelines; (6) optimise slow queries and storage costs.\n\nWe expect a bachelor's degree in a relevant field, together with up to 2 years of relevant experience. The role requires version control, Postgres, Python programming, Apache Airflow, SQL, and ELT. You must be able to work in Korean and English.\n\nAdditional strengths in Docker, data privacy compliance, Azure, or Amazon Web Services will be viewed favourably. The team works in a collaborative environment with regular feedback.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 9,
+      "job_id": "GLOBAL_SYN_001733",
+      "text": "A technology company in Berlin, Germany is looking for a Head of Data Engineering to join its Data Engineering team. The team builds and runs digital products used by internal and external customers. This is a senior leadership position with organisation-wide impact. The position is mainly on-site.\n\nDay-to-day responsibilities: Build and maintain batch and streaming data pipelines; Manage the Data Engineering budget and report results to senior leadership; Lead and develop a team of managers and specialists in Data Engineering; Monitor pipeline jobs and resolve failures quickly; Enforce data quality checks and schema standards; Set the strategic direction and annual objectives for the Data Engineering function.\n\nThe minimum requirements are a master's degree in a relevant field and at least 10 years of experience, including leadership responsibility. Strong grounding in SQL queries, strategic planning, budget management, analytical problem solving, Python, Spark, PostgreSQL, Git, and ETL pipelines is expected. Fluency in German and English is required.\n\nAdditional strengths in Docker, K8s, Azure, or GDPR compliance will be viewed favourably. The employer values reliability, integrity and a willingness to keep learning.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 10,
+      "job_id": "GLOBAL_SYN_000286",
+      "text": "This full-time Junior Machine Learning Engineer position is based in Toulouse, France, within a technology company. The organisation is investing in modernising its systems and data capabilities. This role suits candidates building their first few years of experience. The position follows a hybrid working pattern.\n\nIn this role you will handle routine Machine Learning assignments independently and ask for guidance on complex cases, monitor model latency, accuracy and drift in production, work with data scientists to turn prototypes into maintainable code, package and deploy machine learning models as reliable services, build training and evaluation pipelines that can be rerun on demand, and optimise inference performance and infrastructure cost.\n\nWe expect a bachelor's degree in a relevant field, together with up to 2 years of relevant experience. Candidates must demonstrate model serving, Docker, Python programming, machine-learning models, and problem solving. The working languages for this role are French and English.\n\nPreferred qualifications include Spark, deep learning, and GenAI. Structured onboarding and development opportunities are provided.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 11,
+      "job_id": "GLOBAL_SYN_000829",
+      "text": "A technology company in Manchester, United Kingdom is looking for a Trainee Data Analyst to join its Data Analytics team. The team builds and runs digital products used by internal and external customers. This role suits recent graduates and early-career candidates.\n\nThe successful candidate will write queries to extract data from relational databases, take part in onboarding and on-the-job training for the Data Analytics team, build reports and dashboards that track business performance, collect, clean and validate data from several internal sources, and support ad hoc analysis requests from business teams.\n\nWe expect a bachelor's degree in a relevant field, together with no prior experience. Candidates must demonstrate SQL queries, data analytics, Python programming, Tableau, and communication skills. Fluency in English is required.\n\nPreferred qualifications include R programming and Google Analytics. Successful candidates will be introduced to the team through a short induction period.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 12,
+      "job_id": "GLOBAL_SYN_001720",
+      "text": "We are hiring a Trainee Machine Learning Engineer for our Utrecht office. The role sits in the Machine Learning function and reports to a senior member of the team. The organisation is investing in modernising its systems and data capabilities.\n\nIn this role you will maintain documentation and model version records, build training and evaluation pipelines that can be rerun on demand, complete assigned work under supervision and escalate problems to the team lead, work with data scientists to turn prototypes into maintainable code, and optimise inference performance and infrastructure cost.\n\nWe expect a bachelor's degree in a relevant field, together with no prior experience, although internships or relevant projects are an advantage. The role requires machine-learning models, Python 3, PyTorch, version control, and model deployment. You must be able to work in Dutch and English.\n\nIt would be an advantage to bring GenAI, computer vision, and K8s. The employer values reliability, integrity and a willingness to keep learning.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 13,
+      "job_id": "GLOBAL_SYN_000335",
+      "text": "We are hiring a Trainee Business Intelligence Analyst for our Chicago office. The role sits in the Business Intelligence function and reports to a senior member of the team. The organisation is investing in modernising its systems and data capabilities. The position is mainly on-site.\n\nIn this role you will define and document business metrics with data owners, identify opportunities to automate manual reporting, design interactive dashboards that give managers a clear view of performance, maintain scheduled reports and reconcile figures across systems, and complete assigned work under supervision and escalate problems to the team lead.\n\nWe expect a bachelor's degree in a relevant field, together with no prior experience. Strong grounding in Microsoft Power BI, verbal communication, stakeholder engagement, Structured Query Language, and analysing data is expected. Fluency in English and Spanish is required.\n\nAdditional strengths in Python programming, presenting to stakeholders, or statistics will be viewed favourably. The employer encourages applications from candidates of all backgrounds.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 14,
+      "job_id": "GLOBAL_SYN_001400",
+      "text": "This full-time Data Engineer position is based in Calgary, Canada, within a technology company. Work is organised in small cross-functional teams that release changes regularly. This role suits candidates with solid hands-on experience.\n\nThe successful candidate will build and maintain batch and streaming data pipelines, enforce data quality checks and schema standards, coordinate with other departments to resolve dependencies and deadlines, monitor pipeline jobs and resolve failures quickly, optimise slow queries and storage costs, and work with analysts and scientists to supply reliable datasets.\n\nThe minimum requirements are a bachelor's degree in a relevant field and 2 to 5 years of relevant experience. Candidates must demonstrate problem solving, ETL pipelines, Apache Airflow, Spark, SQL, data warehousing, and PostgreSQL. Fluency in English is required.\n\nAdditional strengths in PIPEDA compliance, Docker, Kubernetes, or Google Cloud Platform will be viewed favourably.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 15,
+      "job_id": "GLOBAL_SYN_000006",
+      "text": "Work is organised in small cross-functional teams that release changes regularly. As a Cybersecurity Analyst, you will work in the Information Security team in Sharjah, United Arab Emirates, reporting to the Information Security team lead. This is a full-time opportunity.\n\nThe successful candidate will recommend improvements to security controls, support audits against information security standards, run awareness sessions that help staff recognise phishing and fraud, review the work of junior colleagues and give constructive feedback, review access rights and security configurations against policy, and carry out vulnerability scans and track remediation to closure.\n\nWe expect an associate degree in a relevant field, together with 3 to 5 years of relevant experience. Strong grounding in SIEM, TCP/IP, security incident handling, ISO/IEC 27001, data protection compliance, attention to detail, and network security is expected. You must be able to work in English.\n\nAdditional strengths in Amazon Web Services or pen testing will be viewed favourably. Structured onboarding and development opportunities are provided.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 16,
+      "job_id": "GLOBAL_SYN_001787",
+      "text": "A technology company in Curitiba, Brazil is looking for a Junior Cybersecurity Analyst to join its Information Security team. The team builds and runs digital products used by internal and external customers. This role suits candidates building their first few years of experience.\n\nDay-to-day responsibilities: Recommend improvements to security controls; Support audits against information security standards; Carry out vulnerability scans and track remediation to closure; Monitor security alerts and investigate suspicious activity; Handle routine Information Security assignments independently and ask for guidance on complex cases.\n\nApplicants need a bachelor's degree in a relevant field and up to 2 years of relevant experience. The role requires vulnerability scanning, attention to detail, security incident handling, network security, SIEM, and ISO/IEC 27001. Fluency in Portuguese is required.\n\nIt would be an advantage to bring Python, drafting reports, and Microsoft Azure.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 17,
+      "job_id": "GLOBAL_SYN_001884",
+      "text": "This full-time Junior Business Intelligence Analyst position is based in Pretoria, South Africa, within a technology company. Work is organised in small cross-functional teams that release changes regularly. This role suits candidates building their first few years of experience.\n\nThe successful candidate will contribute ideas to improve team processes and share lessons with colleagues, gather reporting requirements from business teams and translate them into data models, maintain scheduled reports and reconcile figures across systems, train business users to explore dashboards on their own, and design interactive dashboards that give managers a clear view of performance.\n\nApplicants need a bachelor's degree in a relevant field and 1 to 2 years of relevant experience. Candidates must demonstrate SQL, communication skills, Tableau, stakeholder engagement, Power BI, and dashboarding. The working languages for this role are English.\n\nIt would be an advantage to bring statistical analysis, Python 3, and Microsoft Azure.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 18,
+      "job_id": "GLOBAL_SYN_000098",
+      "text": "We are hiring a Trainee Credit Officer for our Singapore office. The role sits in the Lending function and reports to a senior member of the team. Accuracy, documentation and control are central to how the team works.\n\nThe successful candidate will complete assigned work under supervision and escalate problems to the team lead, explain loan products and terms clearly to customers, monitor the performance of the loan portfolio and follow up on delays, analyse repayment capacity and prepare credit recommendations, and complete identity and documentation checks before disbursement.\n\nThe minimum requirements are a bachelor's degree in a relevant field and no prior experience, although internships or relevant projects are an advantage. The role requires credit analysis, negotiation skills, customer support, anti-money laundering, and decision making. The working languages for this role are English.\n\nIt would be an advantage to bring budget preparation, CRM Software, and PDPA compliance. The employer encourages applications from candidates of all backgrounds.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 19,
+      "job_id": "GLOBAL_SYN_000951",
+      "text": "We are hiring a Trainee Credit Officer for our Mumbai office. The role sits in the Lending function and reports to a senior member of the team. The role supports a growing portfolio of financial products and services.\n\nDay-to-day responsibilities: Refer high-risk cases to credit committees; Monitor the performance of the loan portfolio and follow up on delays; Assess loan applications and verify applicant financial information; Take part in onboarding and on-the-job training for the Lending team; Complete identity and documentation checks before disbursement.\n\nThe minimum requirements are a bachelor's degree in a relevant field and no prior experience. Required skills include contract negotiation, communication, detail orientation, credit risk assessment, and client service. You must be able to work in English.\n\nIt would be an advantage to bring financial forecasting, DPDP Act compliance, and risk assessment.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 20,
+      "job_id": "GLOBAL_SYN_000419",
+      "text": "We are hiring a Senior Financial Analyst for our Perth office. The role sits in the Financial Planning and Analysis function and reports to the head of Financial Planning and Analysis. Accuracy, documentation and control are central to how the team works. The position is mainly on-site.\n\nIn this role you will lead complex or high-priority Financial Planning and Analysis initiatives with limited supervision, review industry and market information that affects financial results, mentor junior staff and review the quality of Financial Planning and Analysis work, produce monthly performance reports and presentations, build and update financial models to support planning decisions, evaluate investment proposals and prepare supporting recommendations, and analyse budget variances and explain drivers to department heads.\n\nApplicants need a master's degree in a relevant field and 5 to 8 years of relevant experience. Required skills include presenting to stakeholders, Structured Query Language, financial statements preparation, budgeting and forecasting, Power BI, Excel, financial modeling, and coaching junior staff. Fluency in English is required.\n\nIt would be an advantage to bring Tableau and risk assessment. Training opportunities are available to support professional growth.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 21,
+      "job_id": "GLOBAL_SYN_001784",
+      "text": "Patient safety and service quality are the top priorities of the facility. As a Senior Healthcare Administrator, you will work in the Clinical Administration team in Sihanoukville, Cambodia, reporting to the head of Clinical Administration. This is a full-time opportunity. The position follows a hybrid working pattern.\n\nThe successful candidate will mentor junior staff and review the quality of Clinical Administration work, monitor budgets and report on departmental performance, lead complex or high-priority Clinical Administration initiatives with limited supervision, oversee daily administrative operations of a clinic or hospital unit, ensure the facility meets regulatory and accreditation requirements, supervise administrative and support staff, and coordinate between clinical staff, suppliers and management.\n\nWe expect a bachelor's degree in a relevant field, together with 6 to 10 years of relevant experience. The role requires leading teams, budget management, clinical governance, drafting reports, coaching junior staff, clinical operations management, and EMR systems. You must be able to work in Khmer and English.\n\nAdditional strengths in change management, Microsoft Excel, or data protection requirements will be viewed favourably. The employer values reliability, integrity and a willingness to keep learning.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 22,
+      "job_id": "GLOBAL_SYN_001841",
+      "text": "We are hiring a Pharmacist for our Hanoi office. The role sits in the Pharmacy function and reports to the Pharmacy team lead. Patient safety and service quality are the top priorities of the facility. The position follows a hybrid working pattern.\n\nMain duties: (1) dispense medicines and give clear instructions to patients; (2) supervise pharmacy assistants and technicians; (3) manage pharmacy stock, ordering and expiry controls; (4) review prescriptions for accuracy, interactions and appropriate dosage; (5) report adverse drug reactions through proper channels; (6) review the work of junior colleagues and give constructive feedback.\n\nThe minimum requirements are a master's degree in a relevant field and 3 to 6 years of relevant experience. Strong grounding in communicating with patients, pharmacology, clinical governance, prescription dispensing, detail orientation, inventory management, and patient records is expected. Fluency in Vietnamese and English is required.\n\nPreferred qualifications include Electronic Health Records, customer service, and leading teams. The team works in a collaborative environment with regular feedback.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 23,
+      "job_id": "GLOBAL_SYN_000627",
+      "text": "A healthcare provider in Singapore, Singapore is looking for a Junior Medical Laboratory Technician to join its Laboratory Services team. The facility serves a diverse patient population and works in multidisciplinary teams. This role suits candidates building their first few years of experience. The position is office-based with occasional travel within Singapore.\n\nIn this role you will contribute ideas to improve team processes and share lessons with colleagues, observe biosafety rules when handling samples, collect, label and process patient specimens, report abnormal results to supervising staff promptly, calibrate and maintain laboratory equipment, and follow quality control procedures and document deviations.\n\nWe expect an associate degree in a relevant field, together with 1 to 2 years of relevant experience. Candidates must demonstrate clinical laboratory analysis, clinical documentation, workplace safety, infection prevention, quality control, and attention to detail. You must be able to work in English.\n\nIt would be an advantage to bring EMR systems and quality management systems. Structured onboarding and development opportunities are provided.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 24,
+      "job_id": "GLOBAL_SYN_001237",
+      "text": "This full-time Trainee Telecommunications Engineer position is based in Phuket, Thailand, within a telecommunications operator. Network quality and customer experience are key measures of success. This role suits recent graduates and early-career candidates. The position is office-based with occasional travel within Thailand.\n\nThe successful candidate will work with vendors and contractors on rollouts, troubleshoot faults affecting voice and data services, support senior colleagues with routine Telecom Engineering tasks while learning company procedures, plan and optimise radio and core network performance, and support upgrades to new technologies.\n\nWe expect a bachelor's degree in a relevant field, together with no prior experience. Candidates must demonstrate Fiber Optics, radio frequency planning, problem solving, and telecom infrastructure. Fluency in Thai and English is required.\n\nIt would be an advantage to bring project management, TCP/IP, and Python programming. Training opportunities are available to support professional growth.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 25,
+      "job_id": "GLOBAL_SYN_001161",
+      "text": "This full-time Senior Network Engineer position is based in Johor Bahru, Malaysia, within a telecommunications operator. The operator provides voice, data and connectivity services to consumers and businesses. This role suits experienced professionals who are ready to guide others. The position is office-based with occasional travel within Malaysia.\n\nDay-to-day responsibilities: Lead complex or high-priority Network Engineering initiatives with limited supervision; Work with vendors on equipment and support issues; Mentor junior staff and review the quality of Network Engineering work; Document network topology and change records; Monitor network performance and resolve outages; Plan capacity and recommend upgrades; Design, configure and maintain network infrastructure.\n\nThe minimum requirements are a bachelor's degree in a relevant field and 5 to 8 years of relevant experience. Required skills include router and switch configuration, network security, network fault resolution, TCP/IP, coaching junior staff, network performance monitoring, and problem-solving. You must be able to work in Malay and English.\n\nAdditional strengths in Amazon Web Services or Telecommunications Systems will be viewed favourably. Successful candidates will be introduced to the team through a short induction period.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 26,
+      "job_id": "GLOBAL_SYN_000708",
+      "text": "We are hiring a Junior Network Engineer for our Bandung office. The role sits in the Network Engineering function and reports to a senior member of the team. The operator provides voice, data and connectivity services to consumers and businesses. The position is mainly on-site.\n\nDay-to-day responsibilities: Monitor network performance and resolve outages; Work with vendors on equipment and support issues; Handle routine Network Engineering assignments independently and ask for guidance on complex cases; Design, configure and maintain network infrastructure; Apply security updates and configuration changes.\n\nThe minimum requirements are an associate degree in a relevant field and 1 to 2 years of relevant experience. Required skills include TCP/IP, network security, report writing, Cisco Networking, network performance monitoring, and network configuration. Fluency in Indonesian and English is required.\n\nPreferred qualifications include AWS and Fiber Optics. The employer values reliability, integrity and a willingness to keep learning.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 27,
+      "job_id": "GLOBAL_SYN_001075",
+      "text": "We are hiring a Production Supervisor for our Manila office. The role sits in the Production function and reports to the Production team lead. Production teams work closely with maintenance, quality and planning colleagues.\n\nDay-to-day responsibilities: Enforce safety rules and report incidents; Coordinate with maintenance, quality and planning teams; Own Production deliverables from planning through completion; Assign tasks, monitor line performance and resolve stoppages; Train operators on procedures and equipment; Track downtime, scrap and productivity metrics.\n\nThe minimum requirements are a bachelor's degree in a relevant field and 3 to 5 years of relevant experience. The role requires communication, quality control, advanced Excel, team leadership, RCA, workplace safety, and production planning. The working languages for this role are English.\n\nPreferred qualifications include ERP Systems and SAP finance modules. Structured onboarding and development opportunities are provided.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 28,
+      "job_id": "GLOBAL_SYN_001234",
+      "text": "The plant operates scheduled production lines with defined quality and safety standards. As a Trainee Quality Control Inspector, you will work in the Quality Assurance team in Bengaluru, India, reporting to a senior member of the team. This is a full-time opportunity.\n\nIn this role you will support senior colleagues with routine Quality Assurance tasks while learning company procedures, inspect raw materials, parts and finished products against specifications, record measurements and defects using standard forms, operate gauges and testing equipment accurately, and take part in audits and corrective action follow-up.\n\nThe minimum requirements are a vocational certificate in a related discipline and no prior experience, although internships or relevant projects are an advantage. Candidates must demonstrate RCA, quality management systems, blueprint reading, and quality inspection. Fluency in English is required.\n\nIt would be an advantage to bring Microsoft Excel and enterprise resource planning. Structured onboarding and development opportunities are provided.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 29,
+      "job_id": "GLOBAL_SYN_000157",
+      "text": "A manufacturing company in Osaka, Japan is looking for a Mechanical Engineer to join its Mechanical Engineering team. The plant operates scheduled production lines with defined quality and safety standards. This role suits candidates with solid hands-on experience.\n\nMain duties: (1) work with suppliers and production teams on manufacturability; (2) run calculations and simulations to verify designs; (3) coordinate with other departments to resolve dependencies and deadlines; (4) troubleshoot equipment failures and recommend fixes; (5) support prototyping, testing and commissioning; (6) prepare drawings, specifications and bills of materials.\n\nApplicants need a bachelor's degree in a relevant field and 3 to 5 years of relevant experience. Strong grounding in SolidWorks, collaboration, reading engineering drawings, mechanical design, AutoCAD, root cause analysis, and maintenance planning is expected. Fluency in Japanese and English is required.\n\nAdditional strengths in PLC Programming or kaizen will be viewed favourably. The employer encourages applications from candidates of all backgrounds.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 30,
+      "job_id": "GLOBAL_SYN_000237",
+      "text": "An energy and utilities company in Incheon, South Korea is looking for a Power Plant Technician to join its Power Operations team. The company supplies or supports essential energy and utility services. This role suits candidates with solid hands-on experience. The position is mainly on-site.\n\nThe successful candidate will perform preventive and corrective maintenance on mechanical and electrical equipment, coordinate with other departments to resolve dependencies and deadlines, carry out routine inspections and record readings, follow lock-out and safety controls, assist with testing and commissioning, and respond to alarms and follow shutdown and restart procedures.\n\nApplicants need a vocational certificate in a related discipline and 3 to 5 years of relevant experience. Candidates must demonstrate problem-solving, equipment maintenance, grid operations, occupational health and safety, attention to detail, reading engineering drawings, and team collaboration. Fluency in Korean is required.\n\nPreferred qualifications include programmable logic controllers, root cause analysis, and communication. Successful candidates will be introduced to the team through a short induction period.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 31,
+      "job_id": "GLOBAL_SYN_001802",
+      "text": "We are hiring a Head of Power Operations for our Berlin office. The role sits in the Power Operations function and reports to the executive leadership team. The organisation is working to improve efficiency and add cleaner energy sources.\n\nIn this role you will carry out routine inspections and record readings, lead and develop a team of managers and specialists in Power Operations, respond to alarms and follow shutdown and restart procedures, represent the Power Operations function with executives, partners and regulators, operate and monitor plant equipment according to procedures, and set the strategic direction and annual objectives for the Power Operations function.\n\nWe expect a bachelor's degree in a relevant field, together with at least 10 years of experience, including leadership responsibility. Strong grounding in budget control, leading teams, preventive maintenance, detail orientation, SCADA systems, occupational health and safety, substation operation, technical drawing interpretation, and problem-solving is expected. Fluency in German and English is required.\n\nPreferred qualifications include root-cause investigation, electrical design, PLC, and renewable energy systems. Successful candidates will be introduced to the team through a short induction period.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 32,
+      "job_id": "GLOBAL_SYN_001114",
+      "text": "Safety, reliability and regulatory compliance guide how the team operates. As a Junior Electrical Engineer, you will work in the Electrical Engineering team in Toulouse, France, reporting to a senior member of the team. This is a full-time opportunity. The position is office-based with occasional travel within France.\n\nIn this role you will design and review electrical systems for generation, distribution or industrial use, handle routine Electrical Engineering assignments independently and ask for guidance on complex cases, analyse faults and recommend protection and safety improvements, coordinate with contractors and equipment suppliers, supervise installation, testing and commissioning, and ensure compliance with electrical codes and safety standards.\n\nApplicants need a bachelor's degree in a relevant field and up to 2 years of relevant experience. Required skills include electrical systems design, problem-solving, maintenance planning, substation operation, AutoCAD, and blueprint reading. You must be able to work in French and English.\n\nIt would be an advantage to bring project management, PLC, renewable energy systems, and energy audits. Training opportunities are available to support professional growth.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 33,
+      "job_id": "GLOBAL_SYN_000150",
+      "text": "We are hiring a Junior Architect for our Manchester office. The role sits in the Architecture and Design function and reports to a senior member of the team. Site and office teams coordinate daily with contractors and consultants.\n\nIn this role you will develop concept and detailed designs that meet client briefs and regulations, prepare permit and tender documentation, coordinate with structural and building services consultants, contribute ideas to improve team processes and share lessons with colleagues, produce drawings, models and specifications, and visit sites to review progress and resolve design issues.\n\nApplicants need a bachelor's degree in a relevant field and 1 to 2 years of relevant experience. Strong grounding in project management, reading engineering drawings, BIM, AutoCAD, creative thinking, and communication is expected. The working languages for this role are English.\n\nAdditional strengths in Adobe Photoshop, OHS, or cost estimation will be viewed favourably. Successful candidates will be introduced to the team through a short induction period.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 34,
+      "job_id": "GLOBAL_SYN_001513",
+      "text": "Site and office teams coordinate daily with contractors and consultants. As a Senior Construction Site Supervisor, you will work in the Site Operations team in Eindhoven, Netherlands, reporting to the head of Site Operations. This is a full-time opportunity. The position is office-based.\n\nIn this role you will support measurement and handover of completed works, direct daily site activities and allocate work to crews, check workmanship and materials against drawings and specifications, keep daily logs of progress, labour and equipment, advise management on improvements to Site Operations processes and standards, lead complex or high-priority Site Operations initiatives with limited supervision, and report defects, delays and variations to project managers.\n\nWe expect a bachelor's degree in a relevant field, together with 5 to 8 years of relevant experience. Candidates must demonstrate problem-solving, communication, meeting deadlines, occupational health and safety, project scheduling, team leadership, reading engineering drawings, and coaching junior staff. You must be able to work in Dutch and English.\n\nIt would be an advantage to bring supplier sourcing, MS Project, and MS Office.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 35,
+      "job_id": "GLOBAL_SYN_000021",
+      "text": "This full-time Farm Manager position is based in New York, United States, within an agricultural enterprise. Work combines field activity with planning, reporting and coordination. This role suits candidates with solid hands-on experience.\n\nIn this role you will supervise farm workers and allocate daily tasks, coordinate with other departments to resolve dependencies and deadlines, ensure compliance with safety, environmental and quality standards, manage budgets, inputs, equipment and maintenance, keep farm records for production, costs and sales, and plan planting, harvesting and field work schedules.\n\nApplicants need a bachelor's degree in a relevant field and 2 to 5 years of relevant experience. The role requires MS Excel, people management, decision making, farm operations management, OHS, crop management, and budget management. Fluency in English is required.\n\nAdditional strengths in irrigation planning, soil fertility management, or precision farming will be viewed favourably. The employer values reliability, integrity and a willingness to keep learning.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 36,
+      "job_id": "GLOBAL_SYN_001571",
+      "text": "We are hiring a Junior Agricultural Officer for our Calgary office. The role sits in the Agricultural Extension function and reports to a senior member of the team. The programme focuses on improving yields, resilience and market access. The position is office-based with occasional travel within Canada.\n\nMain duties: (1) support farmer groups and cooperatives with planning; (2) monitor the use of inputs such as seed, fertiliser and chemicals; (3) link farmers to markets, suppliers and government programmes; (4) contribute ideas to improve team processes and share lessons with colleagues; (5) collect field data on yields, pests and weather impacts.\n\nWe expect a bachelor's degree in a relevant field, together with 1 to 3 years of relevant experience. Candidates must demonstrate crop husbandry, presenting to stakeholders, agricultural extension, communication skills, and report writing. You must be able to work in English.\n\nAdditional strengths in project management, precision farming, irrigation planning, or geographic information systems will be viewed favourably. Training opportunities are available to support professional growth.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 37,
+      "job_id": "GLOBAL_SYN_000694",
+      "text": "This full-time Trainee Teacher position is based in Perth, Australia, within an educational institution. Staff work closely with colleagues, families and external partners to support learner outcomes. This role suits recent graduates and early-career candidates.\n\nDay-to-day responsibilities: Keep accurate attendance and grading records; Assess student progress through tests, assignments and observation; Take part in staff meetings, training and school events; Complete assigned work under supervision and escalate problems to the team lead; Plan and deliver engaging lessons that follow the approved curriculum.\n\nThe minimum requirements are a bachelor's degree in a relevant field and up to 1 year of relevant experience. Strong grounding in lesson planning, verbal communication, teaching qualification, and behaviour management is expected. You must be able to work in English.\n\nPreferred qualifications include adaptability and coaching. The employer encourages applications from candidates of all backgrounds.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 38,
+      "job_id": "GLOBAL_SYN_000124",
+      "text": "We are hiring a Junior Teacher for our Dubai office. The role sits in the Academic Affairs function and reports to a senior member of the team. Staff work closely with colleagues, families and external partners to support learner outcomes.\n\nDay-to-day responsibilities: Keep accurate attendance and grading records; Plan and deliver engaging lessons that follow the approved curriculum; Handle routine Academic Affairs assignments independently and ask for guidance on complex cases; Give regular feedback to students and families; Adapt materials for students with different learning needs.\n\nThe minimum requirements are a bachelor's degree in a relevant field and up to 2 years of relevant experience. Candidates must demonstrate behaviour management, verbal communication, lesson planning, e-learning tools, and interpersonal skills. Fluency in English and Arabic is required.\n\nIt would be an advantage to bring Learning Management Systems, coaching junior staff, creative thinking, and adaptability. Training opportunities are available to support professional growth.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 39,
+      "job_id": "GLOBAL_SYN_001304",
+      "text": "This part-time Supply Chain Manager position is based in São Paulo, Brazil, within a logistics and distribution provider. Teams work to tight delivery schedules and coordinate with many partners. This role suits candidates with solid hands-on experience. The position is office-based.\n\nMain duties: (1) plan the end-to-end flow of goods from suppliers to customers; (2) own Supply Chain deliverables from planning through completion; (3) monitor inventory levels, service levels and logistics costs; (4) manage budgets and report on supply chain metrics; (5) lead supply chain staff and cross-functional projects; (6) lead demand and supply planning cycles with sales and production.\n\nThe minimum requirements are a master's degree in a relevant field and 3 to 5 years of relevant experience. The role requires procurement, demand planning, supplier relationship management, supply chain planning, inventory management, people management, and analysing data. Fluency in Portuguese is required.\n\nPreferred qualifications include SAP finance modules, lean manufacturing, strategic thinking, and negotiation skills.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 40,
+      "job_id": "GLOBAL_SYN_001942",
+      "text": "This full-time Head of Supply Chain position is based in Durban, South Africa, within a logistics and distribution provider. Service reliability, cost control and visibility of shipments are key performance measures. This is a senior leadership position with organisation-wide impact. The position follows a hybrid working pattern.\n\nIn this role you will manage relationships and performance of key suppliers and carriers, plan the end-to-end flow of goods from suppliers to customers, lead and develop a team of managers and specialists in Supply Chain, set the strategic direction and annual objectives for the Supply Chain function, manage the Supply Chain budget and report results to senior leadership, and manage budgets and report on supply chain metrics.\n\nThe minimum requirements are a master's degree in a relevant field and at least 10 years of experience, including leadership responsibility. Required skills include strategic planning, data analytics, enterprise resource planning, decision making, supply chain optimisation, budget oversight, supplier relationship management, inventory management, and demand forecasting. The working languages for this role are English.\n\nIt would be an advantage to bring customs clearance and contract negotiation. The employer encourages applications from candidates of all backgrounds.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 41,
+      "job_id": "GLOBAL_SYN_000220",
+      "text": "Promotions and seasonal peaks require teams to plan carefully and adapt quickly. As a Visual Merchandiser, you will work in the Visual Merchandising team in Sihanoukville, Cambodia, reporting to the Visual Merchandising team lead. This is a part-time opportunity.\n\nDay-to-day responsibilities: Work with store teams on stock presentation; Plan and install window and in-store displays that follow seasonal campaigns; Follow brand guidelines across all stores; Maintain safe fixtures and clear walkways; Own Visual Merchandising deliverables from planning through completion; Review sales data to adjust layouts and displays.\n\nWe expect an associate degree in a relevant field, together with 3 to 6 years of relevant experience. Required skills include prioritisation, team collaboration, communication skills, creativity, merchandise display, brand strategy, and attention to detail. The working languages for this role are Khmer and English.\n\nAdditional strengths in Adobe Photoshop, customer research, visual design, or data analysis will be viewed favourably. The team works in a collaborative environment with regular feedback.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 42,
+      "job_id": "GLOBAL_SYN_000906",
+      "text": "This full-time Senior Store Manager position is based in Hai Phong, Vietnam, within a retail business. Promotions and seasonal peaks require teams to plan carefully and adapt quickly. This role suits experienced professionals who are ready to guide others.\n\nThe successful candidate will mentor junior staff and review the quality of Store Operations work, control store budgets and expenses, review sales reports and plan promotions, maintain displays, cleanliness and safety standards, handle escalated customer complaints, recruit, schedule and coach store employees, and lead complex or high-priority Store Operations initiatives with limited supervision.\n\nThe minimum requirements are a bachelor's degree in a relevant field and 5 to 8 years of relevant experience. Required skills include client service, leading teams, inventory control, mentoring, retail operations, merchandise display, and budget control. The working languages for this role are Vietnamese and English.\n\nAdditional strengths in data analytics, contract negotiation, workplace safety, or stock replenishment will be viewed favourably. The team works in a collaborative environment with regular feedback.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 43,
+      "job_id": "GLOBAL_SYN_001994",
+      "text": "The team works to grow customer reach, revenue and brand awareness. As a Sales Representative, you will work in the Sales team in Singapore, Singapore, reporting to the Sales team lead. This is a contract opportunity. The position is mainly on-site.\n\nDay-to-day responsibilities: Negotiate prices and close sales within company policy; Gather customer feedback and share market intelligence; Coordinate order delivery and after-sales support; Identify and contact prospective customers; Maintain customer records and follow up regularly; Review the work of junior colleagues and give constructive feedback.\n\nWe expect a high school diploma or equivalent, together with 3 to 5 years of relevant experience. Required skills include client service, customer relationship management software, verbal communication, presenting to stakeholders, contract negotiation, prioritisation, and prospecting. Fluency in English is required.\n\nAdditional strengths in account management, Salesforce, Microsoft Excel, or social media marketing will be viewed favourably. Structured onboarding and development opportunities are provided.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 44,
+      "job_id": "GLOBAL_SYN_000566",
+      "text": "A commercial organisation in Phuket, Thailand is looking for a Junior Digital Marketing Specialist to join its Digital Marketing team. The team works to grow customer reach, revenue and brand awareness. This role suits candidates building their first few years of experience. The position follows a hybrid working pattern.\n\nDay-to-day responsibilities: Manage paid and organic campaigns on search and social platforms; Schedule and publish content across digital channels; Optimise websites and content for search visibility; Coordinate with designers and writers on assets; Handle routine Digital Marketing assignments independently and ask for guidance on complex cases; Prepare reports with recommendations for budgets.\n\nApplicants need a bachelor's degree in a relevant field and up to 2 years of relevant experience. Required skills include A/B Testing, content marketing, online marketing, campaign management, Google Analytics, and search engine optimisation. You must be able to work in Thai and English.\n\nIt would be an advantage to bring Photoshop, SQL, customer research, and customer relationship management software. The employer encourages applications from candidates of all backgrounds.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 45,
+      "job_id": "GLOBAL_SYN_000163",
+      "text": "Demand is seasonal, so flexibility and teamwork are valued. As a Trainee Chef, you will work in the Culinary team in Penang, Malaysia, reporting to a senior member of the team. This is a full-time opportunity.\n\nThe successful candidate will plan menus around seasonal ingredients and food cost targets, train and supervise kitchen staff, maintain cleanliness and safe food handling in all work areas, take part in onboarding and on-the-job training for the Culinary team, and adapt dishes for dietary and allergy requirements.\n\nWe expect a high school diploma or equivalent, together with up to 1 year of relevant experience. Required skills include HACCP, food safety, inventory management, and recipe costing. Fluency in Malay and English is required.\n\nIt would be an advantage to bring supplier management and client service. The team works in a collaborative environment with regular feedback.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 46,
+      "job_id": "GLOBAL_SYN_001364",
+      "text": "The business welcomes both domestic and international guests throughout the year. As a Junior Hotel Manager, you will work in the Hotel Operations team in Bandung, Indonesia, reporting to a senior member of the team. This is a full-time opportunity. The position follows a hybrid working pattern.\n\nMain duties: (1) review daily operating reports and take corrective action; (2) recruit, train and schedule hotel staff; (3) maintain safety, hygiene and brand standards; (4) handle routine Hotel Operations assignments independently and ask for guidance on complex cases; (5) oversee front office, housekeeping and food and beverage operations; (6) monitor guest satisfaction and resolve complaints promptly.\n\nThe minimum requirements are an associate degree in a relevant field and 1 to 2 years of relevant experience. Strong grounding in problem solving, decision making, verbal communication, guest relations, and PMS software is expected. The working languages for this role are Indonesian and English.\n\nPreferred qualifications include event coordination, digital marketing, and strategic planning. Training opportunities are available to support professional growth.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 47,
+      "job_id": "GLOBAL_SYN_001466",
+      "text": "This full-time Trainee Content Writer position is based in Cebu City, Philippines, within a media and creative organisation. Audience engagement and brand consistency are key priorities. This role suits recent graduates and early-career candidates. The position is office-based.\n\nIn this role you will optimise content for search and reader engagement, take part in onboarding and on-the-job training for the Content team, edit and proofread content for clarity and consistency, follow editorial calendars and brand guidelines, and work with designers and video teams on multimedia content.\n\nWe expect an associate degree in a relevant field, together with no prior experience, although internships or relevant projects are an advantage. Strong grounding in proofreading, detail orientation, creativity, and article writing is expected. The working languages for this role are English.\n\nPreferred qualifications include Adobe Photoshop, CMS, and social media marketing.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 48,
+      "job_id": "GLOBAL_SYN_001056",
+      "text": "This full-time Video Producer position is based in Mumbai, India, within a media and creative organisation. Teams work to publication deadlines and collaborate across creative and technical roles. This role suits candidates with solid hands-on experience. The position follows a hybrid working pattern.\n\nThe successful candidate will follow production safety rules, coordinate approvals with clients or editors, coordinate with other departments to resolve dependencies and deadlines, manage schedules, crews, locations and budgets, plan video productions from concept and script to final delivery, and direct filming and ensure technical quality.\n\nThe minimum requirements are a bachelor's degree in a relevant field and 2 to 5 years of relevant experience. Required skills include communication skills, post-production editing, meeting deadlines, storyboards, budget oversight, video shooting, and creativity. Fluency in English is required.\n\nIt would be an advantage to bring CMS, Premiere Pro, negotiation skills, and project management. Training opportunities are available to support professional growth.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 49,
+      "job_id": "GLOBAL_SYN_000004",
+      "text": "Transparency, accountability and record keeping are important parts of the role. As a Junior Procurement Officer, you will work in the Procurement team in Tokyo, Japan, reporting to a senior member of the team. This is a full-time opportunity.\n\nDay-to-day responsibilities: Report on procurement spending and savings; Maintain procurement records and contract files; Prepare tender documents and manage competitive bidding; Monitor supplier delivery and contract performance; Handle routine Procurement assignments independently and ask for guidance on complex cases; Evaluate supplier submissions against published criteria.\n\nWe expect an associate degree in a relevant field, together with 1 to 2 years of relevant experience. Strong grounding in supplier sourcing, public procurement regulations, budget management, attention to detail, and Excel is expected. You must be able to work in Japanese and English.\n\nIt would be an advantage to bring enterprise resource planning and civil service procedures. The employer encourages applications from candidates of all backgrounds.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    },
+    {
+      "record_id": 50,
+      "job_id": "GLOBAL_SYN_000514",
+      "text": "A public-sector agency in Busan, South Korea is looking for a Human Resources Specialist to join its Human Resources team. Transparency, accountability and record keeping are important parts of the role. This role suits candidates with solid hands-on experience. The position follows a hybrid working pattern.\n\nMain duties: (1) own Human Resources deliverables from planning through completion; (2) support recruitment, interviews and onboarding of new employees; (3) advise managers and staff on HR policies and procedures; (4) prepare workforce and HR reports; (5) maintain employee records and HR information systems; (6) handle employee relations cases with confidentiality.\n\nWe expect a master's degree in a relevant field, together with 3 to 6 years of relevant experience. Candidates must demonstrate industrial relations, labour regulations, HR software, verbal communication, recruitment and selection, and Microsoft Office. The working languages for this role are Korean.\n\nAdditional strengths in reward management, performance management, data analysis, or change management will be viewed favourably. The employer values reliability, integrity and a willingness to keep learning.",
+      "pass_1": {
+        "status": "PENDING",
+        "instructions": "Mark continuous skill spans in text. Record character_start (inclusive) and character_end (exclusive). text[start:end] must match skill_mention exactly. Do not consult metadata or models.",
+        "spans": []
+      },
+      "pass_2": {
+        "status": "PENDING",
+        "instructions": "Map each confirmed span to canonical_skill and skill_id from data/processed/global_skill_taxonomy.csv. If unresolvable or OOV, assign UNRESOLVED_CANONICAL.",
+        "canonical_mappings": []
+      },
+      "record_status": "INCOMPLETE",
+      "annotator_id": null,
+      "reviewer_notes": null
+    }
+  ]
+}

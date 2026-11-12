@@ -1,0 +1,54 @@
+occupation_id,occupation,industry,department_label,taxonomy_source,isco08_code_candidate,isco08_label_candidate,mapping_confidence,mapping_status,esco_occupation_uri,onet_soc_code,n_synthetic_records
+SG-OC-001,Software Developer,Information Technology,Software Engineering,ISCO-08,2512,Software developers,0.9,candidate_unverified_check_against_official_ilo_file,,,16
+SG-OC-002,Data Analyst,Information Technology,Data Analytics,ISCO-08,2511,Systems analysts,0.5,candidate_unverified_check_against_official_ilo_file,,,16
+SG-OC-003,Data Scientist,Information Technology,Data Science,ISCO-08,2120,"Mathematicians, actuaries and statisticians",0.4,candidate_unverified_check_against_official_ilo_file,,,17
+SG-OC-004,Data Engineer,Information Technology,Data Engineering,ISCO-08,2521,Database designers and administrators,0.5,candidate_unverified_check_against_official_ilo_file,,,17
+SG-OC-005,Machine Learning Engineer,Information Technology,Machine Learning,ISCO-08,2512,Software developers,0.4,candidate_unverified_check_against_official_ilo_file,,,17
+SG-OC-006,Cybersecurity Analyst,Information Technology,Information Security,ISCO-08,2529,Database and network professionals not elsewhere classified,0.6,candidate_unverified_check_against_official_ilo_file,,,16
+SG-OC-007,Business Intelligence Analyst,Information Technology,Business Intelligence,ISCO-08,2511,Systems analysts,0.5,candidate_unverified_check_against_official_ilo_file,,,17
+SG-OC-008,Project Manager,Information Technology,Project Management Office,ISCO-08,1330,Information and communications technology service managers,0.5,candidate_unverified_check_against_official_ilo_file,,,17
+SG-OC-009,Accountant,Finance and Banking,Accounting,ISCO-08,2411,Accountants,0.95,candidate_unverified_check_against_official_ilo_file,,,34
+SG-OC-010,Financial Analyst,Finance and Banking,Financial Planning and Analysis,ISCO-08,2413,Financial analysts,0.9,candidate_unverified_check_against_official_ilo_file,,,34
+SG-OC-011,Credit Officer,Finance and Banking,Lending,ISCO-08,3312,Credit and loans officers,0.9,candidate_unverified_check_against_official_ilo_file,,,35
+SG-OC-012,Risk Analyst,Finance and Banking,Risk Management,ISCO-08,2413,Financial analysts,0.5,candidate_unverified_check_against_official_ilo_file,,,34
+SG-OC-013,Teacher,Education,Academic Affairs,ISCO-08,2330,Secondary education teachers,0.7,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-014,Lecturer,Education,Faculty,ISCO-08,2310,University and higher education teachers,0.9,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-015,Academic Coordinator,Education,Academic Operations,ISCO-08,2351,Education methods specialists,0.5,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-016,Nurse,Healthcare,Nursing,ISCO-08,2221,Nursing professionals,0.95,candidate_unverified_check_against_official_ilo_file,,,33
+SG-OC-017,Pharmacist,Healthcare,Pharmacy,ISCO-08,2262,Pharmacists,0.95,candidate_unverified_check_against_official_ilo_file,,,33
+SG-OC-018,Medical Laboratory Technician,Healthcare,Laboratory Services,ISCO-08,3212,Medical and pathology laboratory technicians,0.9,candidate_unverified_check_against_official_ilo_file,,,32
+SG-OC-019,Healthcare Administrator,Healthcare,Clinical Administration,ISCO-08,1342,Health services managers,0.9,candidate_unverified_check_against_official_ilo_file,,,33
+SG-OC-020,Hotel Manager,Tourism and Hospitality,Hotel Operations,ISCO-08,1411,Hotel managers,0.95,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-021,Tour Operations Coordinator,Tourism and Hospitality,Tour Operations,ISCO-08,4221,Travel consultants and clerks,0.5,candidate_unverified_check_against_official_ilo_file,,,46
+SG-OC-022,Chef,Tourism and Hospitality,Culinary,ISCO-08,3434,Chefs,0.95,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-023,Agricultural Officer,Agriculture,Agricultural Extension,ISCO-08,2132,"Farming, forestry and fisheries advisers",0.8,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-024,Agronomist,Agriculture,Agronomy,ISCO-08,2132,"Farming, forestry and fisheries advisers",0.8,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-025,Farm Manager,Agriculture,Farm Operations,ISCO-08,1311,Agricultural and forestry production managers,0.9,candidate_unverified_check_against_official_ilo_file,,,46
+SG-OC-026,Production Supervisor,Manufacturing,Production,ISCO-08,3122,Manufacturing supervisors,0.95,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-027,Quality Control Inspector,Manufacturing,Quality Assurance,ISCO-08,7543,Product graders and testers (excluding foods and beverages),0.6,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-028,Mechanical Engineer,Manufacturing,Mechanical Engineering,ISCO-08,2144,Mechanical engineers,0.95,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-029,Civil Engineer,Construction,Civil Engineering,ISCO-08,2142,Civil engineers,0.95,candidate_unverified_check_against_official_ilo_file,,,43
+SG-OC-030,Construction Site Supervisor,Construction,Site Operations,ISCO-08,3123,Construction supervisors,0.95,candidate_unverified_check_against_official_ilo_file,,,43
+SG-OC-031,Architect,Construction,Architecture and Design,ISCO-08,2161,Building architects,0.95,candidate_unverified_check_against_official_ilo_file,,,43
+SG-OC-032,Supply Chain Manager,Logistics and Supply Chain,Supply Chain,ISCO-08,1324,"Supply, distribution and related managers",0.95,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-033,Warehouse Supervisor,Logistics and Supply Chain,Warehouse Operations,ISCO-08,1324,"Supply, distribution and related managers",0.5,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-034,Logistics Coordinator,Logistics and Supply Chain,Logistics Coordination,ISCO-08,4323,Transport clerks,0.6,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-035,Marketing Specialist,Sales and Marketing,Marketing,ISCO-08,2431,Advertising and marketing professionals,0.9,candidate_unverified_check_against_official_ilo_file,,,33
+SG-OC-036,Sales Representative,Sales and Marketing,Sales,ISCO-08,3322,Commercial sales representatives,0.95,candidate_unverified_check_against_official_ilo_file,,,34
+SG-OC-037,Digital Marketing Specialist,Sales and Marketing,Digital Marketing,ISCO-08,2431,Advertising and marketing professionals,0.7,candidate_unverified_check_against_official_ilo_file,,,33
+SG-OC-038,Account Manager,Sales and Marketing,Account Management,ISCO-08,3322,Commercial sales representatives,0.6,candidate_unverified_check_against_official_ilo_file,,,34
+SG-OC-039,Store Manager,Retail and E-commerce,Store Operations,ISCO-08,1420,Retail and wholesale trade managers,0.95,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-040,E-commerce Specialist,Retail and E-commerce,E-commerce,ISCO-08,2431,Advertising and marketing professionals,0.4,candidate_unverified_check_against_official_ilo_file,,,43
+SG-OC-041,Visual Merchandiser,Retail and E-commerce,Visual Merchandising,ISCO-08,3432,Interior designers and decorators,0.5,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-042,Electrical Engineer,Energy and Utilities,Electrical Engineering,ISCO-08,2151,Electrical engineers,0.95,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-043,Energy Analyst,Energy and Utilities,Energy Analytics,ISCO-08,2149,Engineering professionals not elsewhere classified,0.4,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-044,Power Plant Technician,Energy and Utilities,Power Operations,ISCO-08,3131,Power production plant operators,0.85,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-045,Human Resources Specialist,Government and Public Administration,Human Resources,ISCO-08,2423,Personnel and careers professionals,0.9,candidate_unverified_check_against_official_ilo_file,,,46
+SG-OC-046,Policy Analyst,Government and Public Administration,Policy and Planning,ISCO-08,2422,Policy administration professionals,0.85,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-047,Procurement Officer,Government and Public Administration,Procurement,ISCO-08,3323,Buyers,0.7,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-048,Network Engineer,Telecommunications,Network Engineering,ISCO-08,2523,Computer network professionals,0.9,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-049,Telecommunications Engineer,Telecommunications,Telecom Engineering,ISCO-08,2153,Telecommunications engineers,0.95,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-050,Customer Support Specialist,Telecommunications,Customer Support,ISCO-08,4222,Contact centre information clerks,0.6,candidate_unverified_check_against_official_ilo_file,,,45
+SG-OC-051,Content Writer,Media and Entertainment,Content,ISCO-08,2641,Authors and related writers,0.85,candidate_unverified_check_against_official_ilo_file,,,44
+SG-OC-052,Video Producer,Media and Entertainment,Video Production,ISCO-08,2654,"Film, stage and related directors and producers",0.85,candidate_unverified_check_against_official_ilo_file,,,43
+SG-OC-053,Graphic Designer,Media and Entertainment,Design,ISCO-08,2166,Graphic and multimedia designers,0.95,candidate_unverified_check_against_official_ilo_file,,,44

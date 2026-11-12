@@ -1,0 +1,231 @@
+skill_id,canonical_skill,skill_category,skill_type,aliases,taxonomy_source,esco_uri,onet_element_id,mapping_status,n_mentions_in_synthetic
+SG-SK-0001,Python,Programming languages,Technology,"[""Python programming"", ""Python 3""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,211
+SG-SK-0002,Java,Programming languages,Technology,"[""Java programming"", ""Core Java""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,6
+SG-SK-0003,JavaScript,Programming languages,Technology,"[""JS"", ""ECMAScript""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,6
+SG-SK-0004,TypeScript,Programming languages,Technology,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,8
+SG-SK-0005,R (programming language),Programming languages,Technology,"[""R programming""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,59
+SG-SK-0006,SQL,Database technologies,Technology,"[""Structured Query Language"", ""SQL queries""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,177
+SG-SK-0007,React,Frameworks and libraries,Technology,"[""React.js"", ""ReactJS""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,8
+SG-SK-0008,pandas,Frameworks and libraries,Technology,"[""Pandas library""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,5
+SG-SK-0009,scikit-learn,Frameworks and libraries,Technology,"[""sklearn""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,8
+SG-SK-0010,TensorFlow,Frameworks and libraries,Technology,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,15
+SG-SK-0011,PyTorch,Frameworks and libraries,Technology,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,14
+SG-SK-0012,Apache Spark,Frameworks and libraries,Technology,"[""Spark"", ""PySpark""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,26
+SG-SK-0013,Apache Airflow,Frameworks and libraries,Technology,"[""Airflow""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,9
+SG-SK-0014,REST APIs,Frameworks and libraries,Technology,"[""RESTful APIs"", ""API development""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,9
+SG-SK-0015,PostgreSQL,Database technologies,Technology,"[""Postgres""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,20
+SG-SK-0016,Data Warehousing,Database technologies,Knowledge area,"[""data warehouse design""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,25
+SG-SK-0017,ETL Development,Database technologies,Hard skill,"[""ETL pipelines"", ""ETL processes"", ""ELT""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,25
+SG-SK-0018,Data Analysis,Data analysis,Hard skill,"[""data analytics"", ""analysing data""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,373
+SG-SK-0019,Data Visualization,Data analysis,Hard skill,"[""data visualisation"", ""dashboarding""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,106
+SG-SK-0020,Microsoft Excel,Data analysis,Tool,"[""Excel"", ""MS Excel"", ""advanced Excel""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,511
+SG-SK-0021,Microsoft Office,Data analysis,Tool,"[""MS Office"", ""Office suite""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,112
+SG-SK-0022,Power BI,Data analysis,Tool,"[""Microsoft Power BI""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,141
+SG-SK-0023,Tableau,Data analysis,Tool,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,39
+SG-SK-0024,Statistics,Data analysis,Knowledge area,"[""statistical analysis"", ""statistical methods""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,207
+SG-SK-0025,A/B Testing,Data analysis,Hard skill,"[""experiment design"", ""split testing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,24
+SG-SK-0026,Google Analytics,Data analysis,Tool,"[""GA4""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,110
+SG-SK-0027,Machine Learning,Machine learning,Knowledge area,"[""ML"", ""machine-learning models""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,34
+SG-SK-0028,Feature Engineering,Machine learning,Hard skill,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,10
+SG-SK-0029,Model Deployment,Machine learning,Hard skill,"[""MLOps"", ""model serving""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,16
+SG-SK-0030,Deep Learning,Machine learning,Knowledge area,"[""neural networks""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,13
+SG-SK-0031,Natural Language Processing,Artificial intelligence,Knowledge area,"[""NLP""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,14
+SG-SK-0032,Computer Vision,Artificial intelligence,Knowledge area,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,7
+SG-SK-0033,Generative AI,Artificial intelligence,Knowledge area,"[""GenAI"", ""large language models""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,5
+SG-SK-0034,Amazon Web Services,Cloud computing,Technology,"[""AWS""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,65
+SG-SK-0035,Microsoft Azure,Cloud computing,Technology,"[""Azure""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,25
+SG-SK-0036,Google Cloud Platform,Cloud computing,Technology,"[""GCP"", ""Google Cloud""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,6
+SG-SK-0037,Docker,Cloud computing,Tool,"[""containerisation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,26
+SG-SK-0038,Kubernetes,Cloud computing,Tool,"[""K8s""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,14
+SG-SK-0039,Git,Cloud computing,Tool,"[""version control""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,36
+SG-SK-0040,CI/CD,Cloud computing,Hard skill,"[""continuous integration"", ""CI/CD pipelines""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,15
+SG-SK-0041,Software Testing,Engineering,Hard skill,"[""unit testing"", ""test automation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,16
+SG-SK-0042,Network Security,Cybersecurity,Hard skill,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0043,Penetration Testing,Cybersecurity,Hard skill,"[""ethical hacking"", ""pen testing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,5
+SG-SK-0044,SIEM,Cybersecurity,Tool,"[""security information and event management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,10
+SG-SK-0045,Incident Response,Cybersecurity,Hard skill,"[""security incident handling""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,16
+SG-SK-0046,ISO 27001,Cybersecurity,Certification,"[""ISO/IEC 27001""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,11
+SG-SK-0047,Vulnerability Assessment,Cybersecurity,Hard skill,"[""vulnerability scanning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,11
+SG-SK-0048,Data Privacy Compliance,Cybersecurity,Knowledge area,"[""data protection compliance""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,136
+SG-SK-0049,TCP/IP,Networking,Knowledge area,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,77
+SG-SK-0050,Network Configuration,Networking,Hard skill,"[""network administration"", ""router and switch configuration""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0051,Cisco Networking,Networking,Tool,"[""Cisco IOS""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,31
+SG-SK-0052,CCNA,Networking,Certification,"[""Cisco Certified Network Associate""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,22
+SG-SK-0053,Network Monitoring,Networking,Hard skill,"[""network performance monitoring""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,56
+SG-SK-0054,Network Troubleshooting,Networking,Hard skill,"[""fault diagnosis"", ""network fault resolution""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,89
+SG-SK-0055,Fiber Optics,Networking,Technology,"[""fibre optic"", ""FTTH""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,58
+SG-SK-0056,LTE and 5G,Networking,Technology,"[""4G/5G"", ""5G networks""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,37
+SG-SK-0057,Financial Reporting,Business and finance,Hard skill,"[""financial statements preparation"", ""financial statements""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,57
+SG-SK-0058,Local Accounting Standards,Business and finance,Knowledge area,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,52
+SG-SK-0059,Bookkeeping,Business and finance,Hard skill,"[""general ledger accounting"", ""general ledger""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,34
+SG-SK-0060,Tax Compliance,Business and finance,Hard skill,"[""tax filing"", ""taxation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,14
+SG-SK-0061,Auditing,Business and finance,Hard skill,"[""internal audit"", ""audit procedures""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,80
+SG-SK-0062,Budgeting and Forecasting,Business and finance,Hard skill,"[""budget preparation"", ""financial forecasting""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,83
+SG-SK-0063,Budget Management,Business and finance,Hard skill,"[""budget control"", ""budget oversight""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,360
+SG-SK-0064,Financial Modelling,Business and finance,Hard skill,"[""financial modeling""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,61
+SG-SK-0065,Credit Risk Assessment,Business and finance,Hard skill,"[""credit analysis"", ""credit evaluation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,59
+SG-SK-0066,Risk Management,Business and finance,Hard skill,"[""risk assessment""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,117
+SG-SK-0067,Anti-Money Laundering,Business and finance,Knowledge area,"[""AML"", ""AML compliance""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,51
+SG-SK-0068,SAP ERP,Business and finance,Tool,"[""SAP"", ""SAP finance modules""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,60
+SG-SK-0069,QuickBooks,Business and finance,Tool,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,21
+SG-SK-0070,ERP Systems,Business and finance,Technology,"[""enterprise resource planning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,193
+SG-SK-0071,CFA,Business and finance,Certification,"[""Chartered Financial Analyst""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,17
+SG-SK-0072,AutoCAD,Engineering,Tool,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,181
+SG-SK-0073,SolidWorks,Engineering,Tool,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0074,Revit,Engineering,Tool,"[""Autodesk Revit""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,51
+SG-SK-0075,Building Information Modelling,Engineering,Knowledge area,"[""BIM""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,68
+SG-SK-0076,Structural Analysis,Engineering,Hard skill,"[""structural design""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,43
+SG-SK-0077,Technical Drawing Interpretation,Engineering,Hard skill,"[""reading engineering drawings"", ""blueprint reading""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,258
+SG-SK-0078,Cost Estimation,Engineering,Hard skill,"[""quantity take-off"", ""cost estimating""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,93
+SG-SK-0079,Quality Control,Engineering,Hard skill,"[""quality inspection"", ""QC procedures""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,135
+SG-SK-0080,Quality Management Systems,Engineering,Knowledge area,"[""ISO 9001""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,93
+SG-SK-0081,Lean Manufacturing,Engineering,Knowledge area,"[""lean production"", ""kaizen""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,122
+SG-SK-0082,Lean Six Sigma,Industry-specific skills,Certification,"[""Six Sigma""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,54
+SG-SK-0083,Production Planning,Engineering,Hard skill,"[""production scheduling"", ""manufacturing planning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0084,PLC Programming,Engineering,Technology,"[""PLC"", ""programmable logic controllers""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,78
+SG-SK-0085,Preventive Maintenance,Engineering,Hard skill,"[""equipment maintenance"", ""maintenance planning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,149
+SG-SK-0086,Electrical Systems Design,Engineering,Hard skill,"[""power systems design"", ""electrical design""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,76
+SG-SK-0087,Power Systems Operation,Engineering,Hard skill,"[""grid operations"", ""substation operation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,76
+SG-SK-0088,SCADA,Engineering,Technology,"[""SCADA systems""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,55
+SG-SK-0089,Renewable Energy Systems,Engineering,Knowledge area,"[""renewable energy technologies""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,88
+SG-SK-0090,Energy Efficiency Analysis,Engineering,Hard skill,"[""energy auditing"", ""energy audits""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,94
+SG-SK-0091,Mechanical Design,Engineering,Hard skill,"[""machine design""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0092,Root Cause Analysis,Problem-solving,Hard skill,"[""RCA"", ""root-cause investigation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,146
+SG-SK-0093,Occupational Health and Safety,Industry-specific skills,Knowledge area,"[""OHS"", ""workplace safety"", ""HSE practices""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,319
+SG-SK-0094,Patient Care,Healthcare competencies,Hard skill,"[""bedside care"", ""nursing care""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,33
+SG-SK-0095,Patient Communication,Healthcare competencies,Competency,"[""communicating with patients""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0096,Clinical Documentation,Healthcare competencies,Hard skill,"[""patient records"", ""medical records management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,78
+SG-SK-0097,Medication Administration,Healthcare competencies,Hard skill,"[""drug administration""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,33
+SG-SK-0098,Infection Control,Healthcare competencies,Hard skill,"[""infection prevention""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0099,Basic Life Support,Healthcare competencies,Certification,"[""BLS certification""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,18
+SG-SK-0100,Pharmaceutical Dispensing,Healthcare competencies,Hard skill,"[""dispensing medication"", ""prescription dispensing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,33
+SG-SK-0101,Pharmacology,Healthcare competencies,Knowledge area,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,33
+SG-SK-0102,Laboratory Testing,Healthcare competencies,Hard skill,"[""clinical laboratory analysis"", ""lab testing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,32
+SG-SK-0103,Electronic Health Records,Healthcare competencies,Technology,"[""EHR"", ""EMR systems""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,89
+SG-SK-0104,Healthcare Regulations Compliance,Healthcare competencies,Knowledge area,"[""clinical governance"", ""healthcare compliance""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,86
+SG-SK-0105,Healthcare Operations Management,Healthcare competencies,Hard skill,"[""hospital administration"", ""clinical operations management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,33
+SG-SK-0106,Hotel Management Systems,Industry-specific skills,Tool,"[""property management system"", ""PMS software""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0107,Guest Service,Industry-specific skills,Competency,"[""guest relations"", ""hospitality service""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0108,Revenue Management,Industry-specific skills,Hard skill,"[""yield management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,25
+SG-SK-0109,Food Safety,Industry-specific skills,Knowledge area,"[""food hygiene standards""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,67
+SG-SK-0110,HACCP,Industry-specific skills,Certification,"[""HACCP principles""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,25
+SG-SK-0111,Menu Planning,Industry-specific skills,Hard skill,"[""menu development"", ""recipe costing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0112,Tour Itinerary Planning,Industry-specific skills,Hard skill,"[""itinerary design"", ""travel planning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,46
+SG-SK-0113,Reservation Systems,Industry-specific skills,Tool,"[""booking systems"", ""reservation software""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,46
+SG-SK-0114,Event Coordination,Industry-specific skills,Hard skill,"[""event planning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0115,Crop Management,Industry-specific skills,Hard skill,"[""crop production"", ""crop husbandry""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,136
+SG-SK-0116,Soil Science,Industry-specific skills,Knowledge area,"[""soil analysis"", ""soil fertility management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,104
+SG-SK-0117,Integrated Pest Management,Industry-specific skills,Knowledge area,"[""IPM"", ""pest control""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,63
+SG-SK-0118,Irrigation Management,Industry-specific skills,Hard skill,"[""irrigation planning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,90
+SG-SK-0119,Agricultural Extension,Industry-specific skills,Hard skill,"[""farmer training"", ""extension services""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,66
+SG-SK-0120,Precision Agriculture,Industry-specific skills,Technology,"[""precision farming""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,79
+SG-SK-0121,GIS,Industry-specific skills,Tool,"[""geographic information systems""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,107
+SG-SK-0122,Farm Operations Management,Industry-specific skills,Hard skill,"[""farm management"", ""agribusiness operations""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,46
+SG-SK-0123,Warehouse Management,Industry-specific skills,Hard skill,"[""warehouse operations""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,74
+SG-SK-0124,Inventory Management,Industry-specific skills,Hard skill,"[""inventory control"", ""stock control""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,217
+SG-SK-0125,Procurement,Industry-specific skills,Hard skill,"[""purchasing"", ""supplier sourcing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,125
+SG-SK-0126,Supply Chain Planning,Industry-specific skills,Hard skill,"[""supply chain optimisation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0127,Demand Forecasting,Industry-specific skills,Hard skill,"[""demand planning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0128,Transportation Management,Industry-specific skills,Hard skill,"[""fleet coordination"", ""freight management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0129,Customs Compliance,Industry-specific skills,Knowledge area,"[""import and export documentation"", ""customs clearance""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,67
+SG-SK-0130,Transport Management Systems,Industry-specific skills,Tool,"[""TMS""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,64
+SG-SK-0131,Supplier Management,Industry-specific skills,Hard skill,"[""vendor management"", ""supplier relationship management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,177
+SG-SK-0132,Digital Marketing,Industry-specific skills,Hard skill,"[""online marketing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,147
+SG-SK-0133,SEO,Industry-specific skills,Hard skill,"[""search engine optimisation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,102
+SG-SK-0134,Social Media Marketing,Industry-specific skills,Hard skill,"[""social media management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,182
+SG-SK-0135,Content Marketing,Industry-specific skills,Hard skill,"[""content strategy""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,37
+SG-SK-0136,Campaign Management,Industry-specific skills,Hard skill,"[""marketing campaign management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,74
+SG-SK-0137,Market Research,Industry-specific skills,Hard skill,"[""market analysis"", ""customer research""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,119
+SG-SK-0138,CRM Software,Industry-specific skills,Tool,"[""CRM systems"", ""customer relationship management software""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,143
+SG-SK-0139,Salesforce,Industry-specific skills,Tool,"[""Salesforce CRM""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,39
+SG-SK-0140,Lead Generation,Industry-specific skills,Hard skill,"[""prospecting""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,34
+SG-SK-0141,Account Management,Industry-specific skills,Hard skill,"[""key account management"", ""client relationship management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,56
+SG-SK-0142,Brand Management,Industry-specific skills,Hard skill,"[""brand strategy""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,72
+SG-SK-0143,Visual Merchandising,Industry-specific skills,Hard skill,"[""merchandise display"", ""in-store display""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,75
+SG-SK-0144,Point-of-Sale Systems,Industry-specific skills,Tool,"[""POS systems""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,48
+SG-SK-0145,E-commerce Platform Management,Industry-specific skills,Hard skill,"[""online store management"", ""marketplace management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,43
+SG-SK-0146,Product Listing Optimisation,Industry-specific skills,Hard skill,"[""product catalogue management"", ""listing management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,43
+SG-SK-0147,Store Operations Management,Industry-specific skills,Hard skill,"[""retail operations"", ""store management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0148,Stock Replenishment,Industry-specific skills,Hard skill,"[""replenishment planning""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,59
+SG-SK-0149,Policy Analysis,Industry-specific skills,Hard skill,"[""policy research"", ""policy evaluation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0150,Public Procurement Regulations,Industry-specific skills,Knowledge area,"[""public tendering rules"", ""government procurement rules""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0151,Public Administration Procedures,Industry-specific skills,Knowledge area,"[""government administrative procedures"", ""civil service procedures""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,54
+SG-SK-0152,Recruitment and Selection,Industry-specific skills,Hard skill,"[""talent acquisition"", ""recruiting""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,46
+SG-SK-0153,Employee Relations,Industry-specific skills,Hard skill,"[""labour relations"", ""industrial relations""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,35
+SG-SK-0154,HR Information Systems,Industry-specific skills,Tool,"[""HRIS"", ""HR software""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,46
+SG-SK-0155,Labour Law Knowledge,Industry-specific skills,Knowledge area,"[""employment law"", ""labour regulations""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,29
+SG-SK-0156,Performance Management,Industry-specific skills,Hard skill,"[""performance appraisal""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,29
+SG-SK-0157,Compensation and Benefits,Industry-specific skills,Hard skill,"[""reward management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,26
+SG-SK-0158,Telecommunications Systems,Industry-specific skills,Technology,"[""telecom infrastructure"", ""telecom networks""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,73
+SG-SK-0159,RF Engineering,Industry-specific skills,Technology,"[""radio frequency planning"", ""RF optimisation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0160,Customer Support Ticketing,Industry-specific skills,Tool,"[""ticketing systems"", ""helpdesk software""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0161,Technical Support,Industry-specific skills,Hard skill,"[""technical troubleshooting"", ""first-line support""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,45
+SG-SK-0162,Service Level Management,Industry-specific skills,Hard skill,"[""SLA management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,64
+SG-SK-0163,Content Writing,Industry-specific skills,Hard skill,"[""article writing"", ""web content creation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0164,Copywriting,Industry-specific skills,Hard skill,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,49
+SG-SK-0165,Editing and Proofreading,Industry-specific skills,Hard skill,"[""proofreading"", ""copy editing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0166,Video Editing,Industry-specific skills,Hard skill,"[""post-production editing"", ""video post-production""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,96
+SG-SK-0167,Video Production,Industry-specific skills,Hard skill,"[""video shooting"", ""production management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,43
+SG-SK-0168,Storyboarding,Industry-specific skills,Hard skill,"[""storyboards""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,26
+SG-SK-0169,Adobe Premiere Pro,Industry-specific skills,Tool,"[""Premiere Pro""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,54
+SG-SK-0170,Adobe Photoshop,Industry-specific skills,Tool,"[""Photoshop""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,136
+SG-SK-0171,Adobe Illustrator,Industry-specific skills,Tool,"[""Illustrator""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,27
+SG-SK-0172,Graphic Design,Industry-specific skills,Hard skill,"[""visual design""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,72
+SG-SK-0173,Content Management Systems,Industry-specific skills,Tool,"[""CMS""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,75
+SG-SK-0174,Lesson Planning,Industry-specific skills,Hard skill,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0175,Curriculum Development,Industry-specific skills,Hard skill,"[""curriculum design""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,85
+SG-SK-0176,Classroom Management,Industry-specific skills,Hard skill,"[""behaviour management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0177,Student Assessment,Industry-specific skills,Hard skill,"[""assessment design"", ""grading and evaluation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,81
+SG-SK-0178,Pedagogy,Industry-specific skills,Knowledge area,"[""teaching methods"", ""instructional strategies""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,70
+SG-SK-0179,Educational Technology,Industry-specific skills,Technology,"[""e-learning tools""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0180,Learning Management Systems,Industry-specific skills,Tool,"[""LMS""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,89
+SG-SK-0181,Academic Research,Industry-specific skills,Hard skill,"[""research methodology"", ""scholarly publishing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0182,Academic Advising,Industry-specific skills,Hard skill,"[""student advising"", ""student support services""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,32
+SG-SK-0183,Teaching Certification,Industry-specific skills,Certification,"[""teaching licence"", ""teaching qualification""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,26
+SG-SK-0184,Communication,Communication,Soft skill,"[""communication skills"", ""verbal communication""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,633
+SG-SK-0185,Written Communication,Communication,Soft skill,"[""business writing""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,106
+SG-SK-0186,Presentation Skills,Communication,Soft skill,"[""presenting to stakeholders""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,224
+SG-SK-0187,Teamwork,Communication,Soft skill,"[""collaboration"", ""team collaboration""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,229
+SG-SK-0188,Interpersonal Skills,Communication,Soft skill,"[""relationship building""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,70
+SG-SK-0189,Active Listening,Communication,Soft skill,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,28
+SG-SK-0190,Negotiation,Communication,Soft skill,"[""negotiation skills"", ""contract negotiation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,280
+SG-SK-0191,Customer Service,Communication,Competency,"[""customer support"", ""client service""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,284
+SG-SK-0192,Report Writing,Communication,Hard skill,"[""writing reports"", ""drafting reports""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,355
+SG-SK-0193,Team Leadership,Leadership,Soft skill,"[""leading teams"", ""people management""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,445
+SG-SK-0194,Mentoring,Leadership,Soft skill,"[""coaching junior staff"", ""coaching""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,348
+SG-SK-0195,Strategic Planning,Leadership,Hard skill,"[""strategic thinking"", ""strategy development""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,183
+SG-SK-0196,Decision Making,Leadership,Soft skill,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,231
+SG-SK-0197,Change Management,Leadership,Hard skill,"[""organisational change""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,85
+SG-SK-0198,Project Management,Project management,Hard skill,"[""project planning"", ""managing projects""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,271
+SG-SK-0199,Project Scheduling,Project management,Hard skill,"[""project schedules"", ""work programming""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,56
+SG-SK-0200,MS Project,Project management,Tool,"[""Microsoft Project""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,29
+SG-SK-0201,Primavera P6,Project management,Tool,[],SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,27
+SG-SK-0202,Agile,Project management,Knowledge area,"[""Agile methodology"", ""Scrum""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,20
+SG-SK-0203,PMP,Project management,Certification,"[""Project Management Professional""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,9
+SG-SK-0204,ITIL,Project management,Certification,"[""ITIL Foundation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,8
+SG-SK-0205,Program Coordination,Project management,Hard skill,"[""programme coordination"", ""program administration""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,44
+SG-SK-0206,Time Management,Project management,Soft skill,"[""prioritisation"", ""meeting deadlines""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,460
+SG-SK-0207,Stakeholder Management,Project management,Soft skill,"[""stakeholder engagement""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,286
+SG-SK-0208,Problem Solving,Problem-solving,Soft skill,"[""problem-solving"", ""analytical problem solving""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,431
+SG-SK-0209,Critical Thinking,Problem-solving,Soft skill,"[""analytical thinking""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,91
+SG-SK-0210,Attention to Detail,Problem-solving,Soft skill,"[""detail orientation""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,447
+SG-SK-0211,Adaptability,Problem-solving,Soft skill,"[""flexibility"", ""learning agility""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,99
+SG-SK-0212,Creativity,Problem-solving,Soft skill,"[""creative thinking""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,241
+SG-SK-0213,English Language,Languages,Language,"[""English""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,1881
+SG-SK-0214,Khmer Language,Languages,Language,"[""Khmer""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0215,Vietnamese Language,Languages,Language,"[""Vietnamese""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0216,Thai Language,Languages,Language,"[""Thai""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0217,Malay Language,Languages,Language,"[""Malay""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0218,Indonesian Language,Languages,Language,"[""Indonesian""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0219,Filipino Language,Languages,Language,"[""Filipino""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,54
+SG-SK-0220,Hindi Language,Languages,Language,"[""Hindi""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,42
+SG-SK-0221,Japanese Language,Languages,Language,"[""Japanese""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0222,Korean Language,Languages,Language,"[""Korean""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0223,German Language,Languages,Language,"[""German""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0224,French Language,Languages,Language,"[""French""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,126
+SG-SK-0225,Dutch Language,Languages,Language,"[""Dutch""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0226,Arabic Language,Languages,Language,"[""Arabic""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,47
+SG-SK-0227,Portuguese Language,Languages,Language,"[""Portuguese""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,100
+SG-SK-0228,Mandarin Chinese Language,Languages,Language,"[""Mandarin""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,25
+SG-SK-0229,Afrikaans Language,Languages,Language,"[""Afrikaans""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,15
+SG-SK-0230,Spanish Language,Languages,Language,"[""Spanish""]",SKILLGRAPH_LOCAL_V1,,,external_unmapped_download_required,11

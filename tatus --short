@@ -1,0 +1,13 @@
+warning: in the working copy of 'data/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/annotations/synthetic_job_postings_ground_truth.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/raw/synthetic_job_postings.csv', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/raw/synthetic_job_postings.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'outputs/reports/skill_extraction_evaluation.md', LF will be replaced by CRLF the next time Git touches it
+ data/README.md                                     |    120 [32m+[m[31m-[m
+ .../synthetic_job_postings_ground_truth.json       | 211747 [32m+++++++++++++++++[m[31m-[m
+ data/raw/synthetic_job_postings.csv                |  14024 [32m+[m[31m-[m
+ data/raw/synthetic_job_postings.json               | 123150 [32m+++++++++[m[31m-[m
+ outputs/reports/skill_extraction_evaluation.md     |    178 [32m+[m[31m-[m
+ research/notebooks/03_eda.ipynb                    |   1798 [32m+[m[31m-[m
+ research/notebooks/04_skill_extraction.ipynb       |   1095 [32m+[m[31m-[m
+ 7 files changed, 351354 insertions(+), 758 deletions(-)
