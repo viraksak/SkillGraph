@@ -1,0 +1,705 @@
+warning: in the working copy of '.env.example', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/app/main.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/requirements.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docker-compose.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/api/api_documentation.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/architecture/data_pipeline.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/database/schema.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'models/skill_extraction/__init__.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'models/skill_extraction/spacy_extractor.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'outputs/reports/skill_extraction_benchmark_report.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'outputs/reports/skill_extraction_evaluation.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'research/notebooks/07_recommendation_evaluation.ipynb', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/build_graph.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/preprocess_data.py', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/.env.example b/.env.example[m
+[1mindex e69de29..0c00dfb 100644[m
+[1m--- a/.env.example[m
+[1m+++ b/.env.example[m
+[36m@@ -0,0 +1,17 @@[m
+[32m+[m[32m# SkillGraph Environment Configuration Template (Zero Real Secrets)[m
+[32m+[m[32m# Copy this file to `.env` locally and set credentials before PostgreSQL migration.[m
+[32m+[m
+[32m+[m[32mSKILLGRAPH_DB_HOST=127.0.0.1[m
+[32m+[m[32mSKILLGRAPH_DB_PORT=5432[m
+[32m+[m[32mSKILLGRAPH_DB_NAME=skillgraph[m
+[32m+[m[32mSKILLGRAPH_DB_USER=postgres[m
+[32m+[m[32mSKILLGRAPH_DB_PASSWORD=CHANGE_ME_LOCAL_ONLY[m
+[32m+[m
+[32m+[m[32m# Offline relational fallback used when PostgreSQL credentials or driver are unavailable[m
+[32m+[m[32mSKILLGRAPH_SQLITE_PATH=:memory:[m
+[32m+[m
+[32m+[m[32m# API service runtime[m
+[32m+[m[32mSKILLGRAPH_API_HOST=127.0.0.1[m
+[32m+[m[32mSKILLGRAPH_API_PORT=8000[m
+[32m+[m[32mSKILLGRAPH_ENVIRONMENT=development[m
+[32m+[m
+[1mdiff --git a/backend/app/main.py b/backend/app/main.py[m
+[1mindex e69de29..c13921f 100644[m
+[1m--- a/backend/app/main.py[m
+[1m+++ b/backend/app/main.py[m
+[36m@@ -0,0 +1,788 @@[m
+[32m+[m[32m"""SkillGraph Week 3 Backend Service (`backend/app/main.py`).[m
+[32m+[m
+[32m+[m[32mProvides a clean layered architecture separating:[m
+[32m+[m[32m1. Configuration & PostgreSQL/SQLite Database Access Layer (`DatabaseConfig`, `DatabaseLayer`)[m
+[32m+[m[32m2. Domain Skill Gap & Explainability Service (`SkillGapService`)[m
+[32m+[m[32m3. Pydantic v2 Request/Response Schemas[m
+[32m+[m[32m4. FastAPI-compatible ASGI Web Application & OpenAPI 3.1 Specification[m
+[32m+[m
+[32m+[m[32mNotes on offline `.venv` compatibility:[m
+[32m+[m[32m- Uses `fastapi.FastAPI` automatically when `fastapi` is installed.[m
+[32m+[m[32m- Uses a pure-Python ASGI 3.0 + Pydantic v2 fallback router (`SkillGraphASGIApp`)[m
+[32m+[m[32m  when `fastapi` is absent in the research environment, preserving real Pydantic[m
+[32m+[m[32m  input/output validation, HTTP status codes (200/201/400/404/422), OpenAPI 3.1[m
+[32m+[m[32m  JSON generation, and real relational SQL persistence.[m
+[32m+[m[32m"""[m
+[32m+[m
+[32m+[m[32mfrom __future__ import annotations[m
+[32m+[m
+[32m+[m[32mfrom dataclasses import asdict[m
+[32m+[m[32mimport importlib.util[m
+[32m+[m[32mimport json[m
+[32m+[m[32mimport os[m
+[32m+[m[32mfrom pathlib import Path[m
+[32m+[m[32mimport re[m
+[32m+[m[32mimport sys[m
+[32m+[m[32mfrom typing import Any, Callable[m
+[32m+[m[32mfrom urllib.parse import parse_qs, unquote[m
+[32m+[m
+[32m+[m[32mfrom pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator[m
+[32m+[m
+[32m+[m[32mROOT_DIR = Path(__file__).resolve().parents[2][m
+[32m+[m[32mif str(ROOT_DIR) not in sys.path:[m
+[32m+[m[32m    sys.path.insert(0, str(ROOT_DIR))[m
+[32m+[m
+[32m+[m[32mfrom scripts.build_graph import (  # noqa: E402[m
+[32m+[m[32m    BASELINE_WEIGHT_PRESETS,[m
+[32m+[m[32m    PriorityWeights,[m
+[32m+[m[32m    RelationalDatabaseManager,[m
+[32m+[m[32m    SkillGapAnalysisEngine,[m
+[32m+[m[32m    SkillGraphBuilder,[m
+[32m+[m[32m    inspect_postgresql_environment,[m
+[32m+[m[32m)[m
+[32m+[m
+[32m+[m[32mFASTAPI_AVAILABLE = importlib.util.find_spec("fastapi") is not None[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m[32m# 1. Environment Configuration (Zero Hardcoded Credentials)[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m
+[32m+[m[32mclass DatabaseConfig(BaseModel):[m
+[32m+[m[32m    """Runtime database configuration loaded exclusively from environment variables."""[m
+[32m+[m
+[32m+[m[32m    model_config = ConfigDict(extra="ignore")[m
+[32m+[m
+[32m+[m[32m    host: str = Field(default_factory=lambda: os.environ.get("SKILLGRAPH_DB_HOST", "127.0.0.1"))[m
+[32m+[m[32m    port: int = Field(default_factory=lambda: int(os.environ.get("SKILLGRAPH_DB_PORT", "5432")))[m
+[32m+[m[32m    database: str = Field(default_factory=lambda: os.environ.get("SKILLGRAPH_DB_NAME", "skillgraph"))[m
+[32m+[m[32m    user: str = Field(default_factory=lambda: os.environ.get("SKILLGRAPH_DB_USER", ""))[m
+[32m+[m[32m    password_configured: bool = Field(default_factory=lambda: bool(os.environ.get("SKILLGRAPH_DB_PASSWORD") or os.environ.get("PGPASSWORD")))[m
+[32m+[m[32m    offline_sqlite_path: str = Field(default_factory=lambda: os.environ.get("SKILLGRAPH_SQLITE_PATH", ":memory:"))[m
+[32m+[m
+[32m+[m[32m    @classmethod[m
+[32m+[m[32m    def from_env(cls) -> "DatabaseConfig":[m
+[32m+[m[32m        return cls()[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m[32m# 2. Domain Exceptions & HTTP Status Mapping[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m
+[32m+[m[32mclass ApiDomainError(Exception):[m
+[32m+[m[32m    """Structured API error carrying HTTP status code and error category."""[m
+[32m+[m
+[32m+[m[32m    def __init__(self, status_code: int, error_code: str, detail: str) -> None:[m
+[32m+[m[32m        super().__init__(detail)[m
+[32m+[m[32m        self.status_code = status_code[m
+[32m+[m[32m        self.error_code = error_code[m
+[32m+[m[32m        self.detail = detail[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass ResourceNotFoundError(ApiDomainError):[m
+[32m+[m[32m    def __init__(self, detail: str) -> None:[m
+[32m+[m[32m        super().__init__(404, "RESOURCE_NOT_FOUND", detail)[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass InvalidInputError(ApiDomainError):[m
+[32m+[m[32m    def __init__(self, detail: str) -> None:[m
+[32m+[m[32m        super().__init__(400, "INVALID_INPUT", detail)[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m[32m# 3. Pydantic v2 Request & Response Schemas[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m
+[32m+[m[32mclass ErrorResponse(BaseModel):[m
+[32m+[m[32m    error_code: str[m
+[32m+[m[32m    detail: str[m
+[32m+[m[32m    status_code: int[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass HealthResponse(BaseModel):[m
+[32m+[m[32m    status: str[m
+[32m+[m[32m    service: str[m
+[32m+[m[32m    api_framework_mode: str[m
+[32m+[m[32m    fastapi_installed: bool[m
+[32m+[m[32m    graph_nodes: int[m
+[32m+[m[32m    graph_edges: int[m
+[32m+[m[32m    database_backend_active: str[m
+[32m+[m[32m    postgresql_env: dict[str, Any][m
+[32m+[m[32m    table_counts: dict[str, int][m
+[32m+[m[32m    research_disclaimer: str[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass OccupationSummary(BaseModel):[m
+[32m+[m[32m    occupation_id: str[m
+[32m+[m[32m    occupation: str[m
+[32m+[m[32m    industry_id: str[m
+[32m+[m[32m    industry: str[m
+[32m+[m[32m    department_label: str | None = None[m
+[32m+[m[32m    isco08_code_candidate: str | None = None[m
+[32m+[m[32m    isco08_label_candidate: str | None = None[m
+[32m+[m[32m    posting_count: int[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass SkillSummary(BaseModel):[m
+[32m+[m[32m    skill_id: str[m
+[32m+[m[32m    canonical_skill: str[m
+[32m+[m[32m    skill_category: str[m
+[32m+[m[32m    skill_type: str[m
+[32m+[m[32m    taxonomy_source: str[m
+[32m+[m[32m    mapping_status: str[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass OccupationSkillItem(BaseModel):[m
+[32m+[m[32m    skill_id: str[m
+[32m+[m[32m    canonical_skill: str[m
+[32m+[m[32m    skill_category: str[m
+[32m+[m[32m    skill_type: str[m
+[32m+[m[32m    job_count: int[m
+[32m+[m[32m    required_count: int[m
+[32m+[m[32m    preferred_count: int[m
+[32m+[m[32m    occupation_total_postings: int[m
+[32m+[m[32m    demand_share: float[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass OccupationSkillsResponse(BaseModel):[m
+[32m+[m[32m    occupation_id: str[m
+[32m+[m[32m    occupation: str[m
+[32m+[m[32m    industry: str[m
+[32m+[m[32m    isco08_code_candidate: str | None = None[m
+[32m+[m[32m    isco08_label_candidate: str | None = None[m
+[32m+[m[32m    total_skills: int[m
+[32m+[m[32m    required_skills: list[OccupationSkillItem][m
+[32m+[m[32m    preferred_only_skills: list[OccupationSkillItem][m
+[32m+[m[32m    all_skills: list[OccupationSkillItem][m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass StudentSkillInput(BaseModel):[m
+[32m+[m[32m    skill: str | None = None[m
+[32m+[m[32m    skill_id: str | None = None[m
+[32m+[m[32m    canonical_skill: str | None = None[m
+[32m+[m[32m    proficiency_level: str | None = None[m
+[32m+[m[32m    proficiency_score: float | None = Field(default=None, ge=0.0, le=1.0)[m
+[32m+[m[32m    evidence: str | None = None[m
+[32m+[m
+[32m+[m[32m    @model_validator(mode="after")[m
+[32m+[m[32m    def _ensure_skill_identifier(self) -> "StudentSkillInput":[m
+[32m+[m[32m        if not any(v and str(v).strip() for v in (self.skill, self.skill_id, self.canonical_skill)):[m
+[32m+[m[32m            raise ValueError("Each skill entry must include one of 'skill', 'skill_id', or 'canonical_skill'.")[m
+[32m+[m[32m        return self[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass PriorityWeightsInput(BaseModel):[m
+[32m+[m[32m    alpha: float = Field(default=0.70, ge=0.0, le=10.0)[m
+[32m+[m[32m    beta: float = Field(default=0.30, ge=0.0, le=10.0)[m
+[32m+[m[32m    gamma: float = Field(default=0.00, ge=0.0, le=10.0)[m
+[32m+[m[32m    delta: float = Field(default=0.00, ge=0.0, le=10.0)[m
+[32m+[m[32m    preset_name: str = "custom_request_weights"[m
+[32m+[m
+[32m+[m[32m    @model_validator(mode="after")[m
+[32m+[m[32m    def _ensure_positive_signal(self) -> "PriorityWeightsInput":[m
+[32m+[m[32m        if (self.alpha + self.beta + self.gamma) <= 0.0:[m
+[32m+[m[32m            raise ValueError("At least one positive weight (alpha, beta, or gamma) must exceed 0.0.")[m
+[32m+[m[32m        return self[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass SkillGapAnalyzeRequest(BaseModel):[m
+[32m+[m[32m    student_id: str = Field(..., min_length=1, max_length=64)[m
+[32m+[m[32m    target_occupation: str = Field(..., min_length=1, max_length=128)[m
+[32m+[m[32m    skills: list[StudentSkillInput | str] = Field(default_factory=list)[m
+[32m+[m[32m    candidate_occupations: list[str] = Field(default_factory=list)[m
+[32m+[m[32m    is_synthetic: bool = True[m
+[32m+[m[32m    strict_validation: bool = False[m
+[32m+[m[32m    top_k: int | None = Field(default=None, ge=1, le=230)[m
+[32m+[m[32m    weights: PriorityWeightsInput | None = None[m
+[32m+[m[32m    run_sensitivity: bool = True[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass StructuredExplanationModel(BaseModel):[m
+[32m+[m[32m    skill: str[m
+[32m+[m[32m    skill_id: str[m
+[32m+[m[32m    why_identified: str[m
+[32m+[m[32m    occupation_requirement_role: str[m
+[32m+[m[32m    student_profile_status: str[m
+[32m+[m[32m    importance_assessment: str[m
+[32m+[m[32m    multi_occupation_relevance: str[m
+[32m+[m[32m    priority_calculation: dict[str, Any][m
+[32m+[m[32m    supporting_evidence: dict[str, Any][m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass SkillRecommendationItem(BaseModel):[m
+[32m+[m[32m    rank: int[m
+[32m+[m[32m    skill_id: str[m
+[32m+[m[32m    canonical_skill: str[m
+[32m+[m[32m    skill_category: str[m
+[32m+[m[32m    skill_type: str[m
+[32m+[m[32m    requirement_type: str[m
+[32m+[m[32m    profile_status: str[m
+[32m+[m[32m    gap_factor: float[m
+[32m+[m[32m    required_count: int[m
+[32m+[m[32m    preferred_count: int[m
+[32m+[m[32m    occupation_total_postings: int[m
+[32m+[m[32m    demand_share: float[m
+[32m+[m[32m    required_share: float[m
+[32m+[m[32m    preferred_share: float[m
+[32m+[m[32m    priority_score: float[m
+[32m+[m[32m    priority_tier: str[m
+[32m+[m[32m    learning_stage: str[m
+[32m+[m[32m    scoring: dict[str, Any][m
+[32m+[m[32m    opportunity: dict[str, Any][m
+[32m+[m[32m    prerequisite_info: dict[str, Any][m
+[32m+[m[32m    learning_resources_status: str[m
+[32m+[m[32m    summary_reason: str[m
+[32m+[m[32m    explanation: StructuredExplanationModel[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass SkillGapAnalysisResponse(BaseModel):[m
+[32m+[m[32m    analysis_id: str[m
+[32m+[m[32m    created_at: str[m
+[32m+[m[32m    student_id: str[m
+[32m+[m[32m    is_synthetic_profile: bool[m
+[32m+[m[32m    target_occupation: dict[str, Any][m
+[32m+[m[32m    candidate_occupations: list[str][m
+[32m+[m[32m    supplied_skill_count: int[m
+[32m+[m[32m    unrecognized_skills: list[dict[str, Any]][m
+[32m+[m[32m    duplicate_skill_notes: list[str][m
+[32m+[m[32m    coverage_metrics: dict[str, Any][m
+[32m+[m[32m    possessed_skills: list[dict[str, Any]][m
+[32m+[m[32m    partially_demonstrated_skills: list[dict[str, Any]][m
+[32m+[m[32m    missing_required_skills: list[dict[str, Any]][m
+[32m+[m[32m    missing_preferred_skills: list[dict[str, Any]][m
+[32m+[m[32m    priority_recommendations: list[SkillRecommendationItem][m
+[32m+[m[32m    learning_path: dict[str, Any][m
+[32m+[m[32m    weight_sensitivity: dict[str, Any] | None = None[m
+[32m+[m[32m    research_integrity_notes: list[str][m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass StudentRecommendationsResponse(BaseModel):[m
+[32m+[m[32m    analysis_id: str[m
+[32m+[m[32m    student_id: str[m
+[32m+[m[32m    is_synthetic_profile: bool[m
+[32m+[m[32m    target_occupation: dict[str, Any][m
+[32m+[m[32m    coverage_metrics: dict[str, Any][m
+[32m+[m[32m    ordering_strategy: str[m
+[32m+[m[32m    learning_resources_status: str[m
+[32m+[m[32m    limitation_notice: str[m
+[32m+[m[32m    recommendations: list[SkillRecommendationItem][m
+[32m+[m[32m    learning_path: dict[str, Any][m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass StudentExplanationsResponse(BaseModel):[m
+[32m+[m[32m    analysis_id: str[m
+[32m+[m[32m    student_id: str[m
+[32m+[m[32m    target_occupation: dict[str, Any][m
+[32m+[m[32m    explanations_count: int[m
+[32m+[m[32m    explanations: list[StructuredExplanationModel][m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m[32m# 4. Database Abstraction & Service Layer[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m
+[32m+[m[32mclass DatabaseLayer:[m
+[32m+[m[32m    """Separates SQL persistence and graph queries from HTTP routes."""[m
+[32m+[m
+[32m+[m[32m    def __init__([m
+[32m+[m[32m        self,[m
+[32m+[m[32m        builder: SkillGraphBuilder | None = None,[m
+[32m+[m[32m        config: DatabaseConfig | None = None,[m
+[32m+[m[32m    ) -> None:[m
+[32m+[m[32m        self.config = config or DatabaseConfig.from_env()[m
+[32m+[m[32m        self.builder = builder or SkillGraphBuilder(include_broad_country_mappings=False, min_co_occurrence=5)[m
+[32m+[m[32m        if not self.builder._built:[m
+[32m+[m[32m            self.builder.build()[m
+[32m+[m[32m        self.db_manager = RelationalDatabaseManager(self.builder, db_path=self.config.offline_sqlite_path)[m
+[32m+[m[32m        self.pg_env = inspect_postgresql_environment()[m
+[32m+[m
+[32m+[m[32m    def health_snapshot(self) -> dict[str, Any]:[m
+[32m+[m[32m        summary = self.builder.summary()[m
+[32m+[m[32m        return {[m
+[32m+[m[32m            "status": "ok",[m
+[32m+[m[32m            "service": "SkillGraph Career Skill Gap & Recommendation API",[m
+[32m+[m[32m            "api_framework_mode": "fastapi" if FASTAPI_AVAILABLE else "asgi_pydantic_fallback",[m
+[32m+[m[32m            "fastapi_installed": FASTAPI_AVAILABLE,[m
+[32m+[m[32m            "graph_nodes": summary["total_active_nodes"],[m
+[32m+[m[32m            "graph_edges": summary["total_active_edges"],[m
+[32m+[m[32m            "database_backend_active": f"sqlite3({self.config.offline_sqlite_path}) [PostgreSQL DDL & constraints mirrored]",[m
+[32m+[m[32m            "postgresql_env": self.pg_env,[m
+[32m+[m[32m            "table_counts": self.db_manager.list_tables_and_counts(),[m
+[32m+[m[32m            "research_disclaimer": ([m
+[32m+[m[32m                "Market skill demand derives from 2,000 synthetic postings; "[m
+[32m+[m[32m                "student gap profiles remain synthetic/anonymized and are not validated user studies."[m
+[32m+[m[32m            ),[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m    def list_occupations(self, industry: str | None = None, search: str | None = None) -> list[dict[str, Any]]:[m
+[32m+[m[32m        return self.db_manager.fetch_occupations(industry=industry, search=search)[m
+[32m+[m
+[32m+[m[32m    def list_skills([m
+[32m+[m[32m        self,[m
+[32m+[m[32m        category: str | None = None,[m
+[32m+[m[32m        skill_type: str | None = None,[m
+[32m+[m[32m        search: str | None = None,[m
+[32m+[m[32m    ) -> list[dict[str, Any]]:[m
+[32m+[m[32m        return self.db_manager.fetch_skills(category=category, skill_type=skill_type, search=search)[m
+[32m+[m
+[32m+[m[32m    def get_occupation_skills(self, occupation_id: str) -> dict[str, Any]:[m
+[32m+[m[32m        res = self.db_manager.fetch_occupation_skills(occupation_id)[m
+[32m+[m[32m        if res is None:[m
+[32m+[m[32m            raise ResourceNotFoundError(f"Occupation not found: {occupation_id!r}")[m
+[32m+[m[32m        return res[m
+[32m+[m
+[32m+[m[32m    def persist_analysis([m
+[32m+[m[32m        self,[m
+[32m+[m[32m        analysis: dict[str, Any],[m
+[32m+[m[32m        engine: SkillGapAnalysisEngine,[m
+[32m+[m[32m        profile: dict[str, Any],[m
+[32m+[m[32m    ) -> None:[m
+[32m+[m[32m        self.db_manager.save_analysis_result(analysis, engine, profile)[m
+[32m+[m
+[32m+[m[32m    def get_analysis(self, analysis_id: str) -> dict[str, Any]:[m
+[32m+[m[32m        res = self.db_manager.fetch_analysis(analysis_id)[m
+[32m+[m[32m        if res is None:[m
+[32m+[m[32m            raise ResourceNotFoundError(f"Skill gap analysis not found: {analysis_id!r}")[m
+[32m+[m[32m        return res[m
+[32m+[m
+[32m+[m[32m    def get_latest_student_recommendations(self, student_id: str) -> dict[str, Any]:[m
+[32m+[m[32m        res = self.db_manager.fetch_latest_student_recommendations(student_id)[m
+[32m+[m[32m        if res is None:[m
+[32m+[m[32m            raise ResourceNotFoundError(f"No skill gap analysis persisted for student_id={student_id!r}")[m
+[32m+[m[32m        return res[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass SkillGapService:[m
+[32m+[m[32m    """Coordinates domain gap calculations, weight validation, and DB persistence."""[m
+[32m+[m
+[32m+[m[32m    def __init__(self, db_layer: DatabaseLayer) -> None:[m
+[32m+[m[32m        self.db_layer = db_layer[m
+[32m+[m[32m        self.engine = SkillGapAnalysisEngine(db_layer.builder)[m
+[32m+[m
+[32m+[m[32m    def analyze_and_persist(self, req: SkillGapAnalyzeRequest) -> SkillGapAnalysisResponse:[m
+[32m+[m[32m        profile_dict: dict[str, Any] = {[m
+[32m+[m[32m            "student_id": req.student_id,[m
+[32m+[m[32m            "target_occupation": req.target_occupation,[m
+[32m+[m[32m            "skills": [[m
+[32m+[m[32m                s.model_dump() if isinstance(s, BaseModel) else s[m
+[32m+[m[32m                for s in req.skills[m
+[32m+[m[32m            ],[m
+[32m+[m[32m            "candidate_occupations": req.candidate_occupations,[m
+[32m+[m[32m            "is_synthetic": req.is_synthetic,[m
+[32m+[m[32m        }[m
+[32m+[m[32m        weights = ([m
+[32m+[m[32m            PriorityWeights([m
+[32m+[m[32m                alpha=req.weights.alpha,[m
+[32m+[m[32m                beta=req.weights.beta,[m
+[32m+[m[32m                gamma=req.weights.gamma,[m
+[32m+[m[32m                delta=req.weights.delta,[m
+[32m+[m[32m                preset_name=req.weights.preset_name,[m
+[32m+[m[32m            )[m
+[32m+[m[32m            if req.weights is not None[m
+[32m+[m[32m            else BASELINE_WEIGHT_PRESETS["baseline_balanced_heuristic"][m
+[32m+[m[32m        )[m
+[32m+[m[32m        try:[m
+[32m+[m[32m            raw_result = self.engine.analyze([m
+[32m+[m[32m                profile=profile_dict,[m
+[32m+[m[32m                weights=weights,[m
+[32m+[m[32m                strict_validation=req.strict_validation,[m
+[32m+[m[32m                top_k=req.top_k,[m
+[32m+[m[32m                run_sensitivity=req.run_sensitivity,[m
+[32m+[m[32m            )[m
+[32m+[m[32m        except ValueError as exc:[m
+[32m+[m[32m            msg = str(exc)[m
+[32m+[m[32m            if "Unknown target occupation" in msg:[m
+[32m+[m[32m                raise ResourceNotFoundError(msg) from exc[m
+[32m+[m[32m            raise InvalidInputError(msg) from exc[m
+[32m+[m
+[32m+[m[32m        self.db_layer.persist_analysis(raw_result, self.engine, profile_dict)[m
+[32m+[m[32m        return SkillGapAnalysisResponse.model_validate(raw_result)[m
+[32m+[m
+[32m+[m[32m    def get_analysis_response(self, analysis_id: str) -> SkillGapAnalysisResponse:[m
+[32m+[m[32m        return SkillGapAnalysisResponse.model_validate(self.db_layer.get_analysis(analysis_id))[m
+[32m+[m
+[32m+[m[32m    def get_recommendations_response(self, student_id: str) -> StudentRecommendationsResponse:[m
+[32m+[m[32m        payload = self.db_layer.get_latest_student_recommendations(student_id)[m
+[32m+[m[32m        return StudentRecommendationsResponse([m
+[32m+[m[32m            analysis_id=payload["analysis_id"],[m
+[32m+[m[32m            student_id=payload["student_id"],[m
+[32m+[m[32m            is_synthetic_profile=payload["is_synthetic_profile"],[m
+[32m+[m[32m            target_occupation=payload["target_occupation"],[m
+[32m+[m[32m            coverage_metrics=payload["coverage_metrics"],[m
+[32m+[m[32m            ordering_strategy=payload["learning_path"]["ordering_strategy"],[m
+[32m+[m[32m            learning_resources_status=payload["learning_path"]["learning_resources_status"],[m
+[32m+[m[32m            limitation_notice=payload["learning_path"]["limitation_notice"],[m
+[32m+[m[32m            recommendations=[SkillRecommendationItem.model_validate(r) for r in payload["priority_recommendations"]],[m
+[32m+[m[32m            learning_path=payload["learning_path"],[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    def get_explanations_response(self, student_id: str) -> StudentExplanationsResponse:[m
+[32m+[m[32m        payload = self.db_layer.get_latest_student_recommendations(student_id)[m
+[32m+[m[32m        exps = [StructuredExplanationModel.model_validate(r["explanation"]) for r in payload["priority_recommendations"]][m
+[32m+[m[32m        return StudentExplanationsResponse([m
+[32m+[m[32m            analysis_id=payload["analysis_id"],[m
+[32m+[m[32m            student_id=payload["student_id"],[m
+[32m+[m[32m            target_occupation=payload["target_occupation"],[m
+[32m+[m[32m            explanations_count=len(exps),[m
+[32m+[m[32m            explanations=exps,[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m[32m# 5. Pure-Python ASGI + OpenAPI 3.1 Fallback Router & TestClient[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m
+[32m+[m[32mclass SkillGraphASGIApp:[m
+[32m+[m[32m    """ASGI 3.0 FastAPI-compatible router used when `fastapi` is not installed."""[m
+[32m+[m
+[32m+[m[32m    def __init__([m
+[32m+[m[32m        self,[m
+[32m+[m[32m        title: str,[m
+[32m+[m[32m        version: str,[m
+[32m+[m[32m        description: str,[m
+[32m+[m[32m        db_layer: DatabaseLayer,[m
+[32m+[m[32m        service: SkillGapService,[m
+[32m+[m[32m    ) -> None:[m
+[32m+[m[32m        self.title = title[m
+[32m+[m[32m        self.version = version[m
+[32m+[m[32m        self.description = description[m
+[32m+[m[32m        self.db_layer = db_layer[m
+[32m+[m[32m        self.service = service[m
+[32m+[m[32m        self.routes: list[tuple[str, re.Pattern[str], Callable[..., Any], str]] = [][m
+[32m+[m[32m        self._register_default_routes()[m
+[32m+[m
+[32m+[m[32m    def _register(self, method: str, path_template: str, handler: Callable[..., Any]) -> None:[m
+[32m+[m[32m        regex_str = "^" + re.sub(r"\{([A-Za-z_][A-Za-z0-9_]*)\}", r"(?P<\1>[^/]+)", path_template) + "$"[m
+[32m+[m[32m        self.routes.append((method.upper(), re.compile(regex_str), handler, path_template))[m
+[32m+[m
+[32m+[m[32m    def _register_default_routes(self) -> None:[m
+[32m+[m[32m        self._register("GET", "/health", self._h_health)[m
+[32m+[m[32m        self._register("GET", "/occupations", self._h_occupations)[m
+[32m+[m[32m        self._register("GET", "/skills", self._h_skills)[m
+[32m+[m[32m        self._register("GET", "/occupations/{occupation_id}/skills", self._h_occ_skills)[m
+[32m+[m[32m        self._register("POST", "/skill-gap/analyze", self._h_analyze)[m
+[32m+[m[32m        self._register("GET", "/skill-gap/{analysis_id}", self._h_get_analysis)[m
+[32m+[m[32m        self._register("GET", "/recommendations/{student_id}", self._h_get_recs)[m
+[32m+[m[32m        self._register("GET", "/recommendations/{student_id}/explanations", self._h_get_exps)[m
+[32m+[m[32m        self._register("GET", "/openapi.json", self._h_openapi)[m
+[32m+[m
+[32m+[m[32m    def _h_health(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        return 200, HealthResponse.model_validate(self.db_layer.health_snapshot()).model_dump()[m
+[32m+[m
+[32m+[m[32m    def _h_occupations(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        industry = query.get("industry", [None])[0][m
+[32m+[m[32m        search = query.get("search", [None])[0][m
+[32m+[m[32m        items = [OccupationSummary.model_validate(r).model_dump() for r in self.db_layer.list_occupations(industry, search)][m
+[32m+[m[32m        return 200, items[m
+[32m+[m
+[32m+[m[32m    def _h_skills(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        category = query.get("category", [None])[0][m
+[32m+[m[32m        skill_type = query.get("skill_type", [None])[0][m
+[32m+[m[32m        search = query.get("search", [None])[0][m
+[32m+[m[32m        items = [SkillSummary.model_validate(r).model_dump() for r in self.db_layer.list_skills(category, skill_type, search)][m
+[32m+[m[32m        return 200, items[m
+[32m+[m
+[32m+[m[32m    def _h_occ_skills(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        occ_id = unquote(params["occupation_id"])[m
+[32m+[m[32m        data = self.db_layer.get_occupation_skills(occ_id)[m
+[32m+[m[32m        return 200, OccupationSkillsResponse.model_validate(data).model_dump()[m
+[32m+[m
+[32m+[m[32m    def _h_analyze(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        if body is None or not isinstance(body, dict):[m
+[32m+[m[32m            return 422, {"detail": [{"loc": ["body"], "msg": "JSON request object is required."}]}[m
+[32m+[m[32m        try:[m
+[32m+[m[32m            req = SkillGapAnalyzeRequest.model_validate(body)[m
+[32m+[m[32m        except ValidationError as exc:[m
+[32m+[m[32m            return 422, {"detail": exc.errors(include_url=False)}[m
+[32m+[m[32m        res = self.service.analyze_and_persist(req)[m
+[32m+[m[32m        return 200, res.model_dump()[m
+[32m+[m
+[32m+[m[32m    def _h_get_analysis(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        res = self.service.get_analysis_response(unquote(params["analysis_id"]))[m
+[32m+[m[32m        return 200, res.model_dump()[m
+[32m+[m
+[32m+[m[32m    def _h_get_recs(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        res = self.service.get_recommendations_response(unquote(params["student_id"]))[m
+[32m+[m[32m        return 200, res.model_dump()[m
+[32m+[m
+[32m+[m[32m    def _h_get_exps(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        res = self.service.get_explanations_response(unquote(params["student_id"]))[m
+[32m+[m[32m        return 200, res.model_dump()[m
+[32m+[m
+[32m+[m[32m    def openapi(self) -> dict[str, Any]:[m
+[32m+[m[32m        """Builds an OpenAPI 3.1.0 specification directly from Pydantic v2 models."""[m
+[32m+[m[32m        schemas = {[m
+[32m+[m[32m            m.__name__: m.model_json_schema(ref_template="#/components/schemas/{model}")[m
+[32m+[m[32m            for m in ([m
+[32m+[m[32m                HealthResponse,[m
+[32m+[m[32m                OccupationSummary,[m
+[32m+[m[32m                SkillSummary,[m
+[32m+[m[32m                OccupationSkillsResponse,[m
+[32m+[m[32m                StudentSkillInput,[m
+[32m+[m[32m                PriorityWeightsInput,[m
+[32m+[m[32m                SkillGapAnalyzeRequest,[m
+[32m+[m[32m                SkillRecommendationItem,[m
+[32m+[m[32m                StructuredExplanationModel,[m
+[32m+[m[32m                SkillGapAnalysisResponse,[m
+[32m+[m[32m                StudentRecommendationsResponse,[m
+[32m+[m[32m                StudentExplanationsResponse,[m
+[32m+[m[32m                ErrorResponse,[m
+[32m+[m[32m            )[m
+[32m+[m[32m        }[m
+[32m+[m[32m        return {[m
+[32m+[m[32m            "openapi": "3.1.0",[m
+[32m+[m[32m            "info": {"title": self.title, "version": self.version, "description": self.description},[m
+[32m+[m[32m            "paths": {[m
+[32m+[m[32m                "/health": {"get": {"summary": "Service & DB Health Check", "responses": {"200": {"description": "OK"}}}},[m
+[32m+[m[32m                "/occupations": {"get": {"summary": "List Occupations", "responses": {"200": {"description": "OK"}}}},[m
+[32m+[m[32m                "/skills": {"get": {"summary": "List Canonical Skills", "responses": {"200": {"description": "OK"}}}},[m
+[32m+[m[32m                "/occupations/{occupation_id}/skills": {"get": {"summary": "Get Occupation Skill Profile", "responses": {"200": {"description": "OK"}, "404": {"description": "Not Found"}}}},[m
+[32m+[m[32m                "/skill-gap/analyze": {[m
+[32m+[m[32m                    "post": {[m
+[32m+[m[32m                        "summary": "Analyze & Persist Student Skill Gap",[m
+[32m+[m[32m                        "requestBody": {"required": True, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/SkillGapAnalyzeRequest"}}}},[m
+[32m+[m[32m                        "responses": {"200": {"description": "OK"}, "400": {"description": "Invalid Skill Input"}, "404": {"description": "Unknown Occupation"}, "422": {"description": "Validation Error"}},[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                },[m
+[32m+[m[32m                "/skill-gap/{analysis_id}": {"get": {"summary": "Fetch Persisted Gap Analysis", "responses": {"200": {"description": "OK"}, "404": {"description": "Not Found"}}}},[m
+[32m+[m[32m                "/recommendations/{student_id}": {"get": {"summary": "Get Ordered Skill Recommendations", "responses": {"200": {"description": "OK"}, "404": {"description": "Not Found"}}}},[m
+[32m+[m[32m                "/recommendations/{student_id}/explanations": {"get": {"summary": "Get Structured Explanations", "responses": {"200": {"description": "OK"}, "404": {"description": "Not Found"}}}},[m
+[32m+[m[32m            },[m
+[32m+[m[32m            "components": {"schemas": schemas},[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m    def _h_openapi(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:[m
+[32m+[m[32m        return 200, self.openapi()[m
+[32m+[m
+[32m+[m[32m    def dispatch([m
+[32m+[m[32m        self,[m
+[32m+[m[32m        method: str,[m
+[32m+[m[32m        path: str,[m
+[32m+[m[32m        query_string: str = "",[m
+[32m+[m[32m        raw_body: bytes | None = None,[m
+[32m+[m[32m    ) -> tuple[int, Any]:[m
+[32m+[m[32m        """Dispatches an HTTP request deterministically and enforces schema/domain validation."""[m
+[32m+[m[32m        body_obj: dict[str, Any] | None = None[m
+[32m+[m[32m        if raw_body:[m
+[32m+[m[32m            try:[m
+[32m+[m[32m                body_obj = json.loads(raw_body.decode("utf-8"))[m
+[32m+[m[32m            except Exception:[m
+[32m+[m[32m                return 422, {"detail": [{"loc": ["body"], "msg": "Malformed JSON request body."}]}[m
+[32m+[m
+[32m+[m[32m        query = parse_qs(query_string)[m
+[32m+[m[32m        upper_m = method.upper()[m
+[32m+[m[32m        for r_method, r_regex, handler, _ in self.routes:[m
+[32m+[m[32m            if r_method != upper_m:[m
+[32m+[m[32m                continue[m
+[32m+[m[32m            m = r_regex.match(path)[m
+[32m+[m[32m            if m:[m
+[32m+[m[32m                try:[m
+[32m+[m[32m                    return handler(m.groupdict(), query, body_obj)[m
+[32m+[m[32m                except ApiDomainError as exc:[m
+[32m+[m[32m                    return exc.status_code, ErrorResponse([m
+[32m+[m[32m                        error_code=exc.error_code,[m
+[32m+[m[32m                        detail=exc.detail,[m
+[32m+[m[32m                        status_code=exc.status_code,[m
+[32m+[m[32m                    ).model_dump()[m
+[32m+[m[32m                except Exception as exc:[m
+[32m+[m[32m                    return 500, ErrorResponse([m
+[32m+[m[32m                        error_code="INTERNAL_SERVER_ERROR",[m
+[32m+[m[32m                        detail=str(exc),[m
+[32m+[m[32m                        status_code=500,[m
+[32m+[m[32m                    ).model_dump()[m
+[32m+[m
+[32m+[m[32m        return 404, {"error_code": "ROUTE_NOT_FOUND", "detail": f"No route for {upper_m} {path}", "status_code": 404}[m
+[32m+[m
+[32m+[m[32m    async def __call__(self, scope: dict[str, Any], receive: Callable[..., Any], send: Callable[..., Any]) -> None:[m
+[32m+[m[32m        """Standard ASGI 3.0 entrypoint compatible with Uvicorn and `httpx.ASGITransport`."""[m
+[32m+[m[32m        if scope.get("type") != "http":[m
+[32m+[m[32m            return[m
+[32m+[m[32m        chunks: list[bytes] = [][m
+[32m+[m[32m        while True:[m
+[32m+[m[32m            event = await receive()[m
+[32m+[m[32m            chunks.append(event.get("body", b""))[m
+[32m+[m[32m            if not event.get("more_body", False):[m
+[32m+[m[32m                break[m
+[32m+[m[32m        status, payload = self.dispatch([m
+[32m+[m[32m            method=scope.get("method", "GET"),[m
+[32m+[m[32m            path=scope.get("path", "/"),[m
+[32m+[m[32m            query_string=(scope.get("query_string") or b"").decode("utf-8"),[m
+[32m+[m[32m            raw_body=b"".join(chunks),[m
+[32m+[m[32m        )[m
+[32m+[m[32m        encoded = json.dumps(payload).encode("utf-8")[m
+[32m+[m[32m        await send({[m
+[32m+[m[32m            "type": "http.response.start",[m
+[32m+[m[32m            "status": status,[m
+[32m+[m[32m            "headers": [[m
+[32m+[m[32m                (b"content-type", b"application/json"),[m
+[32m+[m[32m                (b"content-length", str(len(encoded)).encode("ascii")),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m        })[m
+[32m+[m[32m        await send({"type": "http.response.body", "body": encoded})[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass SkillGraphTestClient:[m
+[32m+[m[32m    """Lightweight synchronous HTTP test client compatible with FastAPI TestClient & ASGI fallback."""[m
+[32m+[m
+[32m+[m[32m    def __init__(self, app_instance: Any) -> None:[m
+[32m+[m[32m        self.app = app_instance[m
+[32m+[m[32m        self._native_client: Any = None[m
+[32m+[m[32m        if FASTAPI_AVAILABLE:[m
+[32m+[m[32m            from fastapi.testclient import TestClient  # type: ignore[m
+[32m+[m[32m            self._native_client = TestClient(app_instance)[m
+[32m+[m
+[32m+[m[32m    def request(self, method: str, url: str, json_body: Any = None) -> "_MockableResponse":[m
+[32m+[m[32m        if self._native_client is not None:[m
+[32m+[m[32m            resp = self._native_client.request(method, url, json=json_body)[m
+[32m+[m[32m            return _MockableResponse(resp.status_code, resp.json())[m
+[32m+[m
+[32m+[m[32m        path, _, q = url.partition("?")[m
+[32m+[m[32m        raw = json.dumps(json_body).encode("utf-8") if json_body is not None else None[m
+[32m+[m[32m        status, data = self.app.dispatch(method, path, q, raw)[m
+[32m+[m[32m        return _MockableResponse(status, data)[m
+[32m+[m
+[32m+[m[32m    def get(self, url: str) -> "_MockableResponse":[m
+[32m+[m[32m        return self.request("GET", url)[m
+[32m+[m
+[32m+[m[32m    def post(self, url: str, json: Any = None) -> "_MockableResponse":[m
+[32m+[m[32m        return self.request("POST", url, json_body=json)[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass _MockableResponse:[m
+[32m+[m[32m    def __init__(self, status_code: int, payload: Any) -> None:[m
+[32m+[m[32m        self.status_code = status_code[m
+[32m+[m[32m        self._payload = payload[m
+[32m+[m
+[32m+[m[32m    def json(self) -> Any:[m
+[32m+[m[32m        return self._payload[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m[32m# 6. Application Factory (FastAPI Native when Installed, ASGI Fallback Otherwise)[m
+[32m+[m[32m# ---------------------------------------------------------------------------[m
+[32m+[m
+[32m+[m[32mdef create_app(

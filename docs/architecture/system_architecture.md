@@ -114,30 +114,26 @@ flowchart TD
 6. System generates an ordered learning pathway.
 7. Results are delivered through FastAPI and displayed in the frontend.
 
-## 5. Proposed Technology Stack
+## 5. Technology Stack & Implementation Status (Week 3 Audit)
 
-- **Programming Language:** Python
-- **Backend:** FastAPI
-- **Database:** PostgreSQL
-- **Graph Processing:** NetworkX
-- **NLP:** spaCy, Sentence Transformers
-- **Data Processing:** Pandas, NumPy
-- **Machine Learning and Analysis:** scikit-learn, SciPy, Statsmodels
-- **Frontend:** Next.js, TypeScript, Tailwind CSS
-- **Visualization:** D3.js
-- **Development and Deployment:** Jupyter Notebook, Docker
+| Component | Target Stack | Current Repository Status |
+| :--- | :--- | :--- |
+| **Core Language & Analytics** | Python 3.12, Pandas, NumPy, scikit-learn | **Implemented & Tested** (`.venv` active) |
+| **NLP Extraction & Negation** | spaCy (`en_core_web_sm` parser), regex clause rules | **Implemented & Tested** (`DictionarySkillExtractor`, `SpacySkillExtractor`) |
+| **Knowledge Graph Engine** | Python adjacency engine + optional NetworkX (`to_networkx()`) | **Implemented & Tested** (`2,336` nodes, `31,503` edges; `networkx` optional/not installed in `.venv`) |
+| **Skill Gap, Priority & Explanations** | `SkillGapAnalysisEngine`, `PriorityScoringModel`, `MultiOccupationAnalyzer`, `LearningPathRecommender` | **Implemented & Tested** (`P(s) = G(s), O(s)`; `D(s), C(s)` safely disabled when absent) |
+| **Backend REST API** | FastAPI + Pydantic v2 + Uvicorn (`backend/app/main.py`) | **Implemented & Tested** (Native `FastAPI` when installed; pure-Python ASGI 3.0 + Pydantic v2 + OpenAPI `3.1.0` fallback `SkillGraphASGIApp` active in `.venv`) |
+| **Database Persistence** | PostgreSQL 17 (`get_postgresql_ddl()`) + SQLite mirror (`PRAGMA foreign_keys = ON`) | **Implemented & Tested** (`17`-table schema; local PG 17 accepting TCP on `127.0.0.1:5432`, awaiting `.env` password & driver install for live PG) |
+| **University Syllabi & Student UI** | Next.js / TypeScript / Real Course Catalog | **Proposed / Awaiting data** (Tables `university_majors`, `university_courses`, `course_skills` = `0` rows; no frontend files built) |
 
 ## 6. Design Considerations
 
 - Keep job data processing separate from student recommendation functionality.
-- Use PostgreSQL as the persistent data storage layer.
-- Use NetworkX for skill relationship representation and graph analysis.
-- Keep the recommendation process explainable by showing why a skill is recommended.
-- Design the backend API so the frontend can access system functionality independently.
-- Allow the architecture to be extended when additional occupations, skills, and learning resources are added.
+- Use PostgreSQL as the persistent relational target with an offline constraint-enforced SQLite mirror for reproducible offline execution.
+- Represent market skill co-occurrence (`CO_OCCURS_WITH`) without misinterpreting co-occurrence as prerequisite ordering (`PREREQUISITE_OF`).
+- Keep every recommendation explainable with 7-part structured evidence, numerical formulas (`G(s)`, `O(s)`, `P(s)`), weight sensitivity checks, and explicit notices where human validation (`human_annotation_sample_50.json`: `PENDING`) or curriculum data (`UNAVAILABLE_NO_VERIFIED_COURSE_CATALOG`) is absent.
+- Design the backend API (`docs/api/api_documentation.md`) cleanly behind `DatabaseLayer` and `SkillGapService` so UI or PostgreSQL drivers attach via environment configuration (`.env.example`, `docker-compose.yml`).
 
 ## 7. Conclusion
 
-The proposed architecture connects job market information, NLP-based skill extraction, skill relationship graph analysis, student proficiency assessment, and personalized learning recommendations.
-
-It provides the technical foundation for developing SkillGraph as an explainable career skill-gap analysis and learning pathway recommendation system.
+As of Week 3, SkillGraph implements and tests end-to-end dependency-based negation filtering, explainable skill gap analysis, multi-occupation career opportunity scoring, weight-sensitivity reporting, 17-table relational persistence, and OpenAPI 3.1 REST endpoints—while explicitly preserving boundaries around synthetic training data, pending human annotation review, and awaiting real university curriculum data.

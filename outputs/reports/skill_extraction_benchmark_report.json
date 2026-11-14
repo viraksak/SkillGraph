@@ -1,35 +1,1439 @@
 {
-  "experiment_id": "EXP-01-SKILL-EXTRACTION-BASELINE",
-  "milestone": "Week 1, Lesson 1",
-  "timestamp": "2026-11-12 16:04:54",
-  "corpus_size": 22,
-  "canonical_taxonomy_size": 31,
-  "metrics": {
-    "regex_baseline": {
-      "micro_precision": 0.9811320754716981,
-      "micro_recall": 1.0,
-      "micro_f1": 0.9904761904761905,
-      "macro_precision": 0.981962481962482,
-      "macro_recall": 1.0,
-      "macro_f1": 0.9897504456327986,
-      "total_tp": 156,
-      "total_fp": 3,
-      "total_fn": 0
+  "experiment_id": "EXP-02-WEEK2-EXTRACTION-NORMALIZATION-BENCHMARK",
+  "milestone": "Week 2 Autonomous Execution (Modules 1-9)",
+  "ground_truth_provenance": {
+    "synthetic_generator_corpus_2000": {
+      "source_file": "data/annotations/synthetic_job_postings_ground_truth.json",
+      "postings": 2000,
+      "reference_spans": 21714,
+      "human_verified": false,
+      "circularity_warning": "Generated using the same canonical skill taxonomy; validates engineering precision, offsets, tokenization, and section filtering — not real-world generalization or human gold-standard performance."
     },
-    "spacy_phrasematcher": {
-      "micro_precision": 0.9873417721518988,
+    "technical_edge_case_set_22": {
+      "source_file": "scripts/generate_synthetic_benchmark.py",
+      "postings": 22,
+      "skill_level_targets": 156,
+      "human_verified": false,
+      "note": "Synthesized specifically to stress-test C, C++, Go, R, Node.js, CI/CD, and negation traps."
+    },
+    "human_candidate_pool_50": {
+      "source_file": "data/annotations/human_annotation_sample_50.json",
+      "records": 50,
+      "candidate_spans": 530,
+      "status": "PENDING_INDEPENDENT_HUMAN_REVIEW",
+      "note": "Excluded from model scoring until independent human confirmation is completed."
+    }
+  },
+  "week1_preserved_baselines": {
+    "week1_22_doc_report": {
+      "experiment_id": "EXP-01-SKILL-EXTRACTION-BASELINE",
+      "milestone": "Week 1, Lesson 1",
+      "timestamp": "2026-11-12 16:04:54",
+      "corpus_size": 22,
+      "canonical_taxonomy_size": 31,
+      "metrics": {
+        "regex_baseline": {
+          "micro_precision": 0.9811320754716981,
+          "micro_recall": 1.0,
+          "micro_f1": 0.9904761904761905,
+          "macro_precision": 0.981962481962482,
+          "macro_recall": 1.0,
+          "macro_f1": 0.9897504456327986,
+          "total_tp": 156,
+          "total_fp": 3,
+          "total_fn": 0
+        },
+        "spacy_phrasematcher": {
+          "micro_precision": 0.9873417721518988,
+          "micro_recall": 1.0,
+          "micro_f1": 0.9936305732484078,
+          "macro_precision": 0.987012987012987,
+          "macro_recall": 1.0,
+          "macro_f1": 0.9924242424242423,
+          "total_tp": 156,
+          "total_fp": 2,
+          "total_fn": 0
+        }
+      },
+      "key_findings": [
+        "spaCy PhraseMatcher demonstrated superior precision (Micro F1 0.9936 vs 0.9842) by preventing substring and symbol overlap.",
+        "Both dictionary methods falsely extracted negated technical requirements ('do not develop in Python or Java'), highlighting the critical necessity of dependency parsing and contextual embeddings."
+      ]
+    },
+    "week1_2000_doc_audit": {
+      "dictionary_regex": {
+        "micro_precision": 0.929359,
+        "micro_recall": 0.993046,
+        "micro_f1": 0.960148,
+        "total_tp": 21563,
+        "total_fp": 1639,
+        "total_fn": 151
+      },
+      "spacy_phrasematcher": {
+        "micro_precision": 0.929356,
+        "micro_recall": 0.993,
+        "micro_f1": 0.960126,
+        "total_tp": 21562,
+        "total_fp": 1639,
+        "total_fn": 152,
+        "known_defects": [
+          "28 false positives matching Title-case 'Siem' inside 'Siem Reap, Cambodia' as 'SIEM' due to len<=3 threshold.",
+          "1 false negative on GLOBAL_SYN_001440 ('LTE and 5G.') due to sentence-final period tokenization attachment."
+        ]
+      }
+    }
+  },
+  "week2_2000_doc_evaluations": {
+    "strict_full_text": {
+      "dictionary_regex": {
+        "micro_precision": 0.930482,
+        "micro_recall": 0.993046,
+        "micro_f1": 0.960747,
+        "macro_precision": 0.94103,
+        "macro_recall": 0.993024,
+        "macro_f1": 0.963771,
+        "total_tp": 21563,
+        "total_fp": 1611,
+        "total_fn": 151,
+        "relaxed_f1": 0.960747,
+        "boundary_only_f1": 0.960747
+      },
+      "spacy_phrasematcher_fast": {
+        "micro_precision": 0.930482,
+        "micro_recall": 0.993046,
+        "micro_f1": 0.960747,
+        "macro_precision": 0.94103,
+        "macro_recall": 0.993024,
+        "macro_f1": 0.963771,
+        "total_tp": 21563,
+        "total_fp": 1611,
+        "total_fn": 151,
+        "relaxed_f1": 0.960747,
+        "boundary_only_f1": 0.960747
+      },
+      "spacy_phrasematcher_full": {
+        "micro_precision": 0.930482,
+        "micro_recall": 0.993046,
+        "micro_f1": 0.960747,
+        "macro_precision": 0.94103,
+        "macro_recall": 0.993024,
+        "macro_f1": 0.963771,
+        "total_tp": 21563,
+        "total_fp": 1611,
+        "total_fn": 151,
+        "relaxed_f1": 0.960747,
+        "boundary_only_f1": 0.960747
+      },
+      "extractor_jaccard_agreement": 1.0,
+      "fast_vs_full_spacy_jaccard": 1.0
+    },
+    "broad_country_full_text": {
+      "spacy_and_dict_parity": {
+        "micro_precision": 0.931931,
+        "micro_recall": 1.0,
+        "micro_f1": 0.964767,
+        "macro_precision": 0.942333,
+        "macro_recall": 1.0,
+        "macro_f1": 0.967927,
+        "total_tp": 21714,
+        "total_fp": 1586,
+        "total_fn": 0,
+        "relaxed_f1": 0.964767,
+        "boundary_only_f1": 0.964767
+      }
+    },
+    "strict_qualification_section_filtered": {
+      "spacy_and_dict_parity": {
+        "micro_precision": 0.998842,
+        "micro_recall": 0.993046,
+        "micro_f1": 0.995936,
+        "macro_precision": 0.998908,
+        "macro_recall": 0.993024,
+        "macro_f1": 0.995817,
+        "total_tp": 21563,
+        "total_fp": 25,
+        "total_fn": 151,
+        "relaxed_f1": 0.995936,
+        "boundary_only_f1": 0.995936
+      }
+    },
+    "broad_country_plus_section_filtered": {
+      "spacy_and_dict_parity": {
+        "micro_precision": 1.0,
+        "micro_recall": 1.0,
+        "micro_f1": 1.0,
+        "macro_precision": 1.0,
+        "macro_recall": 1.0,
+        "macro_f1": 1.0,
+        "total_tp": 21714,
+        "total_fp": 0,
+        "total_fn": 0,
+        "relaxed_f1": 1.0,
+        "boundary_only_f1": 1.0
+      }
+    }
+  },
+  "week2_22_doc_technical_benchmark": {
+    "dictionary_regex": {
+      "micro_precision": 0.987342,
       "micro_recall": 1.0,
-      "micro_f1": 0.9936305732484078,
-      "macro_precision": 0.987012987012987,
-      "macro_recall": 1.0,
-      "macro_f1": 0.9924242424242423,
+      "micro_f1": 0.993631,
       "total_tp": 156,
       "total_fp": 2,
       "total_fn": 0
+    },
+    "spacy_phrasematcher_fast": {
+      "micro_precision": 0.987342,
+      "micro_recall": 1.0,
+      "micro_f1": 0.993631,
+      "total_tp": 156,
+      "total_fp": 2,
+      "total_fn": 0
+    },
+    "note": "The remaining 2 FPs in SYN_JOB_003 ('Python', 'Java' in 'do not develop in Python or Java') reflect intentional dictionary negation sensitivity documented for Milestone 3 dependency-based negation filtering."
+  },
+  "week2_9_category_error_analysis_2000_docs": {
+    "strict_full_text_counts": {
+      "false_positive": 1611,
+      "false_negative": 151,
+      "incorrect_boundary": 25,
+      "duplicate_match": 0,
+      "overlapping_match": 0,
+      "incorrect_normalization": 0,
+      "ambiguous_skill": 59,
+      "tokenization_error": 26,
+      "contextual_interpretation_error": 1586
+    },
+    "strict_full_text_sub_counts": {
+      "false_positive": {
+        "title_or_department_bleed": 728,
+        "responsibility_duty_bleed": 858,
+        "unannotated_lexical_match": 25
+      },
+      "false_negative": {
+        "country_specific_regulatory_or_accounting_surface": 151
+      },
+      "incorrect_boundary": {
+        "partial_span_boundary_mismatch": 25
+      },
+      "duplicate_match": {},
+      "overlapping_match": {},
+      "incorrect_normalization": {},
+      "ambiguous_skill": {
+        "missed_ambiguous_or_acronym_variant": 52,
+        "polysemous_short_or_domain_term": 7
+      },
+      "tokenization_error": {
+        "sentence_final_or_symbol_tokenization_mismatch": 26
+      },
+      "contextual_interpretation_error": {
+        "title_or_department_non_qualification_context": 728,
+        "duty_clause_non_qualification_context": 858
+      }
+    },
+    "strict_section_filtered_counts": {
+      "false_positive": 25,
+      "false_negative": 151,
+      "incorrect_boundary": 25,
+      "duplicate_match": 0,
+      "overlapping_match": 0,
+      "incorrect_normalization": 0,
+      "ambiguous_skill": 52,
+      "tokenization_error": 26,
+      "contextual_interpretation_error": 0
+    },
+    "broad_plus_section_filtered_counts": {
+      "false_positive": 0,
+      "false_negative": 0,
+      "incorrect_boundary": 0,
+      "duplicate_match": 0,
+      "overlapping_match": 0,
+      "incorrect_normalization": 0,
+      "ambiguous_skill": 0,
+      "tokenization_error": 0,
+      "contextual_interpretation_error": 0
+    },
+    "strict_full_text_sample_examples": {
+      "false_positive": [
+        {
+          "sub_category": "title_or_department_bleed",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            93,
+            104
+          ],
+          "mention": "Procurement",
+          "canonical_skill": "Procurement",
+          "section": "intro_or_title",
+          "snippet": "of the role. As a Junior Procurement Officer, you will work i"
+        },
+        {
+          "sub_category": "title_or_department_bleed",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            135,
+            146
+          ],
+          "mention": "Procurement",
+          "canonical_skill": "Procurement",
+          "section": "intro_or_title",
+          "snippet": "er, you will work in the Procurement team in Tokyo, Japan, re"
+        },
+        {
+          "sub_category": "responsibility_duty_bleed",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            284,
+            295
+          ],
+          "mention": "procurement",
+          "canonical_skill": "Procurement",
+          "section": "responsibilities",
+          "snippet": "ponsibilities: Report on procurement spending and savings; Ma"
+        },
+        {
+          "sub_category": "responsibility_duty_bleed",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            327,
+            338
+          ],
+          "mention": "procurement",
+          "canonical_skill": "Procurement",
+          "section": "responsibilities",
+          "snippet": "ng and savings; Maintain procurement records and contract fil"
+        },
+        {
+          "sub_category": "responsibility_duty_bleed",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            491,
+            502
+          ],
+          "mention": "Procurement",
+          "canonical_skill": "Procurement",
+          "section": "responsibilities",
+          "snippet": "formance; Handle routine Procurement assignments independentl"
+        },
+        {
+          "sub_category": "title_or_department_bleed",
+          "job_id": "GLOBAL_SYN_000010",
+          "span": [
+            76,
+            92
+          ],
+          "mention": "Customer Support",
+          "canonical_skill": "Customer Service",
+          "section": "intro_or_title",
+          "snippet": " is looking for a Senior Customer Support Specialist to join its C"
+        },
+        {
+          "sub_category": "title_or_department_bleed",
+          "job_id": "GLOBAL_SYN_000010",
+          "span": [
+            116,
+            132
+          ],
+          "mention": "Customer Support",
+          "canonical_skill": "Customer Service",
+          "section": "intro_or_title",
+          "snippet": "t Specialist to join its Customer Support team. The company is exp"
+        },
+        {
+          "sub_category": "responsibility_duty_bleed",
+          "job_id": "GLOBAL_SYN_000010",
+          "span": [
+            328,
+            344
+          ],
+          "mention": "Customer Support",
+          "canonical_skill": "Customer Service",
+          "section": "responsibilities",
+          "snippet": "complex or high-priority Customer Support initiatives with limited"
+        },
+        {
+          "sub_category": "responsibility_duty_bleed",
+          "job_id": "GLOBAL_SYN_000010",
+          "span": [
+            546,
+            562
+          ],
+          "mention": "Customer Support",
+          "canonical_skill": "Customer Service",
+          "section": "responsibilities",
+          "snippet": "nd review the quality of Customer Support work; (5) diagnose basic"
+        },
+        {
+          "sub_category": "responsibility_duty_bleed",
+          "job_id": "GLOBAL_SYN_000012",
+          "span": [
+            328,
+            348
+          ],
+          "mention": "infection prevention",
+          "canonical_skill": "Infection Control",
+          "section": "responsibilities",
+          "snippet": "\nMain duties: (1) follow infection prevention protocols at all times; "
+        }
+      ],
+      "false_negative": [
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000020",
+          "span": [
+            1016,
+            1034
+          ],
+          "mention": "PDP Law compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "snippet": "\nAdditional strengths in PDP Law compliance, Python progra"
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000035",
+          "span": [
+            1000,
+            1015
+          ],
+          "mention": "LGPD compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "snippet": ", change management, and LGPD compliance."
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000045",
+          "span": [
+            836,
+            842
+          ],
+          "mention": "K-IFRS",
+          "canonical_skill": "Local Accounting Standards",
+          "snippet": " Required skills include K-IFRS, financial rep"
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000047",
+          "span": [
+            1037,
+            1052
+          ],
+          "mention": "LGPD compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "snippet": "lity management systems, LGPD compliance, MS Excel, and"
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000049",
+          "span": [
+            955,
+            978
+          ],
+          "mention": "Brazilian CPC standards",
+          "canonical_skill": "Local Accounting Standards",
+          "snippet": "Python, risk management, Brazilian CPC standards, and CFA. The "
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000061",
+          "span": [
+            1028,
+            1045
+          ],
+          "mention": "PIPEDA compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "snippet": ", organisational change, PIPEDA compliance, or reward man"
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000086",
+          "span": [
+            1093,
+            1097
+          ],
+          "mention": "IFRS",
+          "canonical_skill": "Local Accounting Standards",
+          "snippet": "d qualifications include IFRS, CFA, and risk"
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000092",
+          "span": [
+            849,
+            855
+          ],
+          "mention": "K-IFRS",
+          "canonical_skill": "Local Accounting Standards",
+          "snippet": "requires general ledger, K-IFRS, financial sta"
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000098",
+          "span": [
+            980,
+            995
+          ],
+          "mention": "PDPA compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "snippet": "ation, CRM Software, and PDPA compliance. The employer "
+        },
+        {
+          "sub_category": "country_specific_regulatory_or_accounting_surface",
+          "job_id": "GLOBAL_SYN_000130",
+          "span": [
+            1105,
+            1120
+          ],
+          "mention": "GDPR compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "snippet": "\nAdditional strengths in GDPR compliance, risk manageme"
+        }
+      ],
+      "incorrect_boundary": [
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000178",
+          "pred_span": [
+            826,
+            836
+          ],
+          "gt_span": [
+            826,
+            863
+          ],
+          "pred_mention": "Vietnamese",
+          "gt_mention": "Vietnamese Accounting Standards (VAS)",
+          "canonical_skill": "Vietnamese Language"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000744",
+          "pred_span": [
+            918,
+            928
+          ],
+          "gt_span": [
+            918,
+            959
+          ],
+          "pred_mention": "Vietnamese",
+          "gt_mention": "Vietnamese personal data protection rules",
+          "canonical_skill": "Vietnamese Language"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000761",
+          "pred_span": [
+            1010,
+            1020
+          ],
+          "gt_span": [
+            1010,
+            1051
+          ],
+          "pred_mention": "Vietnamese",
+          "gt_mention": "Vietnamese personal data protection rules",
+          "canonical_skill": "Vietnamese Language"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000840",
+          "pred_span": [
+            1052,
+            1060
+          ],
+          "gt_span": [
+            1052,
+            1065
+          ],
+          "pred_mention": "Japanese",
+          "gt_mention": "Japanese GAAP",
+          "canonical_skill": "Japanese Language"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000848",
+          "pred_span": [
+            1194,
+            1199
+          ],
+          "gt_span": [
+            1194,
+            1204
+          ],
+          "pred_mention": "Dutch",
+          "gt_mention": "Dutch GAAP",
+          "canonical_skill": "Dutch Language"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000849",
+          "pred_span": [
+            890,
+            896
+          ],
+          "gt_span": [
+            890,
+            906
+          ],
+          "pred_mention": "French",
+          "gt_mention": "French PCG rules",
+          "canonical_skill": "French Language"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000933",
+          "pred_span": [
+            754,
+            762
+          ],
+          "gt_span": [
+            754,
+            767
+          ],
+          "pred_mention": "Japanese",
+          "gt_mention": "Japanese GAAP",
+          "canonical_skill": "Japanese Language"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000950",
+          "pred_span": [
+            948,
+            952
+          ],
+          "gt_span": [
+            948,
+            989
+          ],
+          "pred_mention": "Thai",
+          "gt_mention": "Thai Financial Reporting Standards (TFRS)",
+          "canonical_skill": "Thai Language"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_000950",
+          "pred_span": [
+            953,
+            972
+          ],
+          "gt_span": [
+            948,
+            989
+          ],
+          "pred_mention": "Financial Reporting",
+          "gt_mention": "Thai Financial Reporting Standards (TFRS)",
+          "canonical_skill": "Financial Reporting"
+        },
+        {
+          "sub_category": "partial_span_boundary_mismatch",
+          "job_id": "GLOBAL_SYN_001137",
+          "pred_span": [
+            873,
+            881
+          ],
+          "gt_span": [
+            873,
+            886
+          ],
+          "pred_mention": "Japanese",
+          "gt_mention": "Japanese GAAP",
+          "canonical_skill": "Japanese Language"
+        }
+      ],
+      "duplicate_match": [],
+      "overlapping_match": [],
+      "incorrect_normalization": [],
+      "ambiguous_skill": [
+        {
+          "sub_category": "missed_ambiguous_or_acronym_variant",
+          "job_id": "GLOBAL_SYN_000045",
+          "span": [
+            836,
+            842
+          ],
+          "mention": "K-IFRS",
+          "canonical_skill": "Local Accounting Standards"
+        },
+        {
+          "sub_category": "missed_ambiguous_or_acronym_variant",
+          "job_id": "GLOBAL_SYN_000049",
+          "span": [
+            955,
+            978
+          ],
+          "mention": "Brazilian CPC standards",
+          "canonical_skill": "Local Accounting Standards"
+        },
+        {
+          "sub_category": "polysemous_short_or_domain_term",
+          "job_id": "GLOBAL_SYN_000069",
+          "span": [
+            500,
+            503
+          ],
+          "mention": "SQL",
+          "canonical_skill": "SQL",
+          "section": "responsibilities"
+        },
+        {
+          "sub_category": "missed_ambiguous_or_acronym_variant",
+          "job_id": "GLOBAL_SYN_000086",
+          "span": [
+            1093,
+            1097
+          ],
+          "mention": "IFRS",
+          "canonical_skill": "Local Accounting Standards"
+        },
+        {
+          "sub_category": "missed_ambiguous_or_acronym_variant",
+          "job_id": "GLOBAL_SYN_000092",
+          "span": [
+            849,
+            855
+          ],
+          "mention": "K-IFRS",
+          "canonical_skill": "Local Accounting Standards"
+        },
+        {
+          "sub_category": "missed_ambiguous_or_acronym_variant",
+          "job_id": "GLOBAL_SYN_000137",
+          "span": [
+            915,
+            920
+          ],
+          "mention": "CIFRS",
+          "canonical_skill": "Local Accounting Standards"
+        },
+        {
+          "sub_category": "missed_ambiguous_or_acronym_variant",
+          "job_id": "GLOBAL_SYN_000142",
+          "span": [
+            1021,
+            1034
+          ],
+          "mention": "IFRS and ASPE",
+          "canonical_skill": "Local Accounting Standards"
+        },
+        {
+          "sub_category": "polysemous_short_or_domain_term",
+          "job_id": "GLOBAL_SYN_000160",
+          "span": [
+            692,
+            695
+          ],
+          "mention": "SQL",
+          "canonical_skill": "SQL",
+          "section": "responsibilities"
+        },
+        {
+          "sub_category": "missed_ambiguous_or_acronym_variant",
+          "job_id": "GLOBAL_SYN_000178",
+          "span": [
+            826,
+            863
+          ],
+          "mention": "Vietnamese Accounting Standards (VAS)",
+          "canonical_skill": "Local Accounting Standards"
+        },
+        {
+          "sub_category": "missed_ambiguous_or_acronym_variant",
+          "job_id": "GLOBAL_SYN_000210",
+          "span": [
+            944,
+            982
+          ],
+          "mention": "Australian Accounting Standards (AASB)",
+          "canonical_skill": "Local Accounting Standards"
+        }
+      ],
+      "tokenization_error": [
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000035",
+          "span": [
+            1000,
+            1015
+          ],
+          "mention": "LGPD compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": ", change management, and LGPD compliance."
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000098",
+          "span": [
+            980,
+            995
+          ],
+          "mention": "PDPA compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": "ation, CRM Software, and PDPA compliance. The employer "
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000181",
+          "span": [
+            842,
+            861
+          ],
+          "mention": "UAE PDPL compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": "dent handling, SIEM, and UAE PDPL compliance. The working l"
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000281",
+          "span": [
+            1035,
+            1051
+          ],
+          "mention": "POPIA compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": "g Microsoft Power BI and POPIA compliance. The employer "
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000342",
+          "span": [
+            1048,
+            1064
+          ],
+          "mention": "POPIA compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": "ge to bring MS Excel and POPIA compliance. Successful ca"
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000372",
+          "span": [
+            1011,
+            1038
+          ],
+          "mention": "Data Privacy Act compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": "ds, team leadership, and Data Privacy Act compliance. The team work"
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000521",
+          "span": [
+            976,
+            995
+          ],
+          "mention": "UAE PDPL compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": "tems, leading teams, and UAE PDPL compliance. The team work"
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000565",
+          "span": [
+            784,
+            789
+          ],
+          "mention": "CIFRS",
+          "canonical_skill": "Local Accounting Standards",
+          "trailing_char": ".",
+          "snippet": "unting, ERP Systems, and CIFRS. The working l"
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000584",
+          "span": [
+            1169,
+            1188
+          ],
+          "mention": "UAE PDPL compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": " Language, Power BI, and UAE PDPL compliance. The team work"
+        },
+        {
+          "sub_category": "sentence_final_or_symbol_tokenization_mismatch",
+          "job_id": "GLOBAL_SYN_000622",
+          "span": [
+            1145,
+            1161
+          ],
+          "mention": "POPIA compliance",
+          "canonical_skill": "Data Privacy Compliance",
+          "trailing_char": ".",
+          "snippet": ", change management, and POPIA compliance. Training oppo"
+        }
+      ],
+      "contextual_interpretation_error": [
+        {
+          "sub_category": "title_or_department_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            93,
+            104
+          ],
+          "mention": "Procurement",
+          "canonical_skill": "Procurement",
+          "section": "intro_or_title",
+          "snippet": "of the role. As a Junior Procurement Officer, you will work i"
+        },
+        {
+          "sub_category": "title_or_department_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            135,
+            146
+          ],
+          "mention": "Procurement",
+          "canonical_skill": "Procurement",
+          "section": "intro_or_title",
+          "snippet": "er, you will work in the Procurement team in Tokyo, Japan, re"
+        },
+        {
+          "sub_category": "duty_clause_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            284,
+            295
+          ],
+          "mention": "procurement",
+          "canonical_skill": "Procurement",
+          "section": "responsibilities",
+          "snippet": "ponsibilities: Report on procurement spending and savings; Ma"
+        },
+        {
+          "sub_category": "duty_clause_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            327,
+            338
+          ],
+          "mention": "procurement",
+          "canonical_skill": "Procurement",
+          "section": "responsibilities",
+          "snippet": "ng and savings; Maintain procurement records and contract fil"
+        },
+        {
+          "sub_category": "duty_clause_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000004",
+          "span": [
+            491,
+            502
+          ],
+          "mention": "Procurement",
+          "canonical_skill": "Procurement",
+          "section": "responsibilities",
+          "snippet": "formance; Handle routine Procurement assignments independentl"
+        },
+        {
+          "sub_category": "title_or_department_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000010",
+          "span": [
+            76,
+            92
+          ],
+          "mention": "Customer Support",
+          "canonical_skill": "Customer Service",
+          "section": "intro_or_title",
+          "snippet": " is looking for a Senior Customer Support Specialist to join its C"
+        },
+        {
+          "sub_category": "title_or_department_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000010",
+          "span": [
+            116,
+            132
+          ],
+          "mention": "Customer Support",
+          "canonical_skill": "Customer Service",
+          "section": "intro_or_title",
+          "snippet": "t Specialist to join its Customer Support team. The company is exp"
+        },
+        {
+          "sub_category": "duty_clause_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000010",
+          "span": [
+            328,
+            344
+          ],
+          "mention": "Customer Support",
+          "canonical_skill": "Customer Service",
+          "section": "responsibilities",
+          "snippet": "complex or high-priority Customer Support initiatives with limited"
+        },
+        {
+          "sub_category": "duty_clause_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000010",
+          "span": [
+            546,
+            562
+          ],
+          "mention": "Customer Support",
+          "canonical_skill": "Customer Service",
+          "section": "responsibilities",
+          "snippet": "nd review the quality of Customer Support work; (5) diagnose basic"
+        },
+        {
+          "sub_category": "duty_clause_non_qualification_context",
+          "job_id": "GLOBAL_SYN_000012",
+          "span": [
+            328,
+            348
+          ],
+          "mention": "infection prevention",
+          "canonical_skill": "Infection Control",
+          "section": "responsibilities",
+          "snippet": "\nMain duties: (1) follow infection prevention protocols at all times; "
+        }
+      ]
     }
   },
-  "key_findings": [
-    "spaCy PhraseMatcher demonstrated superior precision (Micro F1 0.9936 vs 0.9842) by preventing substring and symbol overlap.",
-    "Both dictionary methods falsely extracted negated technical requirements ('do not develop in Python or Java'), highlighting the critical necessity of dependency parsing and contextual embeddings."
-  ]
+  "scalability_benchmarks": {
+    "corpus_2000_docs": [
+      {
+        "label": "DictionarySkillExtractor (2000 docs)",
+        "docs": 2000,
+        "total_chars": 2261639,
+        "extracted_spans": 23174,
+        "init_seconds": 0.0984,
+        "extract_seconds": 16.4355,
+        "docs_per_second": 121.69,
+        "chars_per_second": 137607.0,
+        "mean_ms_per_doc": 8.218,
+        "tracemalloc_peak_kb_per_200doc_batch": 107.1,
+        "rss_delta_mb": 16.11
+      },
+      {
+        "label": "SpacySkillExtractor Fast Tokenizer (2000 docs)",
+        "docs": 2000,
+        "total_chars": 2261639,
+        "extracted_spans": 23174,
+        "init_seconds": 0.4113,
+        "extract_seconds": 0.5728,
+        "docs_per_second": 3491.79,
+        "chars_per_second": 3948581.0,
+        "mean_ms_per_doc": 0.286,
+        "tracemalloc_peak_kb_per_200doc_batch": 174.1,
+        "rss_delta_mb": 60.44
+      },
+      {
+        "label": "SpacySkillExtractor Full Pipeline (2000 docs)",
+        "docs": 2000,
+        "total_chars": 2261639,
+        "extracted_spans": 23174,
+        "init_seconds": 0.3301,
+        "extract_seconds": 30.1297,
+        "docs_per_second": 66.38,
+        "chars_per_second": 75063.0,
+        "mean_ms_per_doc": 15.065,
+        "tracemalloc_peak_kb_per_200doc_batch": 4179.9,
+        "rss_delta_mb": 57.92
+      }
+    ],
+    "technical_22_docs": [
+      {
+        "label": "DictionarySkillExtractor (22 tech docs)",
+        "docs": 22,
+        "total_chars": 6203,
+        "extracted_spans": 173,
+        "init_seconds": 0.0126,
+        "extract_seconds": 0.0093,
+        "docs_per_second": 2362.14,
+        "chars_per_second": 666015.0,
+        "mean_ms_per_doc": 0.423,
+        "tracemalloc_peak_kb_per_200doc_batch": 17.5,
+        "rss_delta_mb": 0.21
+      },
+      {
+        "label": "SpacySkillExtractor Fast (22 tech docs)",
+        "docs": 22,
+        "total_chars": 6203,
+        "extracted_spans": 173,
+        "init_seconds": 0.2785,
+        "extract_seconds": 0.0082,
+        "docs_per_second": 2696.24,
+        "chars_per_second": 760218.0,
+        "mean_ms_per_doc": 0.371,
+        "tracemalloc_peak_kb_per_200doc_batch": 32.1,
+        "rss_delta_mb": 37.58
+      },
+      {
+        "label": "SpacySkillExtractor Full (22 tech docs)",
+        "docs": 22,
+        "total_chars": 6203,
+        "extracted_spans": 173,
+        "init_seconds": 0.2939,
+        "extract_seconds": 0.1565,
+        "docs_per_second": 140.53,
+        "chars_per_second": 39623.0,
+        "mean_ms_per_doc": 7.116,
+        "tracemalloc_peak_kb_per_200doc_batch": 1433.6,
+        "rss_delta_mb": 40.29
+      }
+    ]
+  },
+  "week3_extensions": {
+    "notebook_source": "research/notebooks/07_recommendation_evaluation.ipynb",
+    "negation_module_benchmarks": {
+      "spacy_8_case_assertions": "11/11",
+      "spacy_8_case_accuracy": 1.0,
+      "dictionary_8_case_assertions": "11/11",
+      "dictionary_8_case_accuracy": 1.0,
+      "non_taxonomy_prohibited_clause_captured": "deprecated technologies",
+      "parser_unavailable_fallback_method": "conservative_regex_fallback_parser_unavailable"
+    },
+    "technical_22_doc_benchmark_after_negation": {
+      "DictionarySkillExtractor": {
+        "exclude_negated_true": {
+          "tp": 156,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "include_negated_true": {
+          "tp": 156,
+          "fp": 2,
+          "fn": 0
+        }
+      },
+      "SpacySkillExtractor": {
+        "exclude_negated_true": {
+          "tp": 156,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "include_negated_true": {
+          "tp": 156,
+          "fp": 2,
+          "fn": 0
+        }
+      }
+    },
+    "corpus_2000_doc_modality_summary": {
+      "spacy_strict_eval": {
+        "tp": 21563,
+        "fp": 1611,
+        "fn": 151,
+        "precision": 0.930482,
+        "recall": 0.993046,
+        "f1": 0.960747,
+        "elapsed_seconds": 1.1647
+      },
+      "modality_distribution_include_negated": {
+        "contextually_irrelevant": 728,
+        "mentioned": 858,
+        "preferred": 5769,
+        "required": 15819
+      }
+    },
+    "skill_gap_and_priority_experiments": [
+      {
+        "profile": "empty_ds",
+        "target_occupation": "Data Scientist",
+        "required_coverage": 0.0,
+        "overall_weighted_coverage": 0.0,
+        "skill_gap_score": 1.0,
+        "possessed": 0,
+        "partial": 0,
+        "missing_req": 22,
+        "missing_pref": 7,
+        "unrecognized": 0
+      },
+      {
+        "profile": "partial_da",
+        "target_occupation": "Data Analyst",
+        "required_coverage": 0.119,
+        "overall_weighted_coverage": 0.1806,
+        "skill_gap_score": 0.8194,
+        "possessed": 2,
+        "partial": 1,
+        "missing_req": 18,
+        "missing_pref": 5,
+        "unrecognized": 0
+      },
+      {
+        "profile": "edge_bi",
+        "target_occupation": "Business Intelligence Analyst",
+        "required_coverage": 0.0208,
+        "overall_weighted_coverage": 0.0836,
+        "skill_gap_score": 0.9164,
+        "possessed": 1,
+        "partial": 1,
+        "missing_req": 23,
+        "missing_pref": 4,
+        "unrecognized": 1
+      },
+      {
+        "profile": "complete_da",
+        "target_occupation": "Data Analyst",
+        "required_coverage": 1.0,
+        "overall_weighted_coverage": 1.0,
+        "skill_gap_score": 0.0,
+        "possessed": 26,
+        "partial": 0,
+        "missing_req": 0,
+        "missing_pref": 0,
+        "unrecognized": 0
+      }
+    ],
+    "worked_example_calculation_data_analyst": [
+      {
+        "rank": 1,
+        "skill": "English Language",
+        "req_type": "required",
+        "gap_factor": 1.0,
+        "req_share": 0.9375,
+        "pref_share": 0.0,
+        "G(s)": 0.9375,
+        "raw_ext_opp": 48.9921,
+        "max_norm": 48.9921,
+        "O(s)": 1.0,
+        "P(s)": 0.9563,
+        "tier": "Critical / High"
+      },
+      {
+        "rank": 2,
+        "skill": "Data Analysis",
+        "req_type": "required",
+        "gap_factor": 1.0,
+        "req_share": 1.0,
+        "pref_share": 0.0,
+        "G(s)": 1.0,
+        "raw_ext_opp": 7.8907,
+        "max_norm": 48.9921,
+        "O(s)": 0.1611,
+        "P(s)": 0.7483,
+        "tier": "Critical / High"
+      },
+      {
+        "rank": 3,
+        "skill": "Tableau",
+        "req_type": "required",
+        "gap_factor": 1.0,
+        "req_share": 0.625,
+        "pref_share": 0.0,
+        "G(s)": 0.625,
+        "raw_ext_opp": 0.9118,
+        "max_norm": 48.9921,
+        "O(s)": 0.0186,
+        "P(s)": 0.4431,
+        "tier": "Medium"
+      },
+      {
+        "rank": 4,
+        "skill": "Statistics",
+        "req_type": "required",
+        "gap_factor": 1.0,
+        "req_share": 0.5625,
+        "pref_share": 0.0,
+        "G(s)": 0.5625,
+        "raw_ext_opp": 5.2964,
+        "max_norm": 48.9921,
+        "O(s)": 0.1081,
+        "P(s)": 0.4262,
+        "tier": "Medium"
+      },
+      {
+        "rank": 5,
+        "skill": "Data Visualization",
+        "req_type": "required",
+        "gap_factor": 1.0,
+        "req_share": 0.5625,
+        "pref_share": 0.0,
+        "G(s)": 0.5625,
+        "raw_ext_opp": 2.2826,
+        "max_norm": 48.9921,
+        "O(s)": 0.0466,
+        "P(s)": 0.4077,
+        "tier": "Medium"
+      },
+      {
+        "rank": 6,
+        "skill": "SQL",
+        "req_type": "required",
+        "gap_factor": 0.5,
+        "req_share": 1.0,
+        "pref_share": 0.0,
+        "G(s)": 0.5,
+        "raw_ext_opp": 4.796,
+        "max_norm": 48.9921,
+        "O(s)": 0.0979,
+        "P(s)": 0.3794,
+        "tier": "Medium"
+      }
+    ],
+    "weight_sensitivity_evaluation": {
+      "baseline_preset": "baseline_balanced_heuristic",
+      "top_k": 5,
+      "top_k_jaccard_vs_baseline": {
+        "target_only": 1.0,
+        "baseline_balanced_heuristic": 1.0,
+        "equal_gap_opportunity": 1.0,
+        "career_mobility_first": 0.4286
+      },
+      "top_k_by_preset": {
+        "target_only": [
+          "Data Analysis",
+          "English Language",
+          "Tableau",
+          "Statistics",
+          "Data Visualization"
+        ],
+        "baseline_balanced_heuristic": [
+          "English Language",
+          "Data Analysis",
+          "Tableau",
+          "Statistics",
+          "Data Visualization"
+        ],
+        "equal_gap_opportunity": [
+          "English Language",
+          "Data Analysis",
+          "Statistics",
+          "Tableau",
+          "Data Visualization"
+        ],
+        "career_mobility_first": [
+          "English Language",
+          "Data Analysis",
+          "Attention to Detail",
+          "Statistics",
+          "Microsoft Excel"
+        ]
+      }
+    },
+    "multi_occupation_opportunity_stats": [
+      {
+        "skill_id": "SG-SK-0001",
+        "canonical_skill": "Python",
+        "required_occupations": 5,
+        "preferred_only_occupations": 8,
+        "total_occupations": 13,
+        "raw_external_opportunity": 5.7866,
+        "normalized_O(s)": 0.1159,
+        "top_co_occurring_bridges": "English Language, Statistics, Data Analysis"
+      },
+      {
+        "skill_id": "SG-SK-0006",
+        "canonical_skill": "SQL",
+        "required_occupations": 6,
+        "preferred_only_occupations": 4,
+        "total_occupations": 10,
+        "raw_external_opportunity": 5.796,
+        "normalized_O(s)": 0.1161,
+        "top_co_occurring_bridges": "English Language, Data Analysis, Python"
+      },
+      {
+        "skill_id": "SG-SK-0024",
+        "canonical_skill": "Statistics",
+        "required_occupations": 8,
+        "preferred_only_occupations": 1,
+        "total_occupations": 9,
+        "raw_external_opportunity": 5.8589,
+        "normalized_O(s)": 0.1173,
+        "top_co_occurring_bridges": "English Language, Data Analysis, Report Writing"
+      },
+      {
+        "skill_id": "SG-SK-0022",
+        "canonical_skill": "Power BI",
+        "required_occupations": 3,
+        "preferred_only_occupations": 4,
+        "total_occupations": 7,
+        "raw_external_opportunity": 3.2736,
+        "normalized_O(s)": 0.0656,
+        "top_co_occurring_bridges": "English Language, Data Analysis, Microsoft Excel"
+      },
+      {
+        "skill_id": "SG-SK-0027",
+        "canonical_skill": "Machine Learning",
+        "required_occupations": 2,
+        "preferred_only_occupations": 0,
+        "total_occupations": 2,
+        "raw_external_opportunity": 2.0,
+        "normalized_O(s)": 0.0401,
+        "top_co_occurring_bridges": "Python, English Language, Apache Spark"
+      }
+    ],
+    "learning_path_status": {
+      "ordering_strategy": "transparent_priority_and_category_heuristic",
+      "prerequisite_graph_available": false,
+      "prerequisite_graph_status": "UNAVAILABLE_IN_LOCAL_TAXONOMY",
+      "learning_resources_available": false,
+      "learning_resources_status": "UNAVAILABLE_NO_VERIFIED_COURSE_CATALOG",
+      "stage_counts": {
+        "Stage 1: Core Target-Required Foundation": 2,
+        "Stage 2: High-Portability & Category/Statistical Bridges": 20,
+        "Stage 3: Role-Specific Preferred Differentiators": 2
+      }
+    },
+    "relational_database_mirror": {
+      "ddl_statement_count": 23,
+      "table_count": 17,
+      "table_row_counts": {
+        "skill_categories": 18,
+        "skills": 230,
+        "skill_aliases": 325,
+        "industries": 15,
+        "occupations": 53,
+        "countries": 20,
+        "job_postings": 2000,
+        "job_skill_mentions": 21588,
+        "occupation_skill_demand": 1645,
+        "skill_co_occurrences": 3987,
+        "university_majors": 0,
+        "university_courses": 0,
+        "course_skills": 0,
+        "students": 1,
+        "student_skills": 3,
+        "skill_gap_analyses": 1,
+        "recommendation_explanations": 24
+      },
+      "postgresql_host_environment": {
+        "psql_exists": true,
+        "pg_isready_exists": true,
+        "port_5432_status": "127.0.0.1:5432 - accepting connections",
+        "python_pg_drivers": {
+          "psycopg2": false,
+          "psycopg": false,
+          "asyncpg": false,
+          "sqlalchemy": false
+        },
+        "env_vars_configured": {
+          "SKILLGRAPH_DB_HOST": false,
+          "SKILLGRAPH_DB_PORT": false,
+          "SKILLGRAPH_DB_NAME": false,
+          "SKILLGRAPH_DB_USER": false,
+          "SKILLGRAPH_DB_PASSWORD": false
+        },
+        "live_pg_execution_ready": false,
+        "offline_sql_fallback": "sqlite3_with_foreign_keys_enabled"
+      }
+    },
+    "api_smoke_checks": {
+      "health_status": 200,
+      "occupations_search_data_count": 3,
+      "da_required_count": 21,
+      "da_preferred_count": 5,
+      "post_analyze_status": 200,
+      "post_gap_score": 0.8863,
+      "get_gap_status": 200,
+      "get_rec_status": 200,
+      "get_exp_status": 200,
+      "openapi_paths_count": 8,
+      "openapi_schemas_count": 13,
+      "negative_404_status": 404,
+      "negative_400_status": 400,
+      "negative_422_status": 422
+    }
+  }
 }

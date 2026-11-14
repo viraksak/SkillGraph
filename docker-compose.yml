@@ -1,0 +1,43 @@
+# SkillGraph Week 3 Local Development Compose Specification
+# Requires local `.env` configuration (no credentials are hardcoded here).
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: skillgraph-postgres
+    environment:
+      POSTGRES_DB: ${SKILLGRAPH_DB_NAME:-skillgraph}
+      POSTGRES_USER: ${SKILLGRAPH_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${SKILLGRAPH_DB_PASSWORD:?Set SKILLGRAPH_DB_PASSWORD in local .env}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - skillgraph_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: python:3.11-slim
+    container_name: skillgraph-api
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
+    environment:
+      SKILLGRAPH_DB_HOST: postgres
+      SKILLGRAPH_DB_PORT: "5432"
+      SKILLGRAPH_DB_NAME: ${SKILLGRAPH_DB_NAME:-skillgraph}
+      SKILLGRAPH_DB_USER: ${SKILLGRAPH_DB_USER:-postgres}
+      SKILLGRAPH_DB_PASSWORD: ${SKILLGRAPH_DB_PASSWORD:?Set SKILLGRAPH_DB_PASSWORD in local .env}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  skillgraph_pgdata:
+
