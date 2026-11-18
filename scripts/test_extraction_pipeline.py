@@ -959,6 +959,115 @@ class TestSkillExtractionPipeline(unittest.TestCase):
             self.assertEqual(res["courses_validated"], 1)
             self.assertGreaterEqual(res["course_skills_extracted"], 2)
 
+    # ------------------------------------------------------------------
+    # Week 4 Member 01: Real Job-Posting Ingestion & Quality Audit Tests
+    # ------------------------------------------------------------------
+
+    def test_50_real_jobs_provenance_and_synthetic_rejection(self) -> None:
+        """Week 4 Real Jobs: Rejects synthetic rows and missing provenance in strict mode."""
+        from scripts.ingest_real_jobs import RealJobPostingPipeline, RealJobValidationError
+
+        pipe = RealJobPostingPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        with self.assertRaises(RealJobValidationError):
+            pipe.validate_and_deduplicate([{
+                "job_id": "REAL_LEAK_1",
+                "occupation": "Data Analyst",
+                "description": "Requires Python and SQL.",
+                "is_synthetic": True,
+                "source_url": "https://example.org/job/1",
+                "source_name": "ExampleBoard",
+                "collected_at": "2026-11-18",
+            }])
+
+        with self.assertRaises(RealJobValidationError):
+            pipe.validate_and_deduplicate([{
+                "job_id": "REAL_NOPROV_1",
+                "occupation": "Data Analyst",
+                "description": "Requires Python and SQL.",
+                "is_synthetic": False,
+            }])
+
+    def test_51_real_jobs_deduplication_and_missingness_audit(self) -> None:
+        """Week 4 Real Jobs: Deduplicates repeated job_ids/content and audits missing optional fields."""
+        from scripts.ingest_real_jobs import RealJobPostingPipeline
+
+        pipe = RealJobPostingPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        rows = [
+            {
+                "job_id": "REAL_1",
+                "occupation": "Data Analyst",
+                "description": "Required: Python and SQL.",
+                "is_synthetic": False,
+                "source_url": "https://example.org/1",
+                "source_name": "JobBoard",
+                "collected_at": "2026-11-18",
+                "country": "Cambodia",
+            },
+            {
+                "job_id": "REAL_1",  # duplicate job_id
+                "occupation": "Data Analyst",
+                "description": "Required: Python and SQL.",
+                "is_synthetic": False,
+                "source_url": "https://example.org/1",
+                "source_name": "JobBoard",
+                "collected_at": "2026-11-18",
+            },
+            {
+                "job_id": "REAL_2",  # duplicate normalized content
+                "occupation": "Data Analyst",
+                "description": "Required:  Python and SQL.",
+                "is_synthetic": False,
+                "source_url": "https://example.org/2",
+                "source_name": "JobBoard",
+                "collected_at": "2026-11-18",
+            },
+        ]
+        val = pipe.validate_and_deduplicate(rows)
+        self.assertEqual(val["total_input_rows"], 3)
+        self.assertEqual(val["valid_unique_rows"], 1)
+        self.assertEqual(val["duplicate_job_ids_dropped"], ["REAL_1"])
+        self.assertEqual(val["duplicate_content_dropped"], ["REAL_2"])
+        self.assertIn("salary_min", val["optional_field_missing_counts"])
+
+    def test_52_real_jobs_cleaning_extraction_and_negation(self) -> None:
+        """Week 4 Real Jobs: Extracts positive skills, filters negated mentions, flags unmapped occupations."""
+        import tempfile
+        import pandas as pd
+        from scripts.ingest_real_jobs import RealJobPostingPipeline
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            csv_path = Path(tmpdir) / "real_jobs_fixture.csv"
+            pd.DataFrame([{
+                "job_id": "REAL_FIX_1",
+                "occupation": "Custom Quantum Analyst",
+                "country": "Cambodia",
+                "description": "Required Skills:\nMust know Python and SQL.\nNote that we do not use Java.",
+                "is_synthetic": False,
+                "source_url": "https://example.org/q1",
+                "source_name": "ExampleBoard",
+                "collected_at": "2026-11-18",
+            }]).to_csv(csv_path, index=False)
+
+            pipe = RealJobPostingPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+            report = pipe.process_and_audit(pipe.load_records(csv_path))
+            self.assertEqual(report["status"], "REAL_DATA_AUDITED")
+            extracted_canons = {r["canonical_skill"] for r in report["extracted_rows"]}
+            self.assertIn("Python", extracted_canons)
+            self.assertIn("SQL", extracted_canons)
+            self.assertNotIn("Java", extracted_canons)
+            self.assertEqual(report["eda_summary"]["unmapped_occupations"], ["Custom Quantum Analyst"])
+            self.assertEqual(report["eda_summary"]["length_preserved_count"], 1)
+
+    def test_53_real_jobs_empty_default_csv_safe_handling(self) -> None:
+        """Week 4 Real Jobs: Handles empty data/raw/real_job_postings.csv cleanly without inventing rows."""
+        from scripts.ingest_real_jobs import DEFAULT_REAL_JOBS_PATH, RealJobPostingPipeline
+
+        pipe = RealJobPostingPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        recs = pipe.load_records(DEFAULT_REAL_JOBS_PATH)
+        report = pipe.process_and_audit(recs)
+        self.assertEqual(report["status"], "AWAITING_REAL_DATA")
+        self.assertEqual(report["valid_unique_rows"], 0)
+
 
 def run_summary_benchmark() -> None:
     """Prints a quick summary of the 22-posting & 200-posting checks."""
