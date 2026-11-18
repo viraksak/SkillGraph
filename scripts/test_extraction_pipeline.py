@@ -745,6 +745,220 @@ class TestSkillExtractionPipeline(unittest.TestCase):
             self.assertEqual(exp["supporting_evidence"]["required_postings"], rec["required_count"])
             self.assertEqual(exp["supporting_evidence"]["preferred_postings"], rec["preferred_count"])
 
+    # ------------------------------------------------------------------
+    # Week 4 Member 01: University Curriculum & Syllabus Ingestion Tests
+    # ------------------------------------------------------------------
+
+    def test_44_curriculum_provenance_and_fk_validation(self) -> None:
+        """Week 4 Curriculum: Rejects missing provenance in strict mode and orphan major_id."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline, CurriculumValidationError
+
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        valid_major = [{
+            "major_id": "TEST_MAJ_CS",
+            "major_name": "Computer Science (Test Fixture)",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+            "source_url": "https://example.edu/cs",
+            "collected_at": "2026-11-18",
+        }]
+        missing_prov_course = [{
+            "course_id": "TEST_CS101",
+            "course_code": "CS101",
+            "course_title": "Intro Programming",
+            "major_id": "TEST_MAJ_CS",
+            "syllabus_text": "Learn Python and SQL.",
+        }]
+        with self.assertRaises(CurriculumValidationError):
+            pipe.validate_records(valid_major, missing_prov_course)
+
+        orphan_course = [{
+            "course_id": "TEST_CS101",
+            "course_code": "CS101",
+            "course_title": "Intro Programming",
+            "major_id": "UNKNOWN_MAJ",
+            "syllabus_text": "Learn Python.",
+            "source_url": "https://example.edu/cs101",
+            "collected_at": "2026-11-18",
+        }]
+        with self.assertRaises(CurriculumValidationError):
+            pipe.validate_records(valid_major, orphan_course)
+
+    def test_45_curriculum_prerequisite_cycle_detection(self) -> None:
+        """Week 4 Curriculum: Rejects self-loops and cyclic prerequisite DAGs."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline, CurriculumValidationError
+
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=False)
+        majors = [{
+            "major_id": "TEST_MAJ_DS",
+            "major_name": "Data Science (Test Fixture)",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+        }]
+        cyclic_courses = [
+            {
+                "course_id": "C1",
+                "course_code": "DS101",
+                "course_title": "Foundations",
+                "major_id": "TEST_MAJ_DS",
+                "syllabus_text": "Python and Statistics.",
+                "prerequisite_course_ids": ["C2"],
+            },
+            {
+                "course_id": "C2",
+                "course_code": "DS201",
+                "course_title": "Modeling",
+                "major_id": "TEST_MAJ_DS",
+                "syllabus_text": "Machine Learning.",
+                "prerequisite_course_ids": ["C1"],
+            },
+        ]
+        with self.assertRaises(CurriculumValidationError):
+            pipe.validate_records(majors, cyclic_courses)
+
+    def test_46_curriculum_syllabus_skill_extraction_and_negation(self) -> None:
+        """Week 4 Curriculum: Extracts syllabus skills while filtering negated requirements."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline
+
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        majors = [{
+            "major_id": "TEST_MAJ_CS",
+            "major_name": "CS Syllabus Fixture",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+            "source_url": "https://example.edu/cs",
+            "collected_at": "2026-11-18",
+        }]
+        courses = [{
+            "course_id": "TEST_CS101",
+            "course_code": "CS101",
+            "course_title": "Data Foundations",
+            "major_id": "TEST_MAJ_CS",
+            "syllabus_text": "Students practice Python and SQL queries. Note that we do not use Java in this course.",
+            "source_url": "https://example.edu/cs101",
+            "collected_at": "2026-11-18",
+        }]
+        res = pipe.ingest(majors, courses)
+        self.assertEqual(res["courses_validated"], 1)
+        self.assertGreaterEqual(res["course_skills_extracted"], 2)
+
+    def test_47_curriculum_verified_prerequisites_and_gap_integration(self) -> None:
+        """Week 4 Curriculum: Course prerequisites derive skill DAG and activate D(s) in PriorityScoringModel."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline
+
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        majors = [{
+            "major_id": "TEST_MAJ_AI",
+            "major_name": "AI Fixture",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+            "source_url": "https://example.edu/ai",
+            "collected_at": "2026-11-18",
+        }]
+        courses = [
+            {
+                "course_id": "TEST_AI101",
+                "course_code": "AI101",
+                "course_title": "Python Programming & Statistics",
+                "major_id": "TEST_MAJ_AI",
+                "syllabus_text": "Covers Python and Statistics.",
+                "prerequisite_course_ids": [],
+                "source_url": "https://example.edu/ai101",
+                "collected_at": "2026-11-18",
+            },
+            {
+                "course_id": "TEST_AI201",
+                "course_code": "AI201",
+                "course_title": "Applied Machine Learning",
+                "major_id": "TEST_MAJ_AI",
+                "syllabus_text": "Covers Machine Learning algorithms.",
+                "prerequisite_course_ids": ["TEST_AI101"],
+                "source_url": "https://example.edu/ai201",
+                "collected_at": "2026-11-18",
+            },
+        ]
+        ingested = pipe.ingest(majors, courses)
+        prereqs = ingested["verified_skill_prerequisites"]
+        # SG-SK-0027 (Machine Learning) should require SG-SK-0001 (Python) and SG-SK-0024 (Statistics)
+        self.assertIn("SG-SK-0027", prereqs)
+        self.assertIn("SG-SK-0001", prereqs["SG-SK-0027"])
+        self.assertIn("SG-SK-0024", prereqs["SG-SK-0027"])
+
+        res = self.gap_engine.analyze(
+            profile={"student_id": "SYN_CURR_TEST", "target_occupation": "Data Scientist", "skills": ["Python"]},
+            weights=self.PriorityWeights(alpha=0.5, beta=0.2, gamma=0.3, preset_name="curriculum_prereq_test"),
+            verified_prerequisites=prereqs,
+            run_sensitivity=False,
+        )
+        ml_rec = next(r for r in res["priority_recommendations"] if r["skill_id"] == "SG-SK-0027")
+        self.assertEqual(ml_rec["scoring"]["components"]["D_status"], "VERIFIED_PREREQUISITE_DAG")
+        self.assertIsNotNone(ml_rec["scoring"]["components"]["D_dependency_importance"])
+        self.assertEqual(ml_rec["prerequisite_info"]["status"], "VERIFIED_PREREQUISITE_SUPPLY")
+        self.assertIn("SG-SK-0024", ml_rec["prerequisite_info"]["unmet_prerequisites"])
+
+    def test_48_curriculum_database_persistence_and_table_counts(self) -> None:
+        """Week 4 Curriculum: Persists university_majors, university_courses, and course_skills into DB."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline
+
+        db = self.RelationalDatabaseManager(self.kg_builder, db_path=":memory:")
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        majors = [{
+            "major_id": "TEST_MAJ_DB",
+            "major_name": "Data Analytics Fixture",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+            "source_url": "https://example.edu/da",
+            "collected_at": "2026-11-18",
+        }]
+        courses = [{
+            "course_id": "TEST_DA101",
+            "course_code": "DA101",
+            "course_title": "SQL and Excel",
+            "major_id": "TEST_MAJ_DB",
+            "syllabus_text": "Hands-on SQL and Microsoft Excel.",
+            "source_url": "https://example.edu/da101",
+            "collected_at": "2026-11-18",
+        }]
+        res = pipe.ingest(majors, courses, db_manager=db)
+        self.assertEqual(res["database_counts"]["university_majors"], 1)
+        self.assertEqual(res["database_counts"]["university_courses"], 1)
+        self.assertGreaterEqual(res["database_counts"]["course_skills"], 2)
+
+    def test_49_curriculum_csv_roundtrip_temp_files(self) -> None:
+        """Week 4 Curriculum: Loads and validates CSV curriculum exports cleanly via TemporaryDirectory."""
+        import tempfile
+        import pandas as pd
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            m_path = tmp / "majors.csv"
+            c_path = tmp / "courses.csv"
+            pd.DataFrame([{
+                "major_id": "TEST_TMP_MAJ",
+                "major_name": "Temp Major",
+                "institution_name": "Test Institute",
+                "degree_level": "Bachelor",
+                "source_url": "https://example.edu/tmp",
+                "collected_at": "2026-11-18",
+            }]).to_csv(m_path, index=False)
+            pd.DataFrame([{
+                "course_id": "TEST_TMP_C1",
+                "course_code": "TMP101",
+                "course_title": "Intro Data Analysis",
+                "major_id": "TEST_TMP_MAJ",
+                "syllabus_text": "Covers Data Analysis and Power BI.",
+                "prerequisite_course_ids": "[]",
+                "source_url": "https://example.edu/tmp101",
+                "collected_at": "2026-11-18",
+            }]).to_csv(c_path, index=False)
+
+            pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+            res = pipe.ingest(pipe.load_records(m_path), pipe.load_records(c_path))
+            self.assertEqual(res["majors_validated"], 1)
+            self.assertEqual(res["courses_validated"], 1)
+            self.assertGreaterEqual(res["course_skills_extracted"], 2)
+
 
 def run_summary_benchmark() -> None:
     """Prints a quick summary of the 22-posting & 200-posting checks."""

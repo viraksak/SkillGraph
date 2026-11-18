@@ -4,7 +4,7 @@
   "created_at": "2026-11-12",
   "source_file": "data/candidates_tierA_all50.csv",
   "total_records": 50,
-  "total_spans": 530,
+  "total_spans": 529,
   "unresolved_canonical_spans": 4,
   "annotation_protocol": "two_pass_strictly_blinded",
   "evaluation_type": "unconfirmed_candidate_pool",
@@ -767,15 +767,6 @@
             "notes": "Candidate span from candidates_tierA_all50.csv; human review pending"
           },
           {
-            "span_id": "R04-S05",
-            "skill_mention": "Structured Query Language",
-            "character_start": 813,
-            "character_end": 838,
-            "source_section": "Required",
-            "span_confidence": "candidate_provisional",
-            "notes": "Candidate span from candidates_tierA_all50.csv; human review pending"
-          },
-          {
             "span_id": "R04-S06",
             "skill_mention": "attention to detail",
             "character_start": 844,
@@ -886,20 +877,6 @@
             "skill_id": "SG-SK-0022",
             "skill_category": "Data analysis",
             "skill_type": "Tool",
-            "annotation_status": "UNCERTAIN",
-            "mapping_confidence": "provisional",
-            "is_oov": false,
-            "reviewer_notes": "Candidate span awaiting independent human review."
-          },
-          {
-            "span_id": "R04-S05",
-            "skill_mention": "Structured Query Language",
-            "character_start": 813,
-            "character_end": 838,
-            "canonical_skill": "SQL",
-            "skill_id": "SG-SK-0006",
-            "skill_category": "Database technologies",
-            "skill_type": "Technology",
             "annotation_status": "UNCERTAIN",
             "mapping_confidence": "provisional",
             "is_oov": false,
