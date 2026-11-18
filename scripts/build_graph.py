@@ -1024,8 +1024,12 @@ class SkillGapAnalysisEngine:
         verified_prerequisites: dict[str, list[str]] | None = None,
         learning_costs: dict[str, float] | None = None,
         run_sensitivity: bool = True,
+        exclude_skill_types: list[str] | set[str] | None = None,
     ) -> dict[str, Any]:
         """Executes end-to-end explainable skill gap, priority, and opportunity analysis."""
+        excluded_types_lower = {
+            str(t).strip().lower() for t in (exclude_skill_types or []) if str(t).strip()
+        }
         active_weights = weights or BASELINE_WEIGHT_PRESETS["baseline_balanced_heuristic"]
         student_id = str(profile.get("student_id") or "SYNTHETIC_STUDENT_ANON").strip()
         is_synthetic = bool(profile.get("is_synthetic", True))
@@ -1136,6 +1140,9 @@ class SkillGapAnalysisEngine:
                 missing_required.append(base_item)
             else:
                 missing_preferred.append(base_item)
+
+            if excluded_types_lower and str(meta.get("skill_type", "")).strip().lower() in excluded_types_lower:
+                continue
 
             opp_info = self.opp_analyzer.analyze_skill_opportunities(
                 sid,
@@ -1283,6 +1290,7 @@ class SkillGapAnalysisEngine:
                 "total_postings_analyzed": int(target_demands[0]["occupation_total_postings"]) if target_demands else 0,
             },
             "candidate_occupations": candidate_occ_ids,
+            "excluded_skill_types": sorted(excluded_types_lower),
             "supplied_skill_count": len(known_map),
             "unrecognized_skills": unrecognized,
             "duplicate_skill_notes": dup_notes,

@@ -1068,6 +1068,36 @@ class TestSkillExtractionPipeline(unittest.TestCase):
         self.assertEqual(report["status"], "AWAITING_REAL_DATA")
         self.assertEqual(report["valid_unique_rows"], 0)
 
+    def test_54_domain_vs_language_filtering_in_gap_engine(self) -> None:
+        """Week 4 Calibration: exclude_skill_types=['Language'] removes spoken languages from rankings cleanly."""
+        profile = {
+            "student_id": "SYN_DOMAIN_FILT",
+            "target_occupation": "Data Analyst",
+            "skills": ["Python"],
+        }
+        base_res = self.gap_engine.analyze(profile, run_sensitivity=False)
+        filt_res = self.gap_engine.analyze(profile, exclude_skill_types=["Language"], run_sensitivity=False)
+
+        self.assertEqual(base_res["priority_recommendations"][0]["canonical_skill"], "English Language")
+        self.assertEqual(filt_res["priority_recommendations"][0]["canonical_skill"], "Data Analysis")
+        self.assertTrue(all(r["skill_type"] != "Language" for r in filt_res["priority_recommendations"]))
+        self.assertEqual(filt_res["coverage_metrics"], base_res["coverage_metrics"])
+
+    def test_55_api_exclude_skill_types_request_parameter(self) -> None:
+        """Week 4 API: POST /skill-gap/analyze respects exclude_skill_types filter cleanly."""
+        resp = self.api_client.post("/skill-gap/analyze", json={
+            "student_id": "SYN_API_DOMAIN_FILT",
+            "target_occupation": "Data Analyst",
+            "skills": ["Python"],
+            "exclude_skill_types": ["Language"],
+            "top_k": 5,
+            "run_sensitivity": False,
+        })
+        self.assertEqual(resp.status_code, 200)
+        payload = resp.json()
+        self.assertEqual(payload["priority_recommendations"][0]["canonical_skill"], "Data Analysis")
+        self.assertTrue(all(r["skill_type"] != "Language" for r in payload["priority_recommendations"]))
+
 
 def run_summary_benchmark() -> None:
     """Prints a quick summary of the 22-posting & 200-posting checks."""

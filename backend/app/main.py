@@ -195,6 +195,7 @@ class SkillGapAnalyzeRequest(BaseModel):
     top_k: int | None = Field(default=None, ge=1, le=230)
     weights: PriorityWeightsInput | None = None
     run_sensitivity: bool = True
+    exclude_skill_types: list[str] = Field(default_factory=list)
 
 
 class StructuredExplanationModel(BaseModel):
@@ -388,6 +389,7 @@ class SkillGapService:
                 strict_validation=req.strict_validation,
                 top_k=req.top_k,
                 run_sensitivity=req.run_sensitivity,
+                exclude_skill_types=req.exclude_skill_types or None,
             )
         except ValueError as exc:
             msg = str(exc)
