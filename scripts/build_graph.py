@@ -1318,6 +1318,64 @@ class SkillGapAnalysisEngine:
             ],
         }
 
+    def analyze_major_vs_occupation(
+        self,
+        major_id: str,
+        target_occupation: str,
+        db_manager: "RelationalDatabaseManager",
+        weights: PriorityWeights | None = None,
+        exclude_skill_types: list[str] | set[str] | None = None,
+    ) -> dict[str, Any]:
+        """Computes curriculum-to-market skill gap for an ingested university major."""
+        majors = db_manager.fetch_majors()
+        major_row = next((m for m in majors if m["major_id"] == major_id), None)
+        if major_row is None:
+            raise ValueError(f"Unknown major_id: {major_id!r}")
+
+        courses = db_manager.fetch_courses(major_id=major_id)
+        course_skills_rows = db_manager.conn.execute(
+            """SELECT cs.course_id, cs.skill_id, cs.target_proficiency_level, c.course_code, c.course_title
+               FROM course_skills cs
+               JOIN university_courses c ON c.course_id = cs.course_id
+               WHERE c.major_id = ?""",
+            (major_id,),
+        ).fetchall()
+
+        skill_entries = []
+        seen: set[str] = set()
+        for row in course_skills_rows:
+            sid = row["skill_id"]
+            if sid in seen:
+                continue
+            seen.add(sid)
+            skill_entries.append({
+                "skill_id": sid,
+                "proficiency_level": row["target_proficiency_level"] or "intermediate",
+                "evidence_source": f"curriculum:{major_id}:{row['course_code']}",
+            })
+
+        gap_res = self.analyze(
+            profile={
+                "student_id": f"CURRICULUM_{major_id}",
+                "target_occupation": target_occupation,
+                "skills": skill_entries,
+                "is_synthetic": False,
+            },
+            weights=weights,
+            exclude_skill_types=exclude_skill_types,
+            run_sensitivity=False,
+        )
+        return {
+            "major": major_row,
+            "course_count": len(courses),
+            "curriculum_unique_skills_count": len(skill_entries),
+            "target_occupation": gap_res["target_occupation"],
+            "coverage_metrics": gap_res["coverage_metrics"],
+            "covered_skills": gap_res["possessed_skills"],
+            "missing_or_partial_recommendations": gap_res["priority_recommendations"],
+            "excluded_skill_types": gap_res["excluded_skill_types"],
+        }
+
 
 def inspect_postgresql_environment() -> dict[str, Any]:
     """Checks local PostgreSQL binaries, service status, and driver availability safely."""
@@ -1752,6 +1810,41 @@ class RelationalDatabaseManager:
             sql += " AND LOWER(o.occupation) LIKE ?"
             params.append(f"%{search.strip().lower()}%")
         sql += " ORDER BY o.occupation_id ASC"
+        return [dict(r) for r in self.conn.execute(sql, params).fetchall()]
+
+    def fetch_industries(self) -> list[dict[str, Any]]:
+        """Lists normalized industries with occupation counts."""
+        sql = """
+            SELECT i.industry_id, i.industry_name,
+                   (SELECT COUNT(*) FROM occupations o WHERE o.industry_id = i.industry_id) AS occupation_count
+            FROM industries i
+            ORDER BY i.industry_name ASC
+        """
+        return [dict(r) for r in self.conn.execute(sql).fetchall()]
+
+    def fetch_majors(self) -> list[dict[str, Any]]:
+        """Lists ingested university majors with course counts."""
+        sql = """
+            SELECT m.major_id, m.major_name, m.institution_name, m.degree_level, m.data_provenance,
+                   (SELECT COUNT(*) FROM university_courses c WHERE c.major_id = m.major_id) AS course_count
+            FROM university_majors m
+            ORDER BY m.major_id ASC
+        """
+        return [dict(r) for r in self.conn.execute(sql).fetchall()]
+
+    def fetch_courses(self, major_id: str | None = None) -> list[dict[str, Any]]:
+        """Lists ingested university courses with extracted skill counts."""
+        sql = """
+            SELECT c.course_id, c.course_code, c.course_title, c.major_id, c.data_provenance,
+                   (SELECT COUNT(*) FROM course_skills cs WHERE cs.course_id = c.course_id) AS skill_count
+            FROM university_courses c
+            WHERE 1=1
+        """
+        params: list[Any] = []
+        if major_id:
+            sql += " AND c.major_id = ?"
+            params.append(major_id.strip())
+        sql += " ORDER BY c.course_id ASC"
         return [dict(r) for r in self.conn.execute(sql, params).fetchall()]
 
     def fetch_skills(

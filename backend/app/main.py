@@ -318,6 +318,15 @@ class DatabaseLayer:
     def list_occupations(self, industry: str | None = None, search: str | None = None) -> list[dict[str, Any]]:
         return self.db_manager.fetch_occupations(industry=industry, search=search)
 
+    def list_industries(self) -> list[dict[str, Any]]:
+        return self.db_manager.fetch_industries()
+
+    def list_majors(self) -> list[dict[str, Any]]:
+        return self.db_manager.fetch_majors()
+
+    def list_courses(self, major_id: str | None = None) -> list[dict[str, Any]]:
+        return self.db_manager.fetch_courses(major_id=major_id)
+
     def list_skills(
         self,
         category: str | None = None,
@@ -429,6 +438,22 @@ class SkillGapService:
             explanations=exps,
         )
 
+    def analyze_major_gap(self, body: dict[str, Any]) -> dict[str, Any]:
+        major_id = str(body.get("major_id") or "").strip()
+        target_occ = str(body.get("target_occupation") or "").strip()
+        exclude_types = body.get("exclude_skill_types") or []
+        if not major_id or not target_occ:
+            raise InvalidInputError("Both 'major_id' and 'target_occupation' are required.")
+        try:
+            return self.engine.analyze_major_vs_occupation(
+                major_id=major_id,
+                target_occupation=target_occ,
+                db_manager=self.db_layer.db_manager,
+                exclude_skill_types=exclude_types or None,
+            )
+        except ValueError as exc:
+            raise ResourceNotFoundError(str(exc)) from exc
+
 
 # ---------------------------------------------------------------------------
 # 5. Pure-Python ASGI + OpenAPI 3.1 Fallback Router & TestClient
@@ -459,9 +484,13 @@ class SkillGraphASGIApp:
 
     def _register_default_routes(self) -> None:
         self._register("GET", "/health", self._h_health)
+        self._register("GET", "/industries", self._h_industries)
         self._register("GET", "/occupations", self._h_occupations)
         self._register("GET", "/skills", self._h_skills)
         self._register("GET", "/occupations/{occupation_id}/skills", self._h_occ_skills)
+        self._register("GET", "/majors", self._h_majors)
+        self._register("GET", "/courses", self._h_courses)
+        self._register("POST", "/curriculum/analyze-major-gap", self._h_analyze_major)
         self._register("POST", "/skill-gap/analyze", self._h_analyze)
         self._register("GET", "/skill-gap/{analysis_id}", self._h_get_analysis)
         self._register("GET", "/recommendations/{student_id}", self._h_get_recs)
@@ -476,6 +505,21 @@ class SkillGraphASGIApp:
         search = query.get("search", [None])[0]
         items = [OccupationSummary.model_validate(r).model_dump() for r in self.db_layer.list_occupations(industry, search)]
         return 200, items
+
+    def _h_industries(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:
+        return 200, self.db_layer.list_industries()
+
+    def _h_majors(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:
+        return 200, self.db_layer.list_majors()
+
+    def _h_courses(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:
+        major_id = query.get("major_id", [None])[0]
+        return 200, self.db_layer.list_courses(major_id=major_id)
+
+    def _h_analyze_major(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:
+        if body is None or not isinstance(body, dict):
+            return 422, {"detail": [{"loc": ["body"], "msg": "JSON request object is required."}]}
+        return 200, self.service.analyze_major_gap(body)
 
     def _h_skills(self, params: dict[str, str], query: dict[str, list[str]], body: dict[str, Any] | None) -> tuple[int, Any]:
         category = query.get("category", [None])[0]
@@ -536,9 +580,13 @@ class SkillGraphASGIApp:
             "info": {"title": self.title, "version": self.version, "description": self.description},
             "paths": {
                 "/health": {"get": {"summary": "Service & DB Health Check", "responses": {"200": {"description": "OK"}}}},
+                "/industries": {"get": {"summary": "List Industries", "responses": {"200": {"description": "OK"}}}},
                 "/occupations": {"get": {"summary": "List Occupations", "responses": {"200": {"description": "OK"}}}},
                 "/skills": {"get": {"summary": "List Canonical Skills", "responses": {"200": {"description": "OK"}}}},
                 "/occupations/{occupation_id}/skills": {"get": {"summary": "Get Occupation Skill Profile", "responses": {"200": {"description": "OK"}, "404": {"description": "Not Found"}}}},
+                "/majors": {"get": {"summary": "List Ingested University Majors", "responses": {"200": {"description": "OK"}}}},
+                "/courses": {"get": {"summary": "List Ingested University Courses", "responses": {"200": {"description": "OK"}}}},
+                "/curriculum/analyze-major-gap": {"post": {"summary": "Analyze Major Curriculum Coverage vs Target Occupation", "responses": {"200": {"description": "OK"}, "400": {"description": "Invalid Input"}, "404": {"description": "Not Found"}}}},
                 "/skill-gap/analyze": {
                     "post": {
                         "summary": "Analyze & Persist Student Skill Gap",
@@ -599,6 +647,18 @@ class SkillGraphASGIApp:
         """Standard ASGI 3.0 entrypoint compatible with Uvicorn and `httpx.ASGITransport`."""
         if scope.get("type") != "http":
             return
+        if scope.get("method", "GET").upper() == "OPTIONS":
+            await send({
+                "type": "http.response.start",
+                "status": 204,
+                "headers": [
+                    (b"access-control-allow-origin", b"*"),
+                    (b"access-control-allow-methods", b"GET, POST, OPTIONS"),
+                    (b"access-control-allow-headers", b"Content-Type"),
+                ],
+            })
+            await send({"type": "http.response.body", "body": b""})
+            return
         chunks: list[bytes] = []
         while True:
             event = await receive()
@@ -618,6 +678,9 @@ class SkillGraphASGIApp:
             "headers": [
                 (b"content-type", b"application/json"),
                 (b"content-length", str(len(encoded)).encode("ascii")),
+                (b"access-control-allow-origin", b"*"),
+                (b"access-control-allow-methods", b"GET, POST, OPTIONS"),
+                (b"access-control-allow-headers", b"Content-Type"),
             ],
         })
         await send({"type": "http.response.body", "body": encoded})
@@ -686,6 +749,25 @@ def create_app(
         @f_app.get("/health", response_model=HealthResponse)
         def health() -> HealthResponse:
             return HealthResponse.model_validate(db_layer.health_snapshot())
+
+        @f_app.get("/industries")
+        def list_industries() -> list[dict[str, Any]]:
+            return db_layer.list_industries()
+
+        @f_app.get("/majors")
+        def list_majors() -> list[dict[str, Any]]:
+            return db_layer.list_majors()
+
+        @f_app.get("/courses")
+        def list_courses(major_id: str | None = Query(default=None)) -> list[dict[str, Any]]:
+            return db_layer.list_courses(major_id=major_id)
+
+        @f_app.post("/curriculum/analyze-major-gap")
+        def analyze_major_gap(body: dict[str, Any]) -> dict[str, Any]:
+            try:
+                return service.analyze_major_gap(body)
+            except ApiDomainError as exc:
+                raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
 
         @f_app.get("/occupations", response_model=list[OccupationSummary])
         def list_occupations(industry: str | None = Query(default=None), search: str | None = Query(default=None)) -> list[OccupationSummary]:

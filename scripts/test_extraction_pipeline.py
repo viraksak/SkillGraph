@@ -1198,6 +1198,109 @@ class TestSkillExtractionPipeline(unittest.TestCase):
         self.assertEqual(eval_res["spacy_strict"]["f1"], 1.0)
         self.assertEqual(eval_res["dictionary_strict"]["f1"], 1.0)
 
+    # ------------------------------------------------------------------
+    # Week 4 Integration: Major Gap, New API Routes, CORS, PG Init, Ablations
+    # ------------------------------------------------------------------
+
+    def test_59_curriculum_major_vs_occupation_gap_engine(self) -> None:
+        """Week 4 Major Gap: Computes curriculum-vs-occupation coverage cleanly from ingested major."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline
+
+        db = self.RelationalDatabaseManager(self.kg_builder, db_path=":memory:")
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        pipe.ingest(
+            majors=[{
+                "major_id": "TEST_MAJ_GAP",
+                "major_name": "BSc Data Analytics (Test)",
+                "institution_name": "Test University",
+                "degree_level": "Bachelor",
+                "source_url": "https://example.edu/da",
+                "collected_at": "2026-11-18",
+            }],
+            courses=[{
+                "course_id": "TEST_DA_1",
+                "course_code": "DA101",
+                "course_title": "Data Analytics Foundations",
+                "major_id": "TEST_MAJ_GAP",
+                "syllabus_text": "Covers Python, SQL, and Data Visualization.",
+                "source_url": "https://example.edu/da101",
+                "collected_at": "2026-11-18",
+            }],
+            db_manager=db,
+        )
+        res = self.gap_engine.analyze_major_vs_occupation(
+            major_id="TEST_MAJ_GAP",
+            target_occupation="Data Analyst",
+            db_manager=db,
+            exclude_skill_types=["Language"],
+        )
+        self.assertEqual(res["course_count"], 1)
+        self.assertGreaterEqual(res["curriculum_unique_skills_count"], 3)
+        self.assertGreater(res["coverage_metrics"]["overall_weighted_coverage"], 0.0)
+        self.assertEqual(res["excluded_skill_types"], ["language"])
+
+    def test_60_api_industries_majors_courses_and_cors(self) -> None:
+        """Week 4 API: Verifies /industries, /majors, /courses, /curriculum/analyze-major-gap, and CORS."""
+        import asyncio
+        import httpx
+
+        self.assertEqual(self.api_client.get("/industries").status_code, 200)
+        self.assertEqual(len(self.api_client.get("/industries").json()), 15)
+        self.assertEqual(self.api_client.get("/majors").status_code, 200)
+        self.assertEqual(self.api_client.get("/courses").status_code, 200)
+        r_missing = self.api_client.post("/curriculum/analyze-major-gap", json={
+            "major_id": "NONEXISTENT_MAJ",
+            "target_occupation": "Data Analyst",
+        })
+        self.assertEqual(r_missing.status_code, 404)
+
+        async def _check_cors() -> tuple[int, str | None, str | None]:
+            transport = httpx.ASGITransport(app=self.api_app)
+            async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+                opt = await client.options("/occupations")
+                get_r = await client.get("/industries")
+                return opt.status_code, opt.headers.get("access-control-allow-origin"), get_r.headers.get("access-control-allow-origin")
+
+        opt_code, opt_cors, get_cors = asyncio.run(_check_cors())
+        self.assertEqual(opt_code, 204)
+        self.assertEqual(opt_cors, "*")
+        self.assertEqual(get_cors, "*")
+
+    def test_61_postgres_init_dry_run_and_dotenv_safety(self) -> None:
+        """Week 4 DB: Verifies PostgreSQL init dry-run without exposing secrets."""
+        from scripts.init_postgres import run_postgres_init
+
+        res = run_postgres_init(dry_run=True)
+        self.assertEqual(res["status"], "DRY_RUN_VALIDATED")
+        self.assertEqual(res["ddl_statement_count"], 23)
+        self.assertFalse(res["executed_against_postgres"])
+
+    def test_62_ablation_experiment_runner_outputs(self) -> None:
+        """Week 4 Evaluation: Verifies all 4 controlled ablation experiments compute cleanly."""
+        from scripts.run_ablation_experiments import run_ablations
+
+        res = run_ablations(save_path=None)
+        self.assertEqual(res["ablation_1_negation_22_docs"]["SpacySkillExtractor"]["with_negation_filter"]["f1"], 1.0)
+        self.assertTrue(res["ablation_2_domain_vs_language_filtering"]["coverage_metrics_unchanged"])
+        self.assertEqual(res["ablation_3_prerequisite_dag_d_score"]["with_dag"]["D_status"], "VERIFIED_PREREQUISITE_DAG")
+        self.assertIn("career_mobility_first", res["ablation_4_weight_sensitivity"]["top_k_jaccard_vs_baseline"])
+
+    def test_63_frontend_files_present_and_valid_json(self) -> None:
+        """Week 4 Frontend: Verifies Next.js TypeScript scaffold files exist with valid JSON configs."""
+        pkg = json.loads((ROOT_DIR / "frontend" / "package.json").read_text(encoding="utf-8"))
+        tsc = json.loads((ROOT_DIR / "frontend" / "tsconfig.json").read_text(encoding="utf-8"))
+        self.assertIn("next", pkg["dependencies"])
+        self.assertIn("compilerOptions", tsc)
+        self.assertTrue((ROOT_DIR / "frontend" / "app" / "page.tsx").exists())
+        self.assertTrue((ROOT_DIR / "frontend" / "components" / "SkillGapDashboard.tsx").exists())
+
+    def test_64_research_questions_and_proposal_nonempty(self) -> None:
+        """Week 4 Docs: Verifies research questions and revised proposal documents are populated."""
+        rq = (ROOT_DIR / "docs" / "proposal" / "research_questions.md").read_text(encoding="utf-8")
+        prop = (ROOT_DIR / "docs" / "proposal" / "project_proposal.md").read_text(encoding="utf-8")
+        self.assertIn("RQ0:", rq)
+        self.assertIn("Member 01", prop)
+
 
 def run_summary_benchmark() -> None:
     """Prints a quick summary of the 22-posting & 200-posting checks."""
