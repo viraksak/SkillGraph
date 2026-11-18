@@ -1098,6 +1098,106 @@ class TestSkillExtractionPipeline(unittest.TestCase):
         self.assertEqual(payload["priority_recommendations"][0]["canonical_skill"], "Data Analysis")
         self.assertTrue(all(r["skill_type"] != "Language" for r in payload["priority_recommendations"]))
 
+    # ------------------------------------------------------------------
+    # Week 4 Member 01: Human-Annotation Importer & Kappa Tests
+    # ------------------------------------------------------------------
+
+    def test_56_human_annotation_rejects_unreviewed_or_fabricated_ids(self) -> None:
+        """Week 4 Integrity: Refuses unreviewed rows, missing EDIT notes, and fabricated annotator_id."""
+        from scripts.evaluate_human_annotations import (
+            HumanAnnotationValidationError,
+            validate_review_rows,
+        )
+
+        with self.assertRaises(HumanAnnotationValidationError):
+            validate_review_rows([{"human_decision": None, "annotator_id": None}])
+
+        with self.assertRaises(HumanAnnotationValidationError):
+            validate_review_rows([{"human_decision": "CONFIRM", "annotator_id": "HUMAN_ANNOTATOR_TIER_A"}])
+
+        with self.assertRaises(HumanAnnotationValidationError):
+            validate_review_rows([{"human_decision": "EDIT", "annotator_id": "hustsak", "human_edit_notes": ""}])
+
+    def test_57_human_annotation_cohens_kappa_calculation(self) -> None:
+        """Week 4 Agreement: Computes exact Cohen's kappa on shared spans."""
+        from scripts.evaluate_human_annotations import compute_cohens_kappa
+
+        rows_a = [
+            {"record_id": 1, "job_id": "J1", "character_start": 0, "character_end": 6, "human_decision": "CONFIRM"},
+            {"record_id": 1, "job_id": "J1", "character_start": 10, "character_end": 13, "human_decision": "CONFIRM"},
+            {"record_id": 2, "job_id": "J2", "character_start": 0, "character_end": 4, "human_decision": "REJECT"},
+            {"record_id": 2, "job_id": "J2", "character_start": 8, "character_end": 12, "human_decision": "REJECT"},
+        ]
+        rows_b = [
+            {"record_id": 1, "job_id": "J1", "character_start": 0, "character_end": 6, "human_decision": "CONFIRM"},
+            {"record_id": 1, "job_id": "J1", "character_start": 10, "character_end": 13, "human_decision": "CONFIRM"},
+            {"record_id": 2, "job_id": "J2", "character_start": 0, "character_end": 4, "human_decision": "REJECT"},
+            {"record_id": 2, "job_id": "J2", "character_start": 8, "character_end": 12, "human_decision": "CONFIRM"},
+        ]
+        res = compute_cohens_kappa(rows_a, rows_b)
+        self.assertEqual(res["shared_spans"], 4)
+        self.assertEqual(res["observed_agreement"], 0.75)
+        self.assertEqual(res["disagreement_count"], 1)
+        self.assertEqual(res["cohens_kappa"], 0.5)
+
+    def test_58_human_annotation_import_and_eval_roundtrip(self) -> None:
+        """Week 4 Integrity: Builds validated human-reference JSON in memory and runs evaluation."""
+        import pandas as pd
+        from scripts.evaluate_human_annotations import (
+            build_human_reviewed_payload,
+            evaluate_against_human_reference,
+        )
+
+        text = "Required: Python and SQL."
+        base_json = {
+            "total_records": 1,
+            "total_spans": 2,
+            "records": [{
+                "record_id": 1,
+                "job_id": "SYN_TEST_HUMAN_1",
+                "text": text,
+                "pass_1": {"spans": [], "status": "PENDING"},
+                "pass_2": {"canonical_mappings": [], "status": "PENDING"},
+                "record_status": "PENDING",
+                "annotator_id": None,
+            }],
+        }
+        review_rows = [
+            {
+                "record_id": 1,
+                "job_id": "SYN_TEST_HUMAN_1",
+                "skill_mention": "Python",
+                "character_start": 10,
+                "character_end": 16,
+                "source_section": "Required",
+                "candidate_skill_id": "SG-SK-0001",
+                "candidate_canonical_skill": "Python",
+                "human_decision": "CONFIRM",
+                "annotator_id": "hustsak_test",
+                "human_edit_notes": "",
+            },
+            {
+                "record_id": 1,
+                "job_id": "SYN_TEST_HUMAN_1",
+                "skill_mention": "SQL",
+                "character_start": 21,
+                "character_end": 24,
+                "source_section": "Required",
+                "candidate_skill_id": "SG-SK-0006",
+                "candidate_canonical_skill": "SQL",
+                "human_decision": "CONFIRM",
+                "annotator_id": "hustsak_test",
+                "human_edit_notes": "",
+            },
+        ]
+        tax_df = pd.read_csv(self.tax_csv_path)
+        payload = build_human_reviewed_payload(review_rows, base_json, tax_df)
+        self.assertEqual(payload["total_spans"], 2)
+        self.assertEqual(payload["records"][0]["record_status"], "COMPLETED")
+        eval_res = evaluate_against_human_reference(payload, self.tax_csv_path)
+        self.assertEqual(eval_res["spacy_strict"]["f1"], 1.0)
+        self.assertEqual(eval_res["dictionary_strict"]["f1"], 1.0)
+
 
 def run_summary_benchmark() -> None:
     """Prints a quick summary of the 22-posting & 200-posting checks."""
