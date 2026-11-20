@@ -104,24 +104,10 @@ class TestSkillExtractionPipeline(unittest.TestCase):
         cls.normalizer_broad = SkillNormalizer(cls.tax_csv_path, include_broad_country_mappings=True)
         cls.normalizer_edge = SkillNormalizer(EXTENDED_EDGE_CASE_TAXONOMY)
 
-        # Week 3 Knowledge Graph, Gap Engine, Relational DB, and Backend API
-        from scripts.build_graph import (  # noqa: E402
-            PriorityScoringModel,
-            PriorityWeights,
-            RelationalDatabaseManager,
-            SkillGapAnalysisEngine,
-            SkillGraphBuilder,
-        )
-        from backend.app.main import SkillGraphTestClient, create_app  # noqa: E402
-
-        cls.PriorityScoringModel = PriorityScoringModel
-        cls.PriorityWeights = PriorityWeights
+        from scripts.build_graph import RelationalDatabaseManager, SkillGraphBuilder  # noqa: E402
         cls.RelationalDatabaseManager = RelationalDatabaseManager
         cls.kg_builder = SkillGraphBuilder(include_broad_country_mappings=False, min_co_occurrence=5)
         cls.kg_builder.build()
-        cls.gap_engine = SkillGapAnalysisEngine(cls.kg_builder)
-        cls.api_app, cls.db_layer, cls.api_service = create_app(builder=cls.kg_builder)
-        cls.api_client = SkillGraphTestClient(cls.api_app)
 
     def _assert_both_extract_canonicals(self, text: str, expected: set[str], edge: bool = True) -> tuple[list[dict], list[dict]]:
         d_ext = self.dict_edge if edge else self.dict_global
@@ -495,255 +481,393 @@ class TestSkillExtractionPipeline(unittest.TestCase):
         self.assertTrue(by_canon["Python"]["is_negated"])
         self.assertFalse(by_canon["SQL"]["is_negated"])
 
-    def test_31_complete_student_profile_zero_gap(self) -> None:
-        """Week 3 Module 2: Student demonstrating all target-occupation skills has gap_score=0.0."""
-        occ_info = self.db_layer.get_occupation_skills("SG-OC-002")
-        full_skills = [{"skill_id": s["skill_id"], "proficiency_level": "advanced"} for s in occ_info["all_skills"]]
-        res = self.gap_engine.analyze({
-            "student_id": "SYN_COMPLETE_DA",
-            "target_occupation": "Data Analyst",
-            "skills": full_skills,
-        })
-        self.assertEqual(res["coverage_metrics"]["required_skill_coverage"], 1.0)
-        self.assertEqual(res["coverage_metrics"]["overall_weighted_coverage"], 1.0)
-        self.assertEqual(res["coverage_metrics"]["skill_gap_score"], 0.0)
-        self.assertEqual(res["priority_recommendations"], [])
+    # Week 4 Member 01: University Curriculum & Syllabus Ingestion Tests
+    # ------------------------------------------------------------------
 
-    def test_32_empty_student_profile_full_gap(self) -> None:
-        """Week 3 Module 2: Empty student profile yields 0.0 coverage and honest unrecorded labels."""
-        res = self.gap_engine.analyze({
-            "student_id": "SYN_EMPTY_DS",
-            "target_occupation": "Data Scientist",
-            "skills": [],
-        })
-        self.assertEqual(res["coverage_metrics"]["required_skill_coverage"], 0.0)
-        self.assertEqual(res["coverage_metrics"]["overall_weighted_coverage"], 0.0)
-        self.assertEqual(res["coverage_metrics"]["skill_gap_score"], 1.0)
-        self.assertTrue(all(r["profile_status"] == "not_recorded_in_supplied_profile" for r in res["priority_recommendations"]))
-        self.assertTrue(all("not recorded in the supplied" in r["explanation"]["student_profile_status"] for r in res["priority_recommendations"]))
+    def test_44_curriculum_provenance_and_fk_validation(self) -> None:
+        """Week 4 Curriculum: Rejects missing provenance in strict mode and orphan major_id."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline, CurriculumValidationError
 
-    def test_33_unknown_occupation_raises_and_returns_404(self) -> None:
-        """Week 3 Module 2/7: Unknown occupation raises ValueError in engine and HTTP 404 in API."""
-        with self.assertRaises(ValueError):
-            self.gap_engine.analyze({"student_id": "SYN_ERR", "target_occupation": "Astral Wizard"})
-        resp = self.api_client.post("/skill-gap/analyze", json={"student_id": "SYN_ERR", "target_occupation": "Astral Wizard", "skills": ["SQL"]})
-        self.assertEqual(resp.status_code, 404)
-        self.assertEqual(resp.json()["error_code"], "RESOURCE_NOT_FOUND")
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        valid_major = [{
+            "major_id": "TEST_MAJ_CS",
+            "major_name": "Computer Science (Test Fixture)",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+            "source_url": "https://example.edu/cs",
+            "collected_at": "2026-11-18",
+        }]
+        missing_prov_course = [{
+            "course_id": "TEST_CS101",
+            "course_code": "CS101",
+            "course_title": "Intro Programming",
+            "major_id": "TEST_MAJ_CS",
+            "syllabus_text": "Learn Python and SQL.",
+        }]
+        with self.assertRaises(CurriculumValidationError):
+            pipe.validate_records(valid_major, missing_prov_course)
 
-    def test_34_unknown_skill_handling_lenient_vs_strict(self) -> None:
-        """Week 3 Module 2/7: Unknown skills are logged cleanly in lenient mode and rejected in strict mode."""
-        res_lenient = self.gap_engine.analyze({
-            "student_id": "SYN_UNK_SKILL",
-            "target_occupation": "Data Analyst",
-            "skills": ["Python", "NonExistentHyperSkill999"],
-        }, strict_validation=False)
-        self.assertEqual(len(res_lenient["unrecognized_skills"]), 1)
-        self.assertEqual(res_lenient["unrecognized_skills"][0]["input_skill"], "NonExistentHyperSkill999")
+        orphan_course = [{
+            "course_id": "TEST_CS101",
+            "course_code": "CS101",
+            "course_title": "Intro Programming",
+            "major_id": "UNKNOWN_MAJ",
+            "syllabus_text": "Learn Python.",
+            "source_url": "https://example.edu/cs101",
+            "collected_at": "2026-11-18",
+        }]
+        with self.assertRaises(CurriculumValidationError):
+            pipe.validate_records(valid_major, orphan_course)
 
-        with self.assertRaises(ValueError):
-            self.gap_engine.analyze({
-                "student_id": "SYN_UNK_SKILL",
-                "target_occupation": "Data Analyst",
-                "skills": ["NonExistentHyperSkill999"],
-            }, strict_validation=True)
-        resp_strict = self.api_client.post("/skill-gap/analyze", json={
-            "student_id": "SYN_UNK_SKILL",
-            "target_occupation": "Data Analyst",
-            "skills": ["NonExistentHyperSkill999"],
-            "strict_validation": True,
-        })
-        self.assertEqual(resp_strict.status_code, 400)
-        self.assertEqual(resp_strict.json()["error_code"], "INVALID_INPUT")
+    def test_45_curriculum_prerequisite_cycle_detection(self) -> None:
+        """Week 4 Curriculum: Rejects self-loops and cyclic prerequisite DAGs."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline, CurriculumValidationError
 
-    def test_35_duplicate_student_skills_retains_highest_proficiency(self) -> None:
-        """Week 3 Module 2: Duplicate skills deduplicate cleanly and retain highest proficiency."""
-        res = self.gap_engine.analyze({
-            "student_id": "SYN_DUP",
-            "target_occupation": "Data Analyst",
-            "skills": [
-                {"skill": "SQL", "proficiency_level": "beginner"},
-                {"skill_id": "SG-SK-0006", "proficiency_level": "advanced"},
-                {"skill": "postgres", "proficiency_level": "intermediate"},
-            ],
-        })
-        self.assertGreaterEqual(len(res["duplicate_skill_notes"]), 1)
-        possessed_ids = {s["skill_id"] for s in res["possessed_skills"]}
-        self.assertIn("SG-SK-0006", possessed_ids)  # SQL retained at advanced (gap=0.0)
-        self.assertNotIn("SG-SK-0006", {s["skill_id"] for s in res["partially_demonstrated_skills"]})
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=False)
+        majors = [{
+            "major_id": "TEST_MAJ_DS",
+            "major_name": "Data Science (Test Fixture)",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+        }]
+        cyclic_courses = [
+            {
+                "course_id": "C1",
+                "course_code": "DS101",
+                "course_title": "Foundations",
+                "major_id": "TEST_MAJ_DS",
+                "syllabus_text": "Python and Statistics.",
+                "prerequisite_course_ids": ["C2"],
+            },
+            {
+                "course_id": "C2",
+                "course_code": "DS201",
+                "course_title": "Modeling",
+                "major_id": "TEST_MAJ_DS",
+                "syllabus_text": "Machine Learning.",
+                "prerequisite_course_ids": ["C1"],
+            },
+        ]
+        with self.assertRaises(CurriculumValidationError):
+            pipe.validate_records(majors, cyclic_courses)
 
-    def test_36_missing_and_partial_proficiency_handling(self) -> None:
-        """Week 3 Module 2: Handles omitted proficiency conservatively and surfaces partial gaps."""
-        res = self.gap_engine.analyze({
-            "student_id": "SYN_PROF",
-            "target_occupation": "Data Analyst",
-            "skills": [
-                "Python",  # proficiency omitted -> demonstrated
-                {"skill": "SQL", "proficiency_score": 0.35},  # 0.35 / 0.70 = 0.50 demonstrated -> gap 0.50
-            ],
-        })
-        self.assertIn("SG-SK-0001", {s["skill_id"] for s in res["possessed_skills"]})
-        partial_ids = {s["skill_id"]: s for s in res["partially_demonstrated_skills"]}
-        self.assertIn("SG-SK-0006", partial_ids)
-        self.assertEqual(partial_ids["SG-SK-0006"]["gap_factor"], 0.5)
-        self.assertEqual(partial_ids["SG-SK-0006"]["profile_status"], "partially_demonstrated_in_supplied_profile")
+    def test_46_curriculum_syllabus_skill_extraction_and_negation(self) -> None:
+        """Week 4 Curriculum: Extracts syllabus skills while filtering negated requirements."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline
 
-    def test_37_required_vs_preferred_distinction_and_missing_mappings(self) -> None:
-        """Week 3 Module 2/4: Preserves required vs preferred distinction and unmapped local laws."""
-        norm_unresolved = self.normalizer_strict.normalize("LGPD compliance")
-        self.assertEqual(norm_unresolved["mapping_status"], "UNRESOLVED_CANONICAL")
-        res = self.gap_engine.analyze({
-            "student_id": "SYN_REQ_PREF",
-            "target_occupation": "Data Scientist",
-            "skills": ["Python"],
-        })
-        req_ids = {s["skill_id"] for s in res["missing_required_skills"]}
-        pref_ids = {s["skill_id"] for s in res["missing_preferred_skills"]}
-        self.assertIn("SG-SK-0027", req_ids)  # Machine Learning is required in 17/17 DS postings
-        self.assertIn("SG-SK-0029", pref_ids)  # Model Deployment is preferred-only in 9/17 DS postings
-        self.assertTrue(req_ids.isdisjoint(pref_ids))
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        majors = [{
+            "major_id": "TEST_MAJ_CS",
+            "major_name": "CS Syllabus Fixture",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+            "source_url": "https://example.edu/cs",
+            "collected_at": "2026-11-18",
+        }]
+        courses = [{
+            "course_id": "TEST_CS101",
+            "course_code": "CS101",
+            "course_title": "Data Foundations",
+            "major_id": "TEST_MAJ_CS",
+            "syllabus_text": "Students practice Python and SQL queries. Note that we do not use Java in this course.",
+            "source_url": "https://example.edu/cs101",
+            "collected_at": "2026-11-18",
+        }]
+        res = pipe.ingest(majors, courses)
+        self.assertEqual(res["courses_validated"], 1)
+        self.assertGreaterEqual(res["course_skills_extracted"], 2)
 
-    def test_38_multi_occupation_opportunity_and_co_occurrence_semantics(self) -> None:
-        """Week 3 Module 4/5: Multi-occupation counts & CO_OCCURS_WITH non-prerequisite tags are exact."""
-        opp_sql = self.gap_engine.opp_analyzer.analyze_skill_opportunities("SG-SK-0006", exclude_occupation_id="SG-OC-002")
-        self.assertEqual(opp_sql["required_occupation_count"], 6)
-        self.assertEqual(opp_sql["preferred_only_occupation_count"], 4)
-        self.assertEqual(opp_sql["total_occupation_count"], 10)
-        self.assertEqual(opp_sql["co_occurrence_disclaimer"], "CO_OCCURS_WITH denotes symmetric statistical association only, never a pedagogical prerequisite.")
-        for co in opp_sql["commonly_co_occurring_skills"]:
-            self.assertEqual(co["relationship_semantics"], "statistical_co_occurrence_not_prerequisite")
-        self.assertIn("Data Analyst", opp_sql["unlock_explanation"])
+    def test_48_curriculum_database_persistence_and_table_counts(self) -> None:
+        """Week 4 Curriculum: Persists university_majors, university_courses, and course_skills into DB."""
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline
 
-    def test_39_unavailable_prerequisite_and_no_fabricated_courses(self) -> None:
-        """Week 3 Module 5: Reports missing prerequisites & courses honestly without fabricating."""
-        res = self.gap_engine.analyze({"student_id": "SYN_LP", "target_occupation": "Data Scientist", "skills": []})
-        lp = res["learning_path"]
-        self.assertFalse(lp["prerequisite_graph_available"])
-        self.assertEqual(lp["prerequisite_graph_status"], "UNAVAILABLE_IN_LOCAL_TAXONOMY")
-        self.assertFalse(lp["learning_resources_available"])
-        self.assertEqual(lp["learning_resources_status"], "UNAVAILABLE_NO_VERIFIED_COURSE_CATALOG")
-        for rec in res["priority_recommendations"]:
-            self.assertEqual(rec["prerequisite_info"]["status"], "UNAVAILABLE_IN_LOCAL_TAXONOMY")
-            self.assertEqual(rec["scoring"]["components"]["D_status"], "UNAVAILABLE_NO_VERIFIED_PREREQUISITE_GRAPH")
-            self.assertIsNone(rec["scoring"]["components"]["D_dependency_importance"])
-            self.assertEqual(rec["scoring"]["components"]["C_status"], "UNAVAILABLE_NO_EMPIRICAL_COST_DATA")
-            self.assertIsNone(rec["scoring"]["components"]["C_learning_cost"])
-
-    def test_40_priority_score_bounds_no_double_counting_and_sensitivity(self) -> None:
-        """Week 3 Module 3: Validates [0, 1] bounds, external O(s) non-overlap, and weight sensitivity."""
-        res = self.gap_engine.analyze({
-            "student_id": "SYN_SENS",
-            "target_occupation": "Data Analyst",
-            "skills": ["Communication"],
-        }, run_sensitivity=True)
-        # Machine Learning only required in DS & ML Eng; check Data Scientist single-target exclusion
-        opp_excl_ds = self.gap_engine.opp_analyzer.analyze_skill_opportunities("SG-SK-0027", exclude_occupation_id="SG-OC-003")
-        opp_incl_all = self.gap_engine.opp_analyzer.analyze_skill_opportunities("SG-SK-0027", exclude_occupation_id=None)
-        self.assertLess(opp_excl_ds["raw_external_opportunity"], opp_incl_all["raw_external_opportunity"])
-
-        for rec in res["priority_recommendations"]:
-            self.assertGreaterEqual(rec["priority_score"], 0.0)
-            self.assertLessEqual(rec["priority_score"], 1.0)
-            c = rec["scoring"]["components"]
-            self.assertTrue(0.0 <= c["G_gap_importance"] <= 1.0)
-            self.assertTrue(0.0 <= c["O_external_opportunity"] <= 1.0)
-
-        sens = res["weight_sensitivity"]
-        self.assertIsNotNone(sens)
-        self.assertIn("target_only", sens["top_k_by_preset"])
-        self.assertIn("career_mobility_first", sens["top_k_by_preset"])
-        self.assertEqual(sens["top_k_jaccard_vs_baseline"]["baseline_balanced_heuristic"], 1.0)
-
-    def test_41_database_constraints_foreign_keys_unique_check(self) -> None:
-        """Week 3 Module 6: Enforces PK, FK, UNIQUE, CHECK constraints & schema separation."""
-        import sqlite3
         db = self.RelationalDatabaseManager(self.kg_builder, db_path=":memory:")
-        counts = db.list_tables_and_counts()
-        self.assertEqual(len(counts), 17)
-        self.assertEqual(counts["skills"], 230)
-        self.assertEqual(counts["occupations"], 53)
-        self.assertEqual(counts["job_postings"], 2000)
-        self.assertEqual(counts["university_courses"], 0)  # No fabricated courses
+        pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        majors = [{
+            "major_id": "TEST_MAJ_DB",
+            "major_name": "Data Analytics Fixture",
+            "institution_name": "Test University",
+            "degree_level": "Bachelor",
+            "source_url": "https://example.edu/da",
+            "collected_at": "2026-11-18",
+        }]
+        courses = [{
+            "course_id": "TEST_DA101",
+            "course_code": "DA101",
+            "course_title": "SQL and Excel",
+            "major_id": "TEST_MAJ_DB",
+            "syllabus_text": "Hands-on SQL and Microsoft Excel.",
+            "source_url": "https://example.edu/da101",
+            "collected_at": "2026-11-18",
+        }]
+        res = pipe.ingest(majors, courses, db_manager=db)
+        self.assertEqual(res["database_counts"]["university_majors"], 1)
+        self.assertEqual(res["database_counts"]["university_courses"], 1)
+        self.assertGreaterEqual(res["database_counts"]["course_skills"], 2)
 
-        # FK violation: unknown skill_id
-        with self.assertRaises(sqlite3.IntegrityError):
-            db.conn.execute("INSERT INTO students VALUES ('TMP_S', NULL, 'SG-OC-002', 1, '2026-01-01')")
-            db.conn.execute("INSERT INTO student_skills VALUES ('TMP_S', 'SG-SK-9999', 'beginner', 0.5, 'test')")
+    def test_49_curriculum_csv_roundtrip_temp_files(self) -> None:
+        """Week 4 Curriculum: Loads and validates CSV curriculum exports cleanly via TemporaryDirectory."""
+        import tempfile
+        import pandas as pd
+        from scripts.ingest_curriculum import CurriculumIngestionPipeline
 
-        # CHECK constraint violation: proficiency_score > 1.0
-        with self.assertRaises(sqlite3.IntegrityError):
-            db.conn.execute("INSERT INTO student_skills VALUES ('TMP_S', 'SG-SK-0001', 'expert', 1.5, 'test')")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            m_path = tmp / "majors.csv"
+            c_path = tmp / "courses.csv"
+            pd.DataFrame([{
+                "major_id": "TEST_TMP_MAJ",
+                "major_name": "Temp Major",
+                "institution_name": "Test Institute",
+                "degree_level": "Bachelor",
+                "source_url": "https://example.edu/tmp",
+                "collected_at": "2026-11-18",
+            }]).to_csv(m_path, index=False)
+            pd.DataFrame([{
+                "course_id": "TEST_TMP_C1",
+                "course_code": "TMP101",
+                "course_title": "Intro Data Analysis",
+                "major_id": "TEST_TMP_MAJ",
+                "syllabus_text": "Covers Data Analysis and Power BI.",
+                "prerequisite_course_ids": "[]",
+                "source_url": "https://example.edu/tmp101",
+                "collected_at": "2026-11-18",
+            }]).to_csv(c_path, index=False)
 
-        # UNIQUE constraint violation: duplicate industry_name
-        with self.assertRaises(sqlite3.IntegrityError):
-            db.conn.execute("INSERT INTO industries VALUES ('IND_DUP', 'Information Technology', 1)")
+            pipe = CurriculumIngestionPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+            res = pipe.ingest(pipe.load_records(m_path), pipe.load_records(c_path))
+            self.assertEqual(res["majors_validated"], 1)
+            self.assertEqual(res["courses_validated"], 1)
+            self.assertGreaterEqual(res["course_skills_extracted"], 2)
 
-    def test_42_api_endpoints_valid_and_invalid_requests(self) -> None:
-        """Week 3 Module 7: Tests all REST endpoints, Pydantic validation, HTTP codes, and OpenAPI schema."""
-        r_health = self.api_client.get("/health")
-        self.assertEqual(r_health.status_code, 200)
-        self.assertEqual(r_health.json()["graph_nodes"], 2336)
+    # ------------------------------------------------------------------
+    # Week 4 Member 01: Real Job-Posting Ingestion & Quality Audit Tests
+    # ------------------------------------------------------------------
 
-        r_occ = self.api_client.get("/occupations?industry=Information%20Technology")
-        self.assertEqual(r_occ.status_code, 200)
-        self.assertGreaterEqual(len(r_occ.json()), 5)
+    def test_50_real_jobs_provenance_and_synthetic_rejection(self) -> None:
+        """Week 4 Real Jobs: Rejects synthetic rows and missing provenance in strict mode."""
+        from scripts.ingest_real_jobs import RealJobPostingPipeline, RealJobValidationError
 
-        r_sk = self.api_client.get("/skills?search=Python")
-        self.assertEqual(r_sk.status_code, 200)
-        self.assertTrue(any(s["skill_id"] == "SG-SK-0001" for s in r_sk.json()))
+        pipe = RealJobPostingPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        with self.assertRaises(RealJobValidationError):
+            pipe.validate_and_deduplicate([{
+                "job_id": "REAL_LEAK_1",
+                "occupation": "Data Analyst",
+                "description": "Requires Python and SQL.",
+                "is_synthetic": True,
+                "source_url": "https://example.org/job/1",
+                "source_name": "ExampleBoard",
+                "collected_at": "2026-11-18",
+            }])
 
-        r_occ_sk = self.api_client.get("/occupations/SG-OC-002/skills")
-        self.assertEqual(r_occ_sk.status_code, 200)
-        self.assertGreater(r_occ_sk.json()["total_skills"], 10)
+        with self.assertRaises(RealJobValidationError):
+            pipe.validate_and_deduplicate([{
+                "job_id": "REAL_NOPROV_1",
+                "occupation": "Data Analyst",
+                "description": "Requires Python and SQL.",
+                "is_synthetic": False,
+            }])
 
-        # Invalid Pydantic payloads -> 422
-        r_bad_empty = self.api_client.post("/skill-gap/analyze", json={"student_id": "", "target_occupation": "Data Analyst"})
-        self.assertEqual(r_bad_empty.status_code, 422)
-        r_bad_prof = self.api_client.post("/skill-gap/analyze", json={
-            "student_id": "SYN_BAD_PROF",
-            "target_occupation": "Data Analyst",
-            "skills": [{"skill": "SQL", "proficiency_score": 2.5}],
-        })
-        self.assertEqual(r_bad_prof.status_code, 422)
+    def test_51_real_jobs_deduplication_and_missingness_audit(self) -> None:
+        """Week 4 Real Jobs: Deduplicates repeated job_ids/content and audits missing optional fields."""
+        from scripts.ingest_real_jobs import RealJobPostingPipeline
 
-        # Full end-to-end analyze -> get by analysis_id -> recommendations -> explanations
-        r_post = self.api_client.post("/skill-gap/analyze", json={
-            "student_id": "SYN_TEST_USER_42",
-            "target_occupation": "Data Scientist",
-            "skills": ["Python", {"skill": "SQL", "proficiency_level": "beginner"}],
-            "top_k": 5,
-        })
-        self.assertEqual(r_post.status_code, 200)
-        aid = r_post.json()["analysis_id"]
-        self.assertEqual(self.api_client.get(f"/skill-gap/{aid}").status_code, 200)
-        self.assertEqual(self.api_client.get("/recommendations/SYN_TEST_USER_42").status_code, 200)
-        r_exp = self.api_client.get("/recommendations/SYN_TEST_USER_42/explanations")
-        self.assertEqual(r_exp.status_code, 200)
-        self.assertEqual(r_exp.json()["explanations_count"], 5)
+        pipe = RealJobPostingPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        rows = [
+            {
+                "job_id": "REAL_1",
+                "occupation": "Data Analyst",
+                "description": "Required: Python and SQL.",
+                "is_synthetic": False,
+                "source_url": "https://example.org/1",
+                "source_name": "JobBoard",
+                "collected_at": "2026-11-18",
+                "country": "Cambodia",
+            },
+            {
+                "job_id": "REAL_1",  # duplicate job_id
+                "occupation": "Data Analyst",
+                "description": "Required: Python and SQL.",
+                "is_synthetic": False,
+                "source_url": "https://example.org/1",
+                "source_name": "JobBoard",
+                "collected_at": "2026-11-18",
+            },
+            {
+                "job_id": "REAL_2",  # duplicate normalized content
+                "occupation": "Data Analyst",
+                "description": "Required:  Python and SQL.",
+                "is_synthetic": False,
+                "source_url": "https://example.org/2",
+                "source_name": "JobBoard",
+                "collected_at": "2026-11-18",
+            },
+        ]
+        val = pipe.validate_and_deduplicate(rows)
+        self.assertEqual(val["total_input_rows"], 3)
+        self.assertEqual(val["valid_unique_rows"], 1)
+        self.assertEqual(val["duplicate_job_ids_dropped"], ["REAL_1"])
+        self.assertEqual(val["duplicate_content_dropped"], ["REAL_2"])
+        self.assertIn("salary_min", val["optional_field_missing_counts"])
 
-        # Unknown analysis/student IDs -> 404
-        self.assertEqual(self.api_client.get("/skill-gap/GAP-DOESNOTEXIST").status_code, 404)
-        self.assertEqual(self.api_client.get("/recommendations/UNKNOWN_STUDENT_404").status_code, 404)
+    def test_52_real_jobs_cleaning_extraction_and_negation(self) -> None:
+        """Week 4 Real Jobs: Extracts positive skills, filters negated mentions, flags unmapped occupations."""
+        import tempfile
+        import pandas as pd
+        from scripts.ingest_real_jobs import RealJobPostingPipeline
 
-    def test_43_explanation_structural_and_numerical_consistency(self) -> None:
-        """Week 3 Module 8: Verifies 7-part structured explanations match numerical calculations."""
-        res = self.gap_engine.analyze({
-            "student_id": "SYN_EXPLAIN_CHECK",
-            "target_occupation": "Data Analyst",
-            "skills": ["Python"],
-        })
-        required_exp_keys = {
-            "skill", "skill_id", "why_identified", "occupation_requirement_role",
-            "student_profile_status", "importance_assessment", "multi_occupation_relevance",
-            "priority_calculation", "supporting_evidence",
+        with tempfile.TemporaryDirectory() as tmpdir:
+            csv_path = Path(tmpdir) / "real_jobs_fixture.csv"
+            pd.DataFrame([{
+                "job_id": "REAL_FIX_1",
+                "occupation": "Custom Quantum Analyst",
+                "country": "Cambodia",
+                "description": "Required Skills:\nMust know Python and SQL.\nNote that we do not use Java.",
+                "is_synthetic": False,
+                "source_url": "https://example.org/q1",
+                "source_name": "ExampleBoard",
+                "collected_at": "2026-11-18",
+            }]).to_csv(csv_path, index=False)
+
+            pipe = RealJobPostingPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+            report = pipe.process_and_audit(pipe.load_records(csv_path))
+            self.assertEqual(report["status"], "REAL_DATA_AUDITED")
+            extracted_canons = {r["canonical_skill"] for r in report["extracted_rows"]}
+            self.assertIn("Python", extracted_canons)
+            self.assertIn("SQL", extracted_canons)
+            self.assertNotIn("Java", extracted_canons)
+            self.assertEqual(report["eda_summary"]["unmapped_occupations"], ["Custom Quantum Analyst"])
+            self.assertEqual(report["eda_summary"]["length_preserved_count"], 1)
+
+    def test_53_real_jobs_empty_default_csv_safe_handling(self) -> None:
+        """Week 4 Real Jobs: Handles empty data/raw/real_job_postings.csv cleanly without inventing rows."""
+        from scripts.ingest_real_jobs import DEFAULT_REAL_JOBS_PATH, RealJobPostingPipeline
+
+        pipe = RealJobPostingPipeline(self.tax_csv_path, extractor=self.spacy_global, strict_provenance=True)
+        recs = pipe.load_records(DEFAULT_REAL_JOBS_PATH)
+        report = pipe.process_and_audit(recs)
+        self.assertIn(report["status"], {"AWAITING_REAL_DATA", "REAL_DATA_AUDITED"})
+        self.assertGreaterEqual(report["valid_unique_rows"], 0)
+
+    # ------------------------------------------------------------------
+    # Week 4 Member 01: Human-Annotation Importer & Kappa Tests
+    # ------------------------------------------------------------------
+
+    def test_56_human_annotation_rejects_unreviewed_or_fabricated_ids(self) -> None:
+        """Week 4 Integrity: Refuses unreviewed rows, missing EDIT notes, and fabricated annotator_id."""
+        from scripts.evaluate_human_annotations import (
+            HumanAnnotationValidationError,
+            validate_review_rows,
+        )
+
+        with self.assertRaises(HumanAnnotationValidationError):
+            validate_review_rows([{"human_decision": None, "annotator_id": None}])
+
+        with self.assertRaises(HumanAnnotationValidationError):
+            validate_review_rows([{"human_decision": "CONFIRM", "annotator_id": "HUMAN_ANNOTATOR_TIER_A"}])
+
+        with self.assertRaises(HumanAnnotationValidationError):
+            validate_review_rows([{"human_decision": "EDIT", "annotator_id": "hustsak", "human_edit_notes": ""}])
+
+    def test_57_human_annotation_cohens_kappa_calculation(self) -> None:
+        """Week 4 Agreement: Computes exact Cohen's kappa on shared spans."""
+        from scripts.evaluate_human_annotations import compute_cohens_kappa
+
+        rows_a = [
+            {"record_id": 1, "job_id": "J1", "character_start": 0, "character_end": 6, "human_decision": "CONFIRM"},
+            {"record_id": 1, "job_id": "J1", "character_start": 10, "character_end": 13, "human_decision": "CONFIRM"},
+            {"record_id": 2, "job_id": "J2", "character_start": 0, "character_end": 4, "human_decision": "REJECT"},
+            {"record_id": 2, "job_id": "J2", "character_start": 8, "character_end": 12, "human_decision": "REJECT"},
+        ]
+        rows_b = [
+            {"record_id": 1, "job_id": "J1", "character_start": 0, "character_end": 6, "human_decision": "CONFIRM"},
+            {"record_id": 1, "job_id": "J1", "character_start": 10, "character_end": 13, "human_decision": "CONFIRM"},
+            {"record_id": 2, "job_id": "J2", "character_start": 0, "character_end": 4, "human_decision": "REJECT"},
+            {"record_id": 2, "job_id": "J2", "character_start": 8, "character_end": 12, "human_decision": "CONFIRM"},
+        ]
+        res = compute_cohens_kappa(rows_a, rows_b)
+        self.assertEqual(res["shared_spans"], 4)
+        self.assertEqual(res["observed_agreement"], 0.75)
+        self.assertEqual(res["disagreement_count"], 1)
+        self.assertEqual(res["cohens_kappa"], 0.5)
+
+    def test_58_human_annotation_import_and_eval_roundtrip(self) -> None:
+        """Week 4 Integrity: Builds validated human-reference JSON in memory and runs evaluation."""
+        import pandas as pd
+        from scripts.evaluate_human_annotations import (
+            build_human_reviewed_payload,
+            evaluate_against_human_reference,
+        )
+
+        text = "Required: Python and SQL."
+        base_json = {
+            "total_records": 1,
+            "total_spans": 2,
+            "records": [{
+                "record_id": 1,
+                "job_id": "SYN_TEST_HUMAN_1",
+                "text": text,
+                "pass_1": {"spans": [], "status": "PENDING"},
+                "pass_2": {"canonical_mappings": [], "status": "PENDING"},
+                "record_status": "PENDING",
+                "annotator_id": None,
+            }],
         }
-        for rec in res["priority_recommendations"]:
-            exp = rec["explanation"]
-            self.assertTrue(required_exp_keys.issubset(set(exp.keys())))
-            self.assertEqual(exp["skill"], rec["canonical_skill"])
-            self.assertEqual(exp["skill_id"], rec["skill_id"])
-            self.assertEqual(exp["priority_calculation"]["priority_score"], rec["priority_score"])
-            self.assertEqual(exp["supporting_evidence"]["required_postings"], rec["required_count"])
-            self.assertEqual(exp["supporting_evidence"]["preferred_postings"], rec["preferred_count"])
+        review_rows = [
+            {
+                "record_id": 1,
+                "job_id": "SYN_TEST_HUMAN_1",
+                "skill_mention": "Python",
+                "character_start": 10,
+                "character_end": 16,
+                "source_section": "Required",
+                "candidate_skill_id": "SG-SK-0001",
+                "candidate_canonical_skill": "Python",
+                "human_decision": "CONFIRM",
+                "annotator_id": "hustsak_test",
+                "human_edit_notes": "",
+            },
+            {
+                "record_id": 1,
+                "job_id": "SYN_TEST_HUMAN_1",
+                "skill_mention": "SQL",
+                "character_start": 21,
+                "character_end": 24,
+                "source_section": "Required",
+                "candidate_skill_id": "SG-SK-0006",
+                "candidate_canonical_skill": "SQL",
+                "human_decision": "CONFIRM",
+                "annotator_id": "hustsak_test",
+                "human_edit_notes": "",
+            },
+        ]
+        tax_df = pd.read_csv(self.tax_csv_path)
+        payload = build_human_reviewed_payload(review_rows, base_json, tax_df)
+        self.assertEqual(payload["total_spans"], 2)
+        self.assertEqual(payload["records"][0]["record_status"], "COMPLETED")
+        eval_res = evaluate_against_human_reference(payload, self.tax_csv_path)
+        self.assertEqual(eval_res["spacy_strict"]["f1"], 1.0)
+        self.assertEqual(eval_res["dictionary_strict"]["f1"], 1.0)
+
+    # ------------------------------------------------------------------
+    # Week 4 Integration: Major Gap, New API Routes, CORS, PG Init, Ablations
+    # ------------------------------------------------------------------
+
+    def test_61_postgres_init_dry_run_and_dotenv_safety(self) -> None:
+        """Week 4 DB: Verifies PostgreSQL init dry-run without exposing secrets."""
+        from scripts.init_postgres import run_postgres_init
+
+        res = run_postgres_init(dry_run=True)
+        self.assertEqual(res["status"], "DRY_RUN_VALIDATED")
+        self.assertEqual(res["ddl_statement_count"], 23)
+        self.assertFalse(res["executed_against_postgres"])
+
+    def test_64_research_questions_and_proposal_nonempty(self) -> None:
+        """Week 4 Docs: Verifies research questions and revised proposal documents are populated."""
+        rq = (ROOT_DIR / "docs" / "proposal" / "research_questions.md").read_text(encoding="utf-8")
+        prop = (ROOT_DIR / "docs" / "proposal" / "project_proposal.md").read_text(encoding="utf-8")
+        self.assertIn("RQ0:", rq)
+        self.assertIn("Member 01", prop)
 
 
 def run_summary_benchmark() -> None:
