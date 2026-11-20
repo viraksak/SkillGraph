@@ -38,7 +38,14 @@ DEFAULT_REVIEW_CSV = ROOT_DIR / "data" / "candidates_review_sheet_all50.csv"
 DEFAULT_SAMPLE_JSON = ROOT_DIR / "data" / "annotations" / "human_annotation_sample_50.json"
 DEFAULT_TAXONOMY_CSV = ROOT_DIR / "data" / "processed" / "global_skill_taxonomy.csv"
 
-VALID_HUMAN_DECISIONS = {"CONFIRM", "REJECT", "EDIT"}
+VALID_HUMAN_DECISIONS = {
+    "CONFIRM",
+    "CONFIRMED",
+    "REJECT",
+    "EDIT",
+    "UNCERTAIN",
+    "UNRESOLVED_CANONICAL",
+}
 FORBIDDEN_ANNOTATOR_IDS = {
     "HUMAN_ANNOTATOR_TIER_A",
     "AUTO",
@@ -222,18 +229,31 @@ def build_human_reviewed_payload(
                 elif notes.lower() in tax_by_name:
                     sid = str(tax_by_name[notes.lower()]["skill_id"])
 
-            tax_rec = tax_by_id.get(sid) if sid else None
-            if tax_rec is not None:
-                canon = str(tax_rec["canonical_skill"])
-                skill_cat = str(tax_rec["skill_category"])
-                skill_type = str(tax_rec["skill_type"])
-                map_status = "APPROVED"
-            else:
-                canon = canon or None
+            if dec == "UNRESOLVED_CANONICAL":
+                sid = ""
+                canon = ""
+                tax_rec = None
                 skill_cat = None
                 skill_type = None
                 map_status = "UNRESOLVED_CANONICAL"
+                p1_status = "APPROVED"
+                map_conf = "human_confirmed_oov"
                 unresolved_count += 1
+            else:
+                tax_rec = tax_by_id.get(sid) if sid else None
+                if tax_rec is not None:
+                    canon = str(tax_rec["canonical_skill"])
+                    skill_cat = str(tax_rec["skill_category"])
+                    skill_type = str(tax_rec["skill_type"])
+                    map_status = "UNCERTAIN" if dec == "UNCERTAIN" else "APPROVED"
+                else:
+                    canon = canon or None
+                    skill_cat = None
+                    skill_type = None
+                    map_status = "UNRESOLVED_CANONICAL"
+                    unresolved_count += 1
+                p1_status = "UNCERTAIN" if dec == "UNCERTAIN" else "APPROVED"
+                map_conf = "human_flagged_uncertain" if dec == "UNCERTAIN" else "human_confirmed"
 
             span_id = f"R{rid:02d}-S{idx:02d}"
             new_p1.append({
@@ -242,7 +262,7 @@ def build_human_reviewed_payload(
                 "character_start": start,
                 "character_end": end,
                 "source_section": _clean_str(row.get("source_section")) or "unknown",
-                "annotation_status": "APPROVED",
+                "annotation_status": p1_status,
                 "reviewer_notes": notes or None,
             })
             new_p2.append({
@@ -255,7 +275,7 @@ def build_human_reviewed_payload(
                 "skill_category": skill_cat,
                 "skill_type": skill_type,
                 "annotation_status": map_status,
-                "mapping_confidence": "human_confirmed",
+                "mapping_confidence": map_conf,
                 "is_oov": tax_rec is None,
                 "reviewer_notes": notes or None,
             })
