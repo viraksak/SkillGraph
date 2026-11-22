@@ -869,6 +869,17 @@ class TestSkillExtractionPipeline(unittest.TestCase):
         self.assertIn("RQ0:", rq)
         self.assertIn("Member 01", prop)
 
+    def test_65_member1_real_data_evaluation_report(self) -> None:
+        """Member 01 M3 Step 1: Verifies human-reference error analysis and real-curriculum coverage."""
+        from scripts.evaluate_member1_real_data import run_member1_evaluation
+
+        res = run_member1_evaluation(save_path=None)
+        self.assertEqual(res["human_reference_50_records"]["records_evaluated"], 50)
+        self.assertEqual(res["real_jobs_100_audit"]["valid_unique_postings"], 100)
+        self.assertIn("negation_ablation", res["real_jobs_100_audit"])
+        self.assertEqual(res["real_curriculum_vs_real_jobs_gap"]["courses_count"], 13)
+        self.assertGreater(res["real_curriculum_vs_real_jobs_gap"]["curriculum_skill_coverage_ratio"], 0.0)
+
 
 def run_summary_benchmark() -> None:
     """Prints a quick summary of the 22-posting & 200-posting checks."""

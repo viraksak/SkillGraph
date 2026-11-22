@@ -1,0 +1,343 @@
+{
+  "member": "Member 01 (hustsak / viraksak)",
+  "milestone_step": "Milestone 3 Step 1 — Real-Data NLP & Curriculum-Gap Evaluation",
+  "human_reference_50_records": {
+    "records_evaluated": 50,
+    "human_annotation_status_counts": {
+      "APPROVED": 405,
+      "UNCERTAIN": 108,
+      "UNRESOLVED_CANONICAL": 17
+    },
+    "spacy_strict": {
+      "tp": 513,
+      "fp": 46,
+      "fn": 0,
+      "precision": 0.91771,
+      "recall": 1.0,
+      "f1": 0.95709
+    },
+    "dictionary_strict": {
+      "tp": 513,
+      "fp": 46,
+      "fn": 0,
+      "precision": 0.91771,
+      "recall": 1.0,
+      "f1": 0.95709
+    },
+    "false_positive_breakdown": {
+      "human_marked_unresolved_canonical": 12,
+      "unannotated_in_human_reference": 34
+    },
+    "fp_examples": [
+      {
+        "job_id": "GLOBAL_SYN_000375",
+        "mention": "machine learning",
+        "predicted_canonical": "Machine Learning",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_000943",
+        "mention": "Scrum",
+        "predicted_canonical": "Agile",
+        "reason": "human_marked_unresolved_canonical"
+      },
+      {
+        "job_id": "GLOBAL_SYN_000943",
+        "mention": "version control",
+        "predicted_canonical": "Git",
+        "reason": "human_marked_unresolved_canonical"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001159",
+        "mention": "Data Analytics",
+        "predicted_canonical": "Data Analysis",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001159",
+        "mention": "Data Analytics",
+        "predicted_canonical": "Data Analysis",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001159",
+        "mention": "Data Analytics",
+        "predicted_canonical": "Data Analysis",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001771",
+        "mention": "Machine Learning",
+        "predicted_canonical": "Machine Learning",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001771",
+        "mention": "Machine Learning",
+        "predicted_canonical": "Machine Learning",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001771",
+        "mention": "Machine Learning",
+        "predicted_canonical": "Machine Learning",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001771",
+        "mention": "Machine Learning",
+        "predicted_canonical": "Machine Learning",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001771",
+        "mention": "machine learning",
+        "predicted_canonical": "Machine Learning",
+        "reason": "unannotated_in_human_reference"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001771",
+        "mention": "containerisation",
+        "predicted_canonical": "Docker",
+        "reason": "human_marked_unresolved_canonical"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001272",
+        "mention": "version control",
+        "predicted_canonical": "Git",
+        "reason": "human_marked_unresolved_canonical"
+      },
+      {
+        "job_id": "GLOBAL_SYN_000680",
+        "mention": "version control",
+        "predicted_canonical": "Git",
+        "reason": "human_marked_unresolved_canonical"
+      },
+      {
+        "job_id": "GLOBAL_SYN_001428",
+        "mention": "version control",
+        "predicted_canonical": "Git",
+        "reason": "human_marked_unresolved_canonical"
+      }
+    ]
+  },
+  "real_jobs_100_audit": {
+    "valid_unique_postings": 100,
+    "positive_skill_mentions": 955,
+    "unique_demanded_skills": 84,
+    "modality_counts_including_negated": {
+      "excluded_or_prohibited": 1,
+      "mentioned": 621,
+      "negated_requirement": 25,
+      "preferred": 183,
+      "required": 151
+    },
+    "negation_ablation": {
+      "SpacySkillExtractor": {
+        "raw_mentions_without_negation_filter": 981,
+        "positive_mentions_with_negation_filter": 955,
+        "negated_or_prohibited_filtered": 26
+      },
+      "DictionarySkillExtractor": {
+        "raw_mentions_without_negation_filter": 1020,
+        "positive_mentions_with_negation_filter": 936,
+        "negated_or_prohibited_filtered": 84
+      }
+    },
+    "filtered_negation_examples": [
+      {
+        "job_id": "REAL_REM_2091137",
+        "canonical_skill": "Apache Airflow",
+        "mention": "Apache Airflow",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_REM_2091137",
+        "canonical_skill": "Python",
+        "mention": "Python",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_REM_2091137",
+        "canonical_skill": "SQL",
+        "mention": "SQL",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_REM_2091136",
+        "canonical_skill": "React",
+        "mention": "React",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_REM_2091136",
+        "canonical_skill": "Python",
+        "mention": "Python",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_ARB_4fd84bb57d",
+        "canonical_skill": "Recruitment and Selection",
+        "mention": "recruiting",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_ARB_bc2f8a598d",
+        "canonical_skill": "Recruitment and Selection",
+        "mention": "recruiting",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_ARB_4993dd9648",
+        "canonical_skill": "React",
+        "mention": "react",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_ARB_123b3ac5b1",
+        "canonical_skill": "Recruitment and Selection",
+        "mention": "recruiting",
+        "modality": "negated_requirement"
+      },
+      {
+        "job_id": "REAL_ARB_bb4e86d0fd",
+        "canonical_skill": "HR Information Systems",
+        "mention": "HRIS",
+        "modality": "negated_requirement"
+      }
+    ]
+  },
+  "real_curriculum_vs_real_jobs_gap": {
+    "majors_count": 1,
+    "courses_count": 13,
+    "curriculum_unique_skills_count": 15,
+    "curriculum_skills": [
+      "Apache Spark",
+      "Computer Vision",
+      "Data Warehousing",
+      "Deep Learning",
+      "Feature Engineering",
+      "Java",
+      "JavaScript",
+      "Machine Learning",
+      "Natural Language Processing",
+      "Network Security",
+      "PyTorch",
+      "Python",
+      "SQL",
+      "Software Testing",
+      "Statistics"
+    ],
+    "verified_skill_prerequisite_nodes": 8,
+    "covered_real_job_skills_count": 14,
+    "covered_real_job_skills": [
+      "Apache Spark",
+      "Computer Vision",
+      "Data Warehousing",
+      "Deep Learning",
+      "Java",
+      "JavaScript",
+      "Machine Learning",
+      "Natural Language Processing",
+      "Network Security",
+      "PyTorch",
+      "Python",
+      "SQL",
+      "Software Testing",
+      "Statistics"
+    ],
+    "curriculum_skill_coverage_ratio": 0.1667,
+    "top_15_missing_real_job_skills": [
+      {
+        "canonical_skill": "English Language",
+        "skill_id": "SG-SK-0213",
+        "skill_type": "Language",
+        "real_job_mentions": 84
+      },
+      {
+        "canonical_skill": "Communication",
+        "skill_id": "SG-SK-0184",
+        "skill_type": "Soft skill",
+        "real_job_mentions": 61
+      },
+      {
+        "canonical_skill": "React",
+        "skill_id": "SG-SK-0007",
+        "skill_type": "Technology",
+        "real_job_mentions": 59
+      },
+      {
+        "canonical_skill": "Teamwork",
+        "skill_id": "SG-SK-0187",
+        "skill_type": "Soft skill",
+        "real_job_mentions": 35
+      },
+      {
+        "canonical_skill": "German Language",
+        "skill_id": "SG-SK-0223",
+        "skill_type": "Language",
+        "real_job_mentions": 33
+      },
+      {
+        "canonical_skill": "Amazon Web Services",
+        "skill_id": "SG-SK-0034",
+        "skill_type": "Technology",
+        "real_job_mentions": 28
+      },
+      {
+        "canonical_skill": "Microsoft Azure",
+        "skill_id": "SG-SK-0035",
+        "skill_type": "Technology",
+        "real_job_mentions": 23
+      },
+      {
+        "canonical_skill": "Problem Solving",
+        "skill_id": "SG-SK-0208",
+        "skill_type": "Soft skill",
+        "real_job_mentions": 21
+      },
+      {
+        "canonical_skill": "Recruitment and Selection",
+        "skill_id": "SG-SK-0152",
+        "skill_type": "Hard skill",
+        "real_job_mentions": 20
+      },
+      {
+        "canonical_skill": "SEO",
+        "skill_id": "SG-SK-0133",
+        "skill_type": "Hard skill",
+        "real_job_mentions": 20
+      },
+      {
+        "canonical_skill": "TypeScript",
+        "skill_id": "SG-SK-0004",
+        "skill_type": "Technology",
+        "real_job_mentions": 18
+      },
+      {
+        "canonical_skill": "Adaptability",
+        "skill_id": "SG-SK-0211",
+        "skill_type": "Soft skill",
+        "real_job_mentions": 17
+      },
+      {
+        "canonical_skill": "Agile",
+        "skill_id": "SG-SK-0202",
+        "skill_type": "Knowledge area",
+        "real_job_mentions": 16
+      },
+      {
+        "canonical_skill": "CI/CD",
+        "skill_id": "SG-SK-0040",
+        "skill_type": "Hard skill",
+        "real_job_mentions": 16
+      },
+      {
+        "canonical_skill": "SAP ERP",
+        "skill_id": "SG-SK-0068",
+        "skill_type": "Tool",
+        "real_job_mentions": 16
+      }
+    ]
+  }
+}
