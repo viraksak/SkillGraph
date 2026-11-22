@@ -880,6 +880,17 @@ class TestSkillExtractionPipeline(unittest.TestCase):
         self.assertEqual(res["real_curriculum_vs_real_jobs_gap"]["courses_count"], 13)
         self.assertGreater(res["real_curriculum_vs_real_jobs_gap"]["curriculum_skill_coverage_ratio"], 0.0)
 
+    def test_66_member1_statistical_analysis_outputs(self) -> None:
+        """Member 01 M4 Step 3: Verifies bootstrap CIs, McNemar test, and frequency correlations."""
+        from scripts.run_member1_statistics import run_member1_statistics
+
+        res = run_member1_statistics(save_path=None)
+        ci = res["human_sample_bootstrap_ci"]
+        self.assertEqual(ci["n_docs"], 50)
+        self.assertLessEqual(ci["f1_ci_95"][0], ci["f1_ci_95"][1])
+        self.assertTrue(res["real_100_negation_mcnemar"]["statistically_significant_alpha_0_05"])
+        self.assertGreater(res["real_100_extractor_frequency_agreement"]["spearman_rho"], 0.90)
+
 
 def run_summary_benchmark() -> None:
     """Prints a quick summary of the 22-posting & 200-posting checks."""

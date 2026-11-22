@@ -1,0 +1,42 @@
+{
+  "member": "Member 01 (hustsak / viraksak)",
+  "milestone_step": "Milestone 4 Step 3 — Statistical Analysis & Extractor Comparison",
+  "human_sample_bootstrap_ci": {
+    "n_docs": 50,
+    "n_resamples": 1000,
+    "precision_ci_95": [
+      0.8846,
+      0.9462
+    ],
+    "recall_ci_95": [
+      1.0,
+      1.0
+    ],
+    "f1_ci_95": [
+      0.9388,
+      0.9723
+    ]
+  },
+  "real_100_negation_mcnemar": {
+    "spacy_only_filtered": 5,
+    "dict_only_filtered": 63,
+    "chi2_corrected": 47.7794,
+    "p_value": 0.0,
+    "statistically_significant_alpha_0_05": true
+  },
+  "real_100_extractor_frequency_agreement": {
+    "unique_skills_compared": 85,
+    "pearson_r": 0.994022,
+    "spearman_rho": 0.980325
+  },
+  "real_100_positive_mentions_by_skill_type": {
+    "Technology": 264,
+    "Soft skill": 174,
+    "Hard skill": 144,
+    "Knowledge area": 140,
+    "Language": 132,
+    "Tool": 85,
+    "Competency": 10,
+    "Certification": 6
+  }
+}
