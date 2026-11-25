@@ -1,0 +1,269 @@
+{
+    "evaluation_mode": "strict_exact_span",
+    "micro_precision": 0.7245080500894454,
+    "micro_recall": 1.0,
+    "micro_f1": 0.8402489626556017,
+    "macro_precision": 0.7253868631368632,
+    "macro_recall": 1.0,
+    "macro_f1": 0.8291959866833335,
+    "total_tp": 405,
+    "total_fp": 154,
+    "total_fn": 0,
+    "fp_examples": [
+        {
+            "job_id": "GLOBAL_SYN_000196",
+            "span": [
+                807,
+                810
+            ],
+            "canonical_skill": "ETL Development",
+            "predicted_mention": "ELT",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000375",
+            "span": [
+                518,
+                534
+            ],
+            "canonical_skill": "Machine Learning",
+            "predicted_mention": "machine learning",
+            "source_section": "responsibilities"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000375",
+            "span": [
+                768,
+                779
+            ],
+            "canonical_skill": "SQL",
+            "predicted_mention": "SQL queries",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000375",
+            "span": [
+                798,
+                806
+            ],
+            "canonical_skill": "Python",
+            "predicted_mention": "Python 3",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000375",
+            "span": [
+                808,
+                827
+            ],
+            "canonical_skill": "Statistics",
+            "predicted_mention": "statistical methods",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000943",
+            "span": [
+                815,
+                820
+            ],
+            "canonical_skill": "Agile",
+            "predicted_mention": "Scrum",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000943",
+            "span": [
+                839,
+                854
+            ],
+            "canonical_skill": "Git",
+            "predicted_mention": "version control",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000943",
+            "span": [
+                856,
+                868
+            ],
+            "canonical_skill": "Software Testing",
+            "predicted_mention": "unit testing",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000943",
+            "span": [
+                963,
+                978
+            ],
+            "canonical_skill": "CI/CD",
+            "predicted_mention": "CI/CD pipelines",
+            "source_section": "preferred"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001159",
+            "span": [
+                122,
+                136
+            ],
+            "canonical_skill": "Data Analysis",
+            "predicted_mention": "Data Analytics",
+            "source_section": "intro_or_title"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001159",
+            "span": [
+                180,
+                194
+            ],
+            "canonical_skill": "Data Analysis",
+            "predicted_mention": "Data Analytics",
+            "source_section": "intro_or_title"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001159",
+            "span": [
+                394,
+                408
+            ],
+            "canonical_skill": "Data Analysis",
+            "predicted_mention": "Data Analytics",
+            "source_section": "responsibilities"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001159",
+            "span": [
+                983,
+                1009
+            ],
+            "canonical_skill": "Presentation Skills",
+            "predicted_mention": "presenting to stakeholders",
+            "source_section": "preferred"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                16,
+                32
+            ],
+            "canonical_skill": "Machine Learning",
+            "predicted_mention": "Machine Learning",
+            "source_section": "intro_or_title"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                87,
+                103
+            ],
+            "canonical_skill": "Machine Learning",
+            "predicted_mention": "Machine Learning",
+            "source_section": "intro_or_title"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                132,
+                148
+            ],
+            "canonical_skill": "Machine Learning",
+            "predicted_mention": "Machine Learning",
+            "source_section": "intro_or_title"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                262,
+                278
+            ],
+            "canonical_skill": "Machine Learning",
+            "predicted_mention": "Machine Learning",
+            "source_section": "responsibilities"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                349,
+                365
+            ],
+            "canonical_skill": "Machine Learning",
+            "predicted_mention": "machine learning",
+            "source_section": "responsibilities"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                761,
+                774
+            ],
+            "canonical_skill": "Model Deployment",
+            "predicted_mention": "model serving",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                807,
+                815
+            ],
+            "canonical_skill": "Python",
+            "predicted_mention": "Python 3",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                821,
+                837
+            ],
+            "canonical_skill": "Docker",
+            "predicted_mention": "containerisation",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001771",
+            "span": [
+                968,
+                975
+            ],
+            "canonical_skill": "Apache Spark",
+            "predicted_mention": "PySpark",
+            "source_section": "preferred"
+        },
+        {
+            "job_id": "GLOBAL_SYN_001272",
+            "span": [
+                851,
+                866
+            ],
+            "canonical_skill": "Git",
+            "predicted_mention": "version control",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000680",
+            "span": [
+                929,
+                944
+            ],
+            "canonical_skill": "Git",
+            "predicted_mention": "version control",
+            "source_section": "required"
+        },
+        {
+            "job_id": "GLOBAL_SYN_000680",
+            "span": [
+                946,
+                961
+            ],
+            "canonical_skill": "Software Testing",
+            "predicted_mention": "test automation",
+            "source_section": "required"
+        }
+    ],
+    "fn_examples": [],
+    "dataset_name": "SkillGraph Candidate Annotations - Week 1 Sample (Tier A Candidates - Unconfirmed)",
+    "evaluation_type": "single_annotator_human_reference",
+    "provenance_note": "Independently reviewed by vichea, viraksak (decisions: {'CONFIRMED': 405, 'UNCERTAIN': 109, 'UNRESOLVED_CANONICAL': 16}).",
+    "evaluation_limitation_statement": "Because these candidate spans originate from the synthetic generator and have not undergone independent human review, they cannot serve as a human-ground-truth evaluation benchmark. Human review is pending."
+}

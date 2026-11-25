@@ -1,0 +1,26 @@
+job_id,span,canonical_skill,predicted_mention,source_section
+GLOBAL_SYN_000196,"(807, 810)",ETL Development,ELT,required
+GLOBAL_SYN_000375,"(518, 534)",Machine Learning,machine learning,responsibilities
+GLOBAL_SYN_000375,"(768, 779)",SQL,SQL queries,required
+GLOBAL_SYN_000375,"(798, 806)",Python,Python 3,required
+GLOBAL_SYN_000375,"(808, 827)",Statistics,statistical methods,required
+GLOBAL_SYN_000943,"(815, 820)",Agile,Scrum,required
+GLOBAL_SYN_000943,"(839, 854)",Git,version control,required
+GLOBAL_SYN_000943,"(856, 868)",Software Testing,unit testing,required
+GLOBAL_SYN_000943,"(963, 978)",CI/CD,CI/CD pipelines,preferred
+GLOBAL_SYN_001159,"(122, 136)",Data Analysis,Data Analytics,intro_or_title
+GLOBAL_SYN_001159,"(180, 194)",Data Analysis,Data Analytics,intro_or_title
+GLOBAL_SYN_001159,"(394, 408)",Data Analysis,Data Analytics,responsibilities
+GLOBAL_SYN_001159,"(983, 1009)",Presentation Skills,presenting to stakeholders,preferred
+GLOBAL_SYN_001771,"(16, 32)",Machine Learning,Machine Learning,intro_or_title
+GLOBAL_SYN_001771,"(87, 103)",Machine Learning,Machine Learning,intro_or_title
+GLOBAL_SYN_001771,"(132, 148)",Machine Learning,Machine Learning,intro_or_title
+GLOBAL_SYN_001771,"(262, 278)",Machine Learning,Machine Learning,responsibilities
+GLOBAL_SYN_001771,"(349, 365)",Machine Learning,machine learning,responsibilities
+GLOBAL_SYN_001771,"(761, 774)",Model Deployment,model serving,required
+GLOBAL_SYN_001771,"(807, 815)",Python,Python 3,required
+GLOBAL_SYN_001771,"(821, 837)",Docker,containerisation,required
+GLOBAL_SYN_001771,"(968, 975)",Apache Spark,PySpark,preferred
+GLOBAL_SYN_001272,"(851, 866)",Git,version control,required
+GLOBAL_SYN_000680,"(929, 944)",Git,version control,required
+GLOBAL_SYN_000680,"(946, 961)",Software Testing,test automation,required
